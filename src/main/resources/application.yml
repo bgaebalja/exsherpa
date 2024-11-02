@@ -33,7 +33,7 @@ spring:
     serialization:
       fail-on-empty-beans: false
   redis:
-    host: ${BSHERPA_REDIS_CONTAINER_NAME}
+    host: ${EXSHERPA_REDIS_CONTAINER_NAME}
     port: 6379
     password: ${REDIS_PASSWORD}
   servlet:

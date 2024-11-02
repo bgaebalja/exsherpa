@@ -75,6 +75,7 @@ pipeline {
                         string(credentialsId: 'EXSHERPA_DB_SLAVE_USER_NAME', variable: 'DB_SLAVE_USER_NAME'),
                         string(credentialsId: 'EXSHERPA_DB_SLAVE_PASSWORD', variable: 'DB_SLAVE_USER_PASSWORD'),
                         string(credentialsId: 'REDIS_PASSWORD', variable: 'REDIS_PASSWORD'),
+                        string(credentialsId: 'EXSHERPA_PROJECT_NAME', variable: 'EXSHERPA_PROJECT_NAME'),
                         string(credentialsId: 'SSL_KEY_STORE_PASSWORD', variable: 'SSL_KEY_STORE_PASSWORD')
                     ]) {
                         sh '''
@@ -95,6 +96,7 @@ pipeline {
                             export DB_SLAVE_USER_NAME='$DB_SLAVE_USER_NAME'
                             export DB_SLAVE_USER_PASSWORD='$DB_SLAVE_USER_PASSWORD'
                             export REDIS_PASSWORD='$REDIS_PASSWORD'
+                            export EXSHERPA_PROJECT_NAME='$EXSHERPA_PROJECT_NAME'
                             export SSL_KEY_STORE_PASSWORD='$SSL_KEY_STORE_PASSWORD'
 
                             docker stop \$PROJECT_NAME || true
