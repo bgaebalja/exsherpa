@@ -10,7 +10,7 @@ pipeline {
                     def projectVersion = sh(script: './gradlew -q printProjectVersion', returnStdout: true).trim()
                     env.PROJECT_NAME = projectName
                     env.PROJECT_VERSION = projectVersion
-                    env.JAR_PATH = "${WORKSPACE}/build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar"
+                    env.WAR_PATH = "${WORKSPACE}/build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.war"
                 }
                 echo 'Environment variables set'
             }
@@ -41,7 +41,7 @@ pipeline {
                     env.DOCKER_IMAGE_TAG = dockerImageTag
                     sh "docker system prune -a -f"
                     sh "docker rmi $DOCKER_HUB_USER_NAME/${dockerImageTag} || true"
-                    sh "docker build --no-cache=true --build-arg JAR_FILE=${env.JAR_PATH} -t ${dockerImageTag} -f ${WORKSPACE}/Dockerfile ${WORKSPACE}/build/libs/"
+                    sh "docker build --no-cache=true --build-arg WAR_FILE=${env.WAR_PATH} -t ${dockerImageTag} -f ${WORKSPACE}/Dockerfile ${WORKSPACE}/build/libs/"
                 }
             }
         }
@@ -112,7 +112,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
+                archiveArtifacts artifacts: "build/libs/*.war", fingerprint: true
                 echo 'Artifacts archived'
             }
         }
