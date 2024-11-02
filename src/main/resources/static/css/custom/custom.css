@@ -1,0 +1,80 @@
+.file_box label {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 10px;
+}
+
+.custom_check span {
+    background-image: url("/images/checkbox_active.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.custom-input {
+    transition: 0.2s ease-out;
+    content: '';
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: #f7f9f9;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+.custom_paging {
+    text-align: center;
+    font-size: 0;
+    margin-bottom: 40px
+}
+
+.custom_paging_btn {
+    display: inline-block;
+    font-size: 13px;
+    color: #aaa;
+    vertical-align: top;
+    margin-right: 20px
+}
+
+.custom_paging_btn_on {
+    color: #000;
+    font-weight: bolder;
+    text-decoration: none
+}
+
+.custom_paging_near {
+    margin-right: 10px;
+    color: #000
+}
+
+.custom_paging_edge {
+    margin-right: 20px;
+    color: #000
+}
+
+.custom_paging_next {
+    margin-left: 6px;
+    margin-right: 10px;
+    color: #000
+}
+
+.custom_paging_last {
+    color: #000
+}
+
+.custom_paging_disable {
+    display: none;
+}
+
+.grid_on div {
+    color: #00a9ff
+}
