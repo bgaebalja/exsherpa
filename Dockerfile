@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY ./*.jar app.jar
+COPY ./*.jar app.war
 
 EXPOSE 443
 
@@ -13,4 +13,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 ENV JAVA_OPTS="-Xms512m -Xmx1024m"
 
-CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -jar app.war"]
