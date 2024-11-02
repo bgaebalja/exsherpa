@@ -67,3 +67,8 @@ task printProjectVersion {
 jar {
     enabled = false
 }
+processResources {
+    from("src/main/webapp") {
+        into "webapp"
+    }
+}
