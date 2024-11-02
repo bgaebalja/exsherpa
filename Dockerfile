@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY ./*.jar app.war
+COPY ./*.war app.war
 
 EXPOSE 443
 

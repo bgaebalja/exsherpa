@@ -41,7 +41,7 @@ pipeline {
                     env.DOCKER_IMAGE_TAG = dockerImageTag
                     sh "docker system prune -a -f"
                     sh "docker rmi $DOCKER_HUB_USER_NAME/${dockerImageTag} || true"
-                    sh "docker build --no-cache=true --build-arg JAR_FILE=${env.WAR_PATH} -t ${dockerImageTag} -f ${WORKSPACE}/Dockerfile ${WORKSPACE}/build/libs/"
+                    sh "docker build --no-cache=true --build-arg WAR_FILE=${env.WAR_PATH} -t ${dockerImageTag} -f ${WORKSPACE}/Dockerfile ${WORKSPACE}/build/libs/"
                 }
             }
         }
