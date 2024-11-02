@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: exsherpa
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  datasource:
+    master:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mariadb://${EXSHERPA_RDS_ENDPOINT}:3306/${EXSHERPA_PROJECT_NAME}?serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true
+      username: ${DB_MASTER_USER_NAME}
+      password: ${DB_MASTER_USER_PASSWORD}
+    slave:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mariadb://${EXSHERPA_SLAVE_DB_CONTAINER_NAME}:3306/${EXSHERPA_PROJECT_NAME}?serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true
+      username: ${DB_SLAVE_USER_NAME}
+      password: ${DB_SLAVE_USER_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MariaDBDialect
+          format_sql: true
+    show-sql: true
+    database: mysql
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Seoul
+    serialization:
+      fail-on-empty-beans: false
+  redis:
+    host: ${BSHERPA_REDIS_CONTAINER_NAME}
+    port: 6379
+    password: ${REDIS_PASSWORD}
+  servlet:
+    content-type: text/html
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
