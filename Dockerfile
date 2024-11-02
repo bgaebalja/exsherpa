@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY ./*.jar app.jar
+COPY src/main/webapp /app/webapp
 
 EXPOSE 443
 
