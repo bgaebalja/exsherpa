@@ -34,6 +34,9 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'javax.servlet:jstl'
 
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.8'
+
     // data
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.7.12'

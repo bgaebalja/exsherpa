@@ -28,7 +28,7 @@
         <h1>로그인</h1>
         <div class="input-box">
             <form id="login_form">
-                <input type="text" id="id" class="line" name="user_id" placeholder="아이디를 입력하세요">
+                <input type="text" id="id" class="line" name="username" placeholder="아이디를 입력하세요">
                 <input type="password" id="password" name="password" class="line" placeholder="비밀번호를 입력하세요"
                        onkeydown="javascript:enterKey();">
                 <div class="check">
@@ -44,7 +44,7 @@
 
   function login() {
     const loginForm = document.getElementById('login_form');
-    loginForm.action = "/naea-service/auth/admin-auth-proc";
+    loginForm.action = "/users/login";
     loginForm.method = "post";
     loginForm.submit();
   }
