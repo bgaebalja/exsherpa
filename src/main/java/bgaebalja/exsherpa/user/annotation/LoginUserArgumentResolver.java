@@ -1,5 +1,7 @@
 package bgaebalja.exsherpa.user.annotation;
 
+import static bgaebalja.exsherpa.util.SessionConstant.LOGIN_USER;
+
 import bgaebalja.exsherpa.user.domain.Users;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,6 +32,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     if (session == null) {
       return null;
     }
-    return session.getAttribute("loginUser");
+    return session.getAttribute(LOGIN_USER);
   }
 }

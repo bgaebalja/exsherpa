@@ -166,7 +166,7 @@
                             out.print("<li><a href=\"#none\">" + nickname + "</a></li><li class=\"ml25\"><a href=\"/user/logout\" class=\"btn logoutBtn\">로그아웃</a></li>");
                         } else {
                             //out.print("<li class=\"ml25\"><a href=\"/user/student-join\" class=\"btn logoutBtn\" style=\"background: #2f538c\">교재구입 인증하기</a></li>");
-                            out.print("<li class=\"ml10\"><a href=\"/user/login\" class=\"btn logoutBtn\" style=\"background: #2f538c\">로그인</a></li>");
+                            out.print("<li class=\"ml10\"><a href=\"/users/login\" class=\"btn logoutBtn\" style=\"background: #2f538c\">로그인</a></li>");
                         }
                     %>
                 </ul>
