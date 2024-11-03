@@ -11,7 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
-    <title>Title</title>
+    <title>EX셀파</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FQ19XPZ5J7"></script>
@@ -145,8 +145,8 @@
     <nav class="menu">
         <div class="container">
             <ul class="justify_start" style="gap: 15px; padding-top: 12px;">
-                <li><a href="https://brand_achievement.chunjae.co.kr/achievement/index.html" target="_blank">학업성취도 평가대비
-                    교재 소개</a></li>
+                <li><a href="https://bsherpa.com" target="_blank">B셀파</a></li>
+                <li><a href="https://b-log-coral.vercel.app" target="_blank">B로그</a></li>
                 <li><a href="https://i.milkt.co.kr/Main/frm_Main.aspx" target="_blank">밀크T아이</a></li>
                 <li><a href="http://www.milkt.co.kr/Main/Main_new" target="_blank">밀크T초등</a></li>
                 <li><a href="http://mid.milkt.co.kr/Main/frm_Main.aspx" target="_blank">밀크T중학</a></li>
@@ -157,7 +157,7 @@
     <div class="container">
         <div class="top">
             <div class="justify_between">
-                <div class="site_tit" onclick="gotoMain();" style="cursor: pointer;">온라인 학업성취도 평가</div>
+                <div class="site_tit" onclick="gotoMain();" style="cursor: pointer;">온라인 문제풀이 서비스 - EX셀파</div>
 
                 <ul class="justify_between user_info">
                     <%
