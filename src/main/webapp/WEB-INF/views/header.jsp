@@ -168,9 +168,10 @@
                         if (authentication != null && authentication.isAuthenticated()) {
                             nickname = authentication.getName();
                         }
-
-                        if (nickname != null) {
-                            out.print("<li><a href=\"#none\">" + nickname + "</a></li><li class=\"ml25\"><a href=\"/user/logout\" class=\"btn logoutBtn\">로그아웃</a></li>");
+                        System.out.println("nickname = " + nickname);
+                        assert nickname != null;
+                        if (!nickname.equals("anonymousUser")) {
+                            out.print("<li><a href=\"#none\">" + nickname + "</a></li><li class=\"ml25\"><a href=\"/users/logout\" class=\"btn logoutBtn\">로그아웃</a></li>");
                         } else {
                             out.print("<li class=\"ml10\"><a href=\"/users/login\" class=\"btn logoutBtn\" style=\"background: #2f538c\">로그인</a></li>");
                         }
