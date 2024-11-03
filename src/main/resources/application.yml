@@ -46,6 +46,8 @@ spring:
     password: ${REDIS_PASSWORD}
   servlet:
     content-type: text/html
+logging:
+  config: classpath:logback-spring.xml
 management:
   endpoints:
     web:
