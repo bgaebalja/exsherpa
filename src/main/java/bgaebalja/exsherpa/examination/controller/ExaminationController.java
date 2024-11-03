@@ -15,12 +15,12 @@ public class ExaminationController {
     }
 
     @GetMapping("/user/viewer1")
-    public String getViewer1Page() {
-        return "exam/exam-view";
+    public String getMiddleHighPracticePage() {
+        return "exam/middle-high-practice-view";
     }
 
     @GetMapping("/user/viewer2")
-    public String getViewer2Page() {
-        return "exam/exam-view";
+    public String getElementaryPracticePage() {
+        return "exam/elementary-practice-view";
     }
 }
