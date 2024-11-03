@@ -159,18 +159,17 @@
                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
                                                                 <c:when test="${empty exam.examResultId and isTesting eq false}">
-                                                                    <a href="/user/exam/user-exam-sound/${examInformationResponse.examRound}?exam_id=${exam.examId}"
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}&examId=${examInformationResponse.examId}"
                                                                        class="startBtn"
                                                                        style="background-color: #3c6ebf;">응시하기</a>
                                                                 </c:when>
                                                                 <c:when test="${empty exam.examResultId and isTesting eq true}">
-                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}"
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}&examId=${examInformationResponse.examId}"
                                                                        class="startBtn"
                                                                        style="cursor: default; background-color: #5a6268;">응시하기</a>
                                                                 </c:when>
                                                                 <c:when test="${empty exam.examResultId and isTesting eq true}">
-                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}"
-                                                                       class="startBtn"
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}&examId=${examInformationResponse.examId}"
                                                                        style="cursor: default; background-color: #5a6268;">응시하기</a>
                                                                 </c:when>
                                                                 <c:otherwise>-</c:otherwise>
@@ -309,7 +308,7 @@
                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
                                                                 <c:when test="${empty exam.examResultId and isTesting eq false}">
-                                                                    <a href="/user/exam/user-exam-sound/${examInformationResponse.examRound}?exam_id=${exam.examId}"
+                                                                    <a href="/user/exam/user-exam-sound/${examInformationResponse.examRound}?exam_id=${examInformationResponse.examId}"
                                                                        class="startBtn"
                                                                        style="background-color: #3c6ebf;">응시하기</a>
                                                                 </c:when>
@@ -376,7 +375,7 @@
                 return response.json();
             }).then(data => {
                 if (data.result === true) {
-                    location.href = "/user/exam/user-exam-sound/${examInformationResponse.examRound}?exam_id=" + examId;
+                    location.href = "/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${examInformationResponse.examId}";
                 } else {
                     console.log(data.message);
                 }

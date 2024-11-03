@@ -13,7 +13,7 @@ public class ExamInformationResponse {
         this.schoolLevel = schoolLevel;
         this.examRound = examRound;
         this.year = year;
-        examId = "";
+        examId = "1";
     }
 
     private ExamInformationResponse(String schoolLevel, String examRound, String year, String examId) {
