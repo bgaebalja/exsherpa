@@ -11,7 +11,7 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>온라인 학업성취도 평가 (실전시험Ⅱ)</title>
+    <title>EX셀파 (실전시험Ⅱ)</title>
 
     <link rel="icon" href="/img/fav.png">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css">

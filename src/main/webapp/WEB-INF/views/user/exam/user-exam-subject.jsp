@@ -14,10 +14,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <c:choose>
         <c:when test="${examInformationResponse.examRound eq '1'}">
-            <title>온라인 학업성취도 평가 (실전시험Ⅰ)</title>
+            <title>EX셀파 (실전시험Ⅰ)</title>
         </c:when>
         <c:when test="${examInformationResponse.examRound eq '2'}">
-            <title>온라인 학업성취도 평가 (실전시험Ⅱ)</title>
+            <title>EX셀파 (실전시험Ⅱ)</title>
         </c:when>
     </c:choose>
     <!-- Google tag (gtag.js) -->
