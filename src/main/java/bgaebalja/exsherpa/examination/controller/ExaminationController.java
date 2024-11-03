@@ -15,14 +15,56 @@ public class ExaminationController {
         return new ModelAndView("user/exam/user-exam-cbt", "schoolLevel", schoolLevel);
     }
 
+    @GetMapping("/user/viewer1")
+    public String getMiddleHighPracticePage() {
+        return "exam/middle-high-practice-view";
+    }
+
+    @GetMapping("/user/viewer2")
+    public String getElementaryPracticePage() {
+        return "exam/elementary-practice-view";
+    }
+
     @GetMapping("/user-exam-subject")
-    public ModelAndView getExamInformationPage(
+    public ModelAndView getExamSubjectPage(
             @RequestParam("school_level") String schoolLevel,
             @RequestParam("exam_round") String examRound,
             @RequestParam("year") String year
     ) {
         // TODO: 데이터베이스에서 시험지 ID를 가져 오는 로직 추가
-        ExamInformationResponse examInformationResponse = ExamInformationResponse.of(schoolLevel, examRound, year);
+        return new ModelAndView(
+                "user/exam/user-exam-subject",
+                "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
+        );
+    }
+
+    @GetMapping("/user-exam-sound")
+    public ModelAndView getExamSoundPage(
+            @RequestParam("school_level") String schoolLevel,
+            @RequestParam("exam_round") String examRound,
+            @RequestParam("year") String year,
+            @RequestParam(value = "exam_id", defaultValue = "1") String examId
+    ) {
+        ExamInformationResponse examInformationResponse
+                = ExamInformationResponse.of(schoolLevel, examRound, year, examId);
+        if (examRound.equals("1")) {
+            return new ModelAndView(
+                    "user/exam/user-exam-sound1", "examInformationResponse", examInformationResponse
+            );
+        }
+
+        return new ModelAndView("user/exam/user-exam-sound2", "examInformationResponse", examInformationResponse);
+    }
+
+    @GetMapping("/user-exam-notice")
+    public ModelAndView getExamNoticePage(
+            @RequestParam("school_level") String schoolLevel,
+            @RequestParam("exam_round") String examRound,
+            @RequestParam("year") String year,
+            @RequestParam(value = "exam_id", defaultValue = "1") String examId
+    ) {
+        ExamInformationResponse examInformationResponse
+                = ExamInformationResponse.of(schoolLevel, examRound, year, examId);
         if (examRound.equals("1")) {
             return new ModelAndView(
                     "user/exam/user-exam-notice1", "examInformationResponse", examInformationResponse
@@ -33,7 +75,7 @@ public class ExaminationController {
     }
 
     @GetMapping("/report")
-    public ModelAndView getReportInformationPage(
+    public ModelAndView getReportPage(
             @RequestParam("school_level") String schoolLevel,
             @RequestParam("year") String year
     ) {
@@ -43,13 +85,10 @@ public class ExaminationController {
         return modelAndView;
     }
 
-    @GetMapping("/user/viewer1")
-    public String getMiddleHighPracticePage() {
-        return "exam/middle-high-practice-view";
-    }
-
-    @GetMapping("/user/viewer2")
-    public String getElementaryPracticePage() {
-        return "exam/elementary-practice-view";
+    @GetMapping("/exam-view")
+    public ModelAndView getActualTestPage(@RequestParam(value = "exam_id") String examId) {
+        // TODO: 데이터베이스에서 시험지와 문제 목록 가져 오기
+        // TODO: 멀티스레드 시간 측정
+        return new ModelAndView("exam/exam-view", "examId", examId);
     }
 }
