@@ -79,17 +79,17 @@
                                             <li><em>헤드셋 혹은 이어폰을 착용</em>해 주시기 바랍니다.</li>
                                         </ul>
                                         <c:choose>
-                                            <c:when test="${school_level eq 'SL01'}">
+                                            <c:when test="${schoolLevel eq 'SL01'}">
                                                 <a href="/user/exam/user/viewer2">
                                                     <div class="btn testBtn" id="testBtn">시험 시작</div>
                                                 </a>
                                             </c:when>
-                                            <c:when test="${school_level eq 'SL02'}">
+                                            <c:when test="${schoolLevel eq 'SL02'}">
                                                 <a href="/user/exam/user/viewer1">
                                                     <div class="btn testBtn" id="testBtn">시험 시작</div>
                                                 </a>
                                             </c:when>
-                                            <c:when test="${school_level eq 'SL03'}">
+                                            <c:when test="${schoolLevel eq 'SL03'}">
                                                 <a href="/user/exam/user/viewer1">
                                                     <div class="btn testBtn" id="testBtn">시험 시작</div>
                                                 </a>
@@ -105,15 +105,19 @@
                             </div>
                         </li>
                         <li id="tab2" class="tab_btn">
-                            <a href="/user/exam/user-exam-subject?exam_round=1" class="tlabel2 label">실전시험Ⅰ</a>
+                            <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
+                            <a href="/user/exam/user-exam-subject?school_level=SL02&exam_round=1&year=2024"
+                               class="tlabel2 label">실전시험Ⅰ</a>
                         </li>
                         <li id="tab3" class="tab_btn">
-                            <a href="/user/exam/user-exam-subject?&exam_round=2&year=2023"
+                            <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
+                            <a href="/user/exam/user-exam-subject?&school_level=SL02&exam_round=2&year=2024"
                                class="tlabel2 label">실전시험Ⅱ</a>
-                            <%--                                    href="/user/exam/user-exam-subject?school_level=${params.school_level}&exam_round=2" class="tlabel2 label">실전시험Ⅱ</a>--%>
+                            <%--                                    href="/user/exam/user-exam-subject?school_level=${params.schoolLevel}&exam_round=2" class="tlabel2 label">실전시험Ⅱ</a>--%>
                         </li>
+                        <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                         <li id="tab4" class="tab_btn">
-                            <a href="/user/exam/report" class="tlabel2 label">Report</a>
+                            <a href="/user/exam/report?school_level=SL02&year=2024" class="tlabel2 label">Report</a>
                         </li>
                     </ul>
                 </div>
