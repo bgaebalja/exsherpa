@@ -60,19 +60,22 @@
                     </li>
                     <!--E: 220808 CBT 스타일 추가 -->
                     <li>
-                        <a href="#">
+                        <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
+                        <a href="user/exam/user-exam-subject?school_level=SL02&exam_round=1&year=2024">
                             <span class="tit">실전시험 1회</span>
                             <span class="txt">기출문제를 CBT로<br>재구성한 문제로<br>실전 모의고사 응시</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
+                        <a href="user/exam/user-exam-subject?school_level=SL02&exam_round=2&year=2024">
                             <span class="tit">실전시험 2회</span>
                             <span class="txt">적중률 높은<br>예상문제를 바탕으로<br>실전 모의고사 응시</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
+                        <a href="user/exam/report?school_level=SL02&year=2024">
                             <span class="tit">시험결과 REPORT</span>
                             <span class="txt">나의 성취도 파악과<br>취약점 분석,<br>시험 대비 학습 </span>
                         </a>
