@@ -1,12 +1,10 @@
 package bgaebalja.exsherpa.user.annotation;
 
-import static bgaebalja.exsherpa.util.SessionConstant.LOGIN_USER;
-
 import bgaebalja.exsherpa.user.domain.Users;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -26,12 +24,10 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
   public Object resolveArgument(
       MethodParameter parameter, ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-    HttpServletRequest request =  webRequest.getNativeRequest(HttpServletRequest.class);
-    assert request != null;
-    HttpSession session = request.getSession(false);
-    if (session == null) {
-      return null;
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.isAuthenticated()) {
+      return authentication.getPrincipal();
     }
-    return session.getAttribute(LOGIN_USER);
+    return null;
   }
 }
