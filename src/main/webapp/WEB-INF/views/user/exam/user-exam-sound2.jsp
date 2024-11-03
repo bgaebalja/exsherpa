@@ -60,7 +60,7 @@
                                class="tlabel2 label">CBT 대표유형</a>
                         </li>
                         <li id="tab2" class="tab_btn">
-                            <a href="/user/exam/user-exam-subject?school_level=${params.school_level}&exam_round=1"
+                            <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=1&year=${examInformationResponse.year}"
                                class="tlabel2 label">실전시험Ⅰ</a>
                         </li>
                         <li id="tab3" class="tab_btn">

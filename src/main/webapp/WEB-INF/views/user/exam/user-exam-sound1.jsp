@@ -87,7 +87,7 @@
                             </div>
                         </li>
                         <li id="tab3" class="tab_btn">
-                            <a href="/user/exam/user-exam-subject?&exam_round=2&year=2023"
+                            <a href="/user/exam/user-exam-subject?school_level=school_level=${examInformationResponse.schoolLevel}&exam_round=2&year=${examInformationResponse.year}"
                                class="tlabel2 label">실전시험Ⅱ</a>
                             <%--                                    href="/user/exam/user-exam-subject?school_level=${params.school_level}&exam_round=2" class="tlabel2 label">실전시험Ⅱ</a>--%>
                         </li>
