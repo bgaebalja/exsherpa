@@ -52,9 +52,9 @@
                         </a>
                         <div class="cbt-overlay">
                             <div class="cbt-btn-list">
-                                <a href="#">초등</a>
-                                <a href="#">중등</a>
-                                <a href="#">고등</a>
+                                <a href="user/exam/user-exam-cbt?school_level=SL01">초등</a>
+                                <a href="user/exam/user-exam-cbt?school_level=SL02">중등</a>
+                                <a href="user/exam/user-exam-cbt?school_level=SL03">고등</a>
                             </div>
                         </div>
                     </li>
