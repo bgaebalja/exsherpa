@@ -18,4 +18,12 @@ public class GetExaminationHistoriesResponse {
                 examinationHistories.stream().map(GetExaminationHistoryResponse::from).collect(Collectors.toList())
         );
     }
+
+    public int size() {
+        return getExaminationHistoryResponses.size();
+    }
+
+    public GetExaminationHistoryResponse get(int index) {
+        return getExaminationHistoryResponses.get(index);
+    }
 }

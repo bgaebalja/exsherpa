@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.exam.domain;
 
+import bgaebalja.exsherpa.collection.domain.Collection;
 import bgaebalja.exsherpa.collection.domain.GetCollectionsResponse;
 import bgaebalja.exsherpa.examination.domain.GetExaminationHistoriesResponse;
 import lombok.Builder;
@@ -14,13 +15,14 @@ public class GetExamResponse {
     private String examName;
     private String subjectName;
     private String timeLimit;
+    private int size;
     private GetCollectionsResponse getCollectionsResponse;
     private GetExaminationHistoriesResponse getExaminationHistoriesResponse;
 
     @Builder
     private GetExamResponse(
             Long id, String username, String className, String grade, String examName,
-            String subjectName, String timeLimit, GetCollectionsResponse getCollectionsResponse,
+            String subjectName, String timeLimit, int size, GetCollectionsResponse getCollectionsResponse,
             GetExaminationHistoriesResponse getExaminationHistoriesResponse
     ) {
         this.id = id;
@@ -30,6 +32,7 @@ public class GetExamResponse {
         this.examName = examName;
         this.subjectName = subjectName;
         this.timeLimit = timeLimit;
+        this.size = size;
         this.getCollectionsResponse = getCollectionsResponse;
         this.getExaminationHistoriesResponse = getExaminationHistoriesResponse;
     }
@@ -47,6 +50,7 @@ public class GetExamResponse {
                 .examName(exam.getExamName())
                 .subjectName(exam.getBook().getSubject().getName())
                 .timeLimit("60")
+                .size(exam.getCollections().stream().map(Collection::getQuestionCount).reduce(0, Integer::sum))
                 .getCollectionsResponse(GetCollectionsResponse.from(exam.getCollections()))
                 .getExaminationHistoriesResponse(GetExaminationHistoriesResponse.from(exam.getExaminationHistories()))
                 .build();
