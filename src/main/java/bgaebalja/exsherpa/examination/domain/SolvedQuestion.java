@@ -1,4 +1,4 @@
-package bgaebalja.exsherpa.examinationhistory.domain;
+package bgaebalja.exsherpa.examination.domain;
 
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.question.domain.Question;

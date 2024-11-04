@@ -1,6 +1,9 @@
 package bgaebalja.exsherpa.examination.controller;
 
+import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
+import bgaebalja.exsherpa.exam.service.ExamService;
 import bgaebalja.exsherpa.examination.domain.ExamInformationResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/user/exam")
+@RequiredArgsConstructor
 public class ExaminationController {
+    private final ExamService examService;
+
     @GetMapping("/user-exam-cbt")
     public ModelAndView getPracticeInformationPage(@RequestParam("school_level") String schoolLevel) {
         return new ModelAndView("user/exam/user-exam-cbt", "schoolLevel", schoolLevel);
@@ -31,11 +37,16 @@ public class ExaminationController {
             @RequestParam("exam_round") String examRound,
             @RequestParam("year") String year
     ) {
-        // TODO: 데이터베이스에서 시험지 ID를 가져 오는 로직 추가
-        return new ModelAndView(
-                "user/exam/user-exam-subject",
-                "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
-        );
+        ModelAndView modelAndView = new ModelAndView("user/exam/user-exam-subject");
+        modelAndView.addObject("examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year));
+
+        if (examRound.equals("1")) {
+            modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getPastExams()));
+            return modelAndView;
+        }
+
+        modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getBsherpaExams()));
+        return modelAndView;
     }
 
     @GetMapping("/user-exam-sound")

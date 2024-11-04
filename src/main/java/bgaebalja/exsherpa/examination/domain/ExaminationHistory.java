@@ -1,8 +1,9 @@
-package bgaebalja.exsherpa.examinationhistory.domain;
+package bgaebalja.exsherpa.examination.domain;
 
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.exam.domain.Exam;
 import bgaebalja.exsherpa.user.domain.Users;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -16,9 +17,10 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 public class ExaminationHistory extends BaseGeneralEntity {
     @Column(nullable = false, columnDefinition = BOOLEAN_DEFAULT_FALSE)
-    private boolean SolvedYn;
+    private boolean solvedYn;
 
     private short answerCount;
 
