@@ -67,7 +67,7 @@ pipeline {
                     withCredentials([
                         sshUserPrivateKey(credentialsId: 'EC2_DEPLOY_KEY_FOR_EXSHERPA', keyFileVariable: 'EC2_DEPLOY_KEY_FOR_EXSHERPA'),
                         string(credentialsId: 'EXSHERPA_RDS_ENDPOINT', variable: 'EXSHERPA_RDS_ENDPOINT'),
-                        string(credentialsId: 'EXSHERPA_SLAVE_DB_CONTAINER_NAME', variable: 'EXSHERPA_SLAVE_DB_CONTAINER_NAME'),
+                        string(credentialsId: 'BSHERPA_SLAVE_DB_CONTAINER_NAME', variable: 'BSHERPA_SLAVE_DB_CONTAINER_NAME'),
                         string(credentialsId: 'EXSHERPA_REDIS_CONTAINER_NAME', variable: 'EXSHERPA_REDIS_CONTAINER_NAME'),
                         string(credentialsId: 'DB_ROOT_PASSWORD', variable: 'DB_ROOT_PASSWORD'),
                         string(credentialsId: 'EXSHERPA_DB_MASTER_USER_NAME', variable: 'DB_MASTER_USER_NAME'),
@@ -88,7 +88,7 @@ pipeline {
                             export PROJECT_VERSION='${PROJECT_VERSION}'
                             export DOCKER_HUB_USER_NAME='${DOCKER_HUB_USER_NAME}'
                             export EXSHERPA_RDS_ENDPOINT='$EXSHERPA_RDS_ENDPOINT'
-                            export EXSHERPA_SLAVE_DB_CONTAINER_NAME='$EXSHERPA_SLAVE_DB_CONTAINER_NAME'
+                            export BSHERPA_SLAVE_DB_CONTAINER_NAME='$BSHERPA_SLAVE_DB_CONTAINER_NAME'
                             export EXSHERPA_REDIS_CONTAINER_NAME='$EXSHERPA_REDIS_CONTAINER_NAME'
                             export DB_ROOT_PASSWORD='$DB_ROOT_PASSWORD'
                             export DB_MASTER_USER_NAME='$DB_MASTER_USER_NAME'
