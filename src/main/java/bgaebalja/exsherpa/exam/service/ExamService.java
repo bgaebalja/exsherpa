@@ -8,4 +8,6 @@ public interface ExamService {
     List<Exam> getPastExams();
 
     List<Exam> getBsherpaExams();
+
+    Exam getExam(Long examId);
 }
