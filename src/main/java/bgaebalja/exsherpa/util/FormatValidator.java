@@ -27,6 +27,10 @@ public class FormatValidator {
         return value != null;
     }
 
+    public static boolean hasValue(String[] value) {
+        return value != null && value.length > 0;
+    }
+
     public static boolean hasValue(List value) {
         return value != null && !value.isEmpty();
     }

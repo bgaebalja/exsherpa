@@ -18,4 +18,12 @@ public class GetQuestionsResponse {
                 questions.stream().map(GetQuestionResponse::from).collect(Collectors.toList())
         );
     }
+
+    public int size() {
+        return getQuestionResponses.size();
+    }
+
+    public GetQuestionResponse get(int index) {
+        return getQuestionResponses.get(index);
+    }
 }
