@@ -1,6 +1,6 @@
 package bgaebalja.exsherpa.collection.domain;
 
-import bgaebalja.exsherpa.exam.passage.domain.GetPassagesResponse;
+import bgaebalja.exsherpa.passage.domain.GetPassagesResponse;
 import bgaebalja.exsherpa.question.domain.GetQuestionsResponse;
 import lombok.Builder;
 import lombok.Getter;

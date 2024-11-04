@@ -2,7 +2,7 @@ package bgaebalja.exsherpa.collection.domain;
 
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.exam.domain.Exam;
-import bgaebalja.exsherpa.exam.passage.domain.Passage;
+import bgaebalja.exsherpa.passage.domain.Passage;
 import bgaebalja.exsherpa.question.domain.Question;
 import lombok.Builder;
 import lombok.Getter;
