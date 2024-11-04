@@ -18,4 +18,12 @@ public class GetPassagesResponse {
                 passages.stream().map(GetPassageResponse::from).collect(Collectors.toList())
         );
     }
+
+    public int size() {
+        return getPassageResponses.size();
+    }
+
+    public GetPassageResponse get(int index) {
+        return getPassageResponses.get(index);
+    }
 }

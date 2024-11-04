@@ -2,6 +2,7 @@ package bgaebalja.exsherpa.collection.domain;
 
 import bgaebalja.exsherpa.passage.domain.GetPassagesResponse;
 import bgaebalja.exsherpa.question.domain.GetQuestionsResponse;
+import bgaebalja.exsherpa.util.FormatValidator;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,8 +18,13 @@ public class GetCollectionResponse {
     }
 
     public static GetCollectionResponse from(Collection collection) {
+        GetPassagesResponse getPassagesResponse = null;
+        if (FormatValidator.hasValue(collection.getPassages())) {
+            getPassagesResponse = GetPassagesResponse.from(collection.getPassages());
+        }
+
         return GetCollectionResponse.builder()
-                .getPassagesResponse(GetPassagesResponse.from(collection.getPassages()))
+                .getPassagesResponse(getPassagesResponse)
                 .getQuestionsResponse(GetQuestionsResponse.from(collection.getQuestions()))
                 .build();
     }
