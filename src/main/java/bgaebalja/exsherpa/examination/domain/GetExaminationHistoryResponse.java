@@ -1,5 +1,8 @@
 package bgaebalja.exsherpa.examination.domain;
 
+import lombok.Getter;
+
+@Getter
 public class GetExaminationHistoryResponse {
     private boolean isSolved;
     private short answerCount;

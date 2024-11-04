@@ -37,4 +37,8 @@ public class Collection extends BaseGeneralEntity {
         this.questions = questions;
         this.passages = passages;
     }
+
+    public int getQuestionCount() {
+        return questions.size();
+    }
 }

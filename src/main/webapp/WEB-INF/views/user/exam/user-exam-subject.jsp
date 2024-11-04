@@ -111,66 +111,38 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tbody>
-                                                <c:forEach var="exam" begin="1" end="1">
-                                                    <tr>
-                                                        <td class="first">1교시</td>
-                                                        <td>국어</td>
-                                                        <td>응시 시각으로부터 60분</td>
-                                                        <td>20문항</td>
-                                                        <td>
-                                                            <!-- TODO: 시험지 ID 전송 -->
-                                                            <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${examInformationResponse.examId}"
-                                                               class="startBtn"
-                                                               style="background-color: #3c6ebf;">응시하기</a>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                                </tbody>
-                                                <c:forEach var="exam" items="${examList}" varStatus="index">
+                                                <c:forEach var="exam" items="${getExamsResponse.getExamResponses}"
+                                                           varStatus="index">
                                                     <tr>
                                                         <td class="first">${index.index + 1}교시</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.subjectId eq 14}">국어</c:when>
-                                                                <c:when test="${exam.subjectId eq 15}">영어</c:when>
-                                                                <c:when test="${exam.subjectId eq 16}">수학</c:when>
-                                                                <c:when test="${exam.subjectId eq 17}">사회</c:when>
-                                                                <c:when test="${exam.subjectId eq 18}">과학</c:when>
+                                                                <c:when test="${exam.subjectName eq '국어'}">국어</c:when>
+                                                                <c:when test="${exam.subjectName eq '영어'}">영어</c:when>
+                                                                <c:when test="${exam.subjectName eq '수학'}">수학</c:when>
+                                                                <c:when test="${exam.subjectName eq '사회'}">사회</c:when>
+                                                                <c:when test="${exam.subjectName eq '과학'}">과학</c:when>
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
                                                         </td>
-                                                        <td>응시 시각으로부터 ${exam.testTime}분</td>
-                                                        <td>${exam.itemCnt}문항</td>
+                                                        <td>응시 시각으로부터 ${exam.timeLimit}분</td>
+                                                        <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.completeYn eq 'Y' and isTesting eq false}">
-                                                                    <a href="javascript:restartExam('${exam.examResultId}','${exam.examId}');"
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'true'}">
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
-                                                                <c:when test="${exam.completeYn eq 'Y' and isTesting eq true}">
-                                                                    <a href="#none" class="startBtn"
-                                                                       style="cursor: default; background-color: #5a6268;">재응시</a>
-                                                                </c:when>
-                                                                <c:when test="${exam.completeYn eq 'N' and not empty exam.examResultId}">
-                                                                    <a href="/user/exam/exam-view?exam_id=${exam.examId}"
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'false'}">
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
-                                                                <c:when test="${empty exam.examResultId and isTesting eq false}">
-                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}&examId=${examInformationResponse.examId}"
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() == 0}">
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #3c6ebf;">응시하기</a>
-                                                                </c:when>
-                                                                <c:when test="${empty exam.examResultId and isTesting eq true}">
-                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}&examId=${examInformationResponse.examId}"
-                                                                       class="startBtn"
-                                                                       style="cursor: default; background-color: #5a6268;">응시하기</a>
-                                                                </c:when>
-                                                                <c:when test="${empty exam.examResultId and isTesting eq true}">
-                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}&examId=${examInformationResponse.examId}"
-                                                                       style="cursor: default; background-color: #5a6268;">응시하기</a>
                                                                 </c:when>
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
@@ -260,61 +232,38 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tbody>
-                                                <c:forEach var="exam" begin="1" end="1">
-                                                    <tr>
-                                                        <td class="first">1교시</td>
-                                                        <td>국어</td>
-                                                        <td>응시 시각으로부터 60분</td>
-                                                        <td>20문항</td>
-                                                        <td>
-                                                            <!-- TODO: 시험지 ID 전송 -->
-                                                            <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${examInformationResponse.examId}"
-                                                               class="startBtn"
-                                                               style="background-color: #3c6ebf;">응시하기</a>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                                </tbody>
-                                                <c:forEach var="exam" items="${examList}" varStatus="index">
+                                                <c:forEach var="exam" items="${getExamsResponse.getExamResponses}"
+                                                           varStatus="index">
                                                     <tr>
                                                         <td class="first">${index.index + 1}교시</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.subjectId eq 14}">국어</c:when>
-                                                                <c:when test="${exam.subjectId eq 15}">영어</c:when>
-                                                                <c:when test="${exam.subjectId eq 16}">수학</c:when>
-                                                                <c:when test="${exam.subjectId eq 17}">사회</c:when>
-                                                                <c:when test="${exam.subjectId eq 18}">과학</c:when>
+                                                                <c:when test="${exam.subjectName eq '국어'}">국어</c:when>
+                                                                <c:when test="${exam.subjectName eq '영어'}">영어</c:when>
+                                                                <c:when test="${exam.subjectName eq '수학'}">수학</c:when>
+                                                                <c:when test="${exam.subjectName eq '사회'}">사회</c:when>
+                                                                <c:when test="${exam.subjectName eq '과학'}">과학</c:when>
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
                                                         </td>
-                                                        <td>응시 시각으로부터 ${exam.testTime}분</td>
-                                                        <td>${exam.itemCnt}문항</td>
+                                                        <td>응시 시각으로부터 ${exam.timeLimit}분</td>
+                                                        <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.completeYn eq 'Y' and isTesting eq false}">
-                                                                    <a href="javascript:restartExam('${exam.examResultId}','${exam.examId}');"
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'true'}">
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
-                                                                <c:when test="${exam.completeYn eq 'Y' and isTesting eq true}">
-                                                                    <a href="#none" class="startBtn"
-                                                                       style="cursor: default; background-color: #5a6268;">재응시</a>
-                                                                </c:when>
-                                                                <c:when test="${exam.completeYn eq 'N' and not empty exam.examResultId}">
-                                                                    <a href="/user/exam/exam-view?exam_id=${exam.examId}"
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'false'}">
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
-                                                                <c:when test="${empty exam.examResultId and isTesting eq false}">
-                                                                    <a href="/user/exam/user-exam-sound/${examInformationResponse.examRound}?exam_id=${examInformationResponse.examId}"
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() == 0}">
+                                                                    <a href="/user/exam/user-exam-sound?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #3c6ebf;">응시하기</a>
-                                                                </c:when>
-                                                                <c:when test="${empty exam.examResultId and isTesting eq true}">
-                                                                    <a href="#none" class="startBtn"
-                                                                       style="cursor: default; background-color: #5a6268;">응시하기</a>
                                                                 </c:when>
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
