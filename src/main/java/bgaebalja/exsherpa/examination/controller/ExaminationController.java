@@ -1,8 +1,10 @@
 package bgaebalja.exsherpa.examination.controller;
 
+import bgaebalja.exsherpa.exam.domain.GetExamResponse;
 import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
 import bgaebalja.exsherpa.exam.service.ExamService;
 import bgaebalja.exsherpa.examination.domain.ExamInformationResponse;
+import bgaebalja.exsherpa.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,8 +100,10 @@ public class ExaminationController {
 
     @GetMapping("/exam-view")
     public ModelAndView getActualTestPage(@RequestParam(value = "exam_id") String examId) {
-        // TODO: 데이터베이스에서 시험지와 문제 목록 가져 오기
         // TODO: 멀티스레드 시간 측정
-        return new ModelAndView("exam/exam-view", "examId", examId);
+        GetExamResponse getExamResponse
+                = GetExamResponse.from(examService.getExam(FormatConverter.parseToLong(examId)));
+
+        return new ModelAndView("exam/exam-view", "getExamResponse", getExamResponse);
     }
 }
