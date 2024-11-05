@@ -10,17 +10,7 @@ public class ContentExtractor {
 
         if (startIndex != -1 && endIndex != -1) {
             String bodyContent = html.substring(startIndex + startTag.length(), endIndex);
-
-            String[] divContents = bodyContent.split("(?=<div[^>]*>)");
-            for (String divContent : divContents) {
-                if (divContent.contains("class=\"paragraph\"")) {
-                    int divEndIndex = divContent.indexOf("</div>");
-                    if (divEndIndex != -1) {
-                        String completeDiv = divContent.substring(0, divEndIndex + "</div>".length());
-                        totalContent.append(completeDiv.trim()).append("<br />");
-                    }
-                }
-            }
+            totalContent.append(bodyContent.trim()).append("\n");
         }
     }
 }
