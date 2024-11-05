@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class GetQuestionResponse {
+    private Long id;
     private Long itemId;
     private String content;
     private String descriptionUrl;
@@ -31,12 +32,13 @@ public class GetQuestionResponse {
 
     @Builder
     private GetQuestionResponse(
-            Long itemId, String content, String descriptionUrl, QuestionType questionType,
+            Long id, Long itemId, String content, String descriptionUrl, QuestionType questionType,
             GetOptionsResponse getOptionsResponse, Difficulty difficulty, String answer, String answerUrl,
             int errorReportCount, boolean blockYn, Integer placementNumber, String largeChapterCode,
             String largeChapterName, String mediumChapterCode, String mediumChapterName, String smallChapterCode,
             String smallChapterName, String topicChapterCode, String topicChapterName, boolean isSubjective
     ) {
+        this.id = id;
         this.itemId = itemId;
         this.content = content;
         this.descriptionUrl = descriptionUrl;
@@ -76,6 +78,7 @@ public class GetQuestionResponse {
         System.out.println(totalContent + "abcde");
 
         return GetQuestionResponse.builder()
+                .id(question.getId())
                 .itemId(question.getItemId())
                 .content(totalContent.toString())
                 .descriptionUrl(question.getDescriptionUrl())
