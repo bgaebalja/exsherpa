@@ -1,6 +1,7 @@
 package bgaebalja.exsherpa.question.domain;
 
 import bgaebalja.exsherpa.option.domain.GetOptionsResponse;
+import bgaebalja.exsherpa.util.ContentExtractor;
 import bgaebalja.exsherpa.util.FormatValidator;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,9 +62,10 @@ public class GetQuestionResponse {
     public static GetQuestionResponse from(Question question) {
         String html = question.getHtml();
         StringBuilder totalContent = new StringBuilder();
+        System.out.println(html + "asdfl;kj");
 
         if (FormatValidator.hasValue(html)) {
-            extractBodyContent(html, totalContent);
+            ContentExtractor.extractBodyContent(html, totalContent);
         }
 
         boolean isSubjective = question.getQuestionType().isSubjective();
@@ -71,6 +73,7 @@ public class GetQuestionResponse {
         if (!isSubjective) {
             getOptionsResponse = GetOptionsResponse.from(question.getOptions());
         }
+        System.out.println(totalContent + "abcde");
 
         return GetQuestionResponse.builder()
                 .itemId(question.getItemId())
@@ -105,27 +108,6 @@ public class GetQuestionResponse {
         if (FormatValidator.hasValue(splitContents)) {
             String[] contents = splitContents[0].split(">");
             totalContent.append(contents[contents.length - 1]);
-        }
-    }
-
-    private static void extractBodyContent(String html, StringBuilder totalContent) {
-        String startTag = "<body>";
-        String endTag = "</body>";
-
-        int startIndex = html.indexOf(startTag);
-        int endIndex = html.lastIndexOf(endTag);
-
-        if (startIndex != -1 && endIndex != -1) {
-            String bodyContent = html.substring(startIndex + startTag.length(), endIndex);
-
-            String[] divContents = bodyContent.split("(?=<div[^>]*>)");
-            for (String divContent : divContents) {
-                if (divContent.contains("</div>")) {
-                    int divEndIndex = divContent.indexOf("</div>") + "</div>".length();
-                    String completeDiv = divContent.substring(0, divEndIndex);
-                    totalContent.append(completeDiv.trim()).append("\n");
-                }
-            }
         }
     }
 }

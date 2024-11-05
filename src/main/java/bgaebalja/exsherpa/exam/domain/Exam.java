@@ -36,9 +36,6 @@ public class Exam extends BaseGeneralEntity {
     @Column(name = "open_yn")
     private Boolean openYn;
 
-    @Column(name = "exam_type")
-    private ExamType examType = ExamType.ALL;
-
     @OneToMany(mappedBy = "exam", cascade = PERSIST)
     private List<Collection> collections;
 

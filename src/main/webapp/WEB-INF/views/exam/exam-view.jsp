@@ -11,6 +11,8 @@
 <%@ page import="bgaebalja.exsherpa.passage.domain.GetPassagesResponse" %>
 <%@ page import="bgaebalja.exsherpa.question.domain.GetQuestionsResponse" %>
 <%@ page import="bgaebalja.exsherpa.passage.domain.GetPassageResponse" %>
+<%@ page import="bgaebalja.exsherpa.option.domain.GetOptionsResponse" %>
+<%@ page import="java.util.List" %>
 
 <%
     GetExamResponse getExamResponse = (GetExamResponse) request.getAttribute("getExamResponse");
@@ -101,6 +103,12 @@
         }
 
     </style>
+    <style>
+        .passage {
+            line-height: 1.5; /* 텍스트 줄 간격 */
+            font-size: 14px; /* 텍스트 크기 조정 */
+        }
+    </style>
 </head>
 <body>
 <div class="wrap
@@ -187,9 +195,9 @@
             <input type="hidden" name="currentId" value="">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-
                     <%
                         int previousIndex = 0;
+                        int subjectiveNumber = 0;
                         GetCollectionsResponse getCollectionsResponse = getExamResponse.getGetCollectionsResponse();
                         for (int i = 0; i < getCollectionsResponse.size(); i++) {
                             GetPassagesResponse getPassagesResponse
@@ -198,6 +206,10 @@
                                     = getCollectionsResponse.get(i).getGetQuestionsResponse();
 
                             if (FormatValidator.hasValue(getPassagesResponse)) {
+                                int startIndex = previousIndex + 1;
+                                int endIndex = startIndex + getQuestionsResponse.size() - 1;
+                                for (int j = 0; j < getQuestionsResponse.size(); j++) {
+                                    ++previousIndex;
                     %>
                     <div class="swiper-slide" id="item153">
                         <input type="hidden" name="item_id" value="153">
@@ -209,49 +221,66 @@
                             <div class="inner">
                                 <div class="question type01">
                                     <div class="left">
-                                        <div class="txt">
+                                        <div class="passage">
+                                            <span>문제 <%= startIndex %> <%= getQuestionsResponse.size() > 1 ? " ~ " + endIndex : ""%></span>
                                             <%
-                                                for (int j = 0; j < getPassagesResponse.size(); j++) {
+                                                for (int k = 0; k < getPassagesResponse.size(); k++) {
                                             %>
-                                            <img src="<%= getCollectionsResponse.get(i).getGetPassagesResponse().get(j).getUrl()%>">
+                                            <img src="<%= getCollectionsResponse.get(i).getGetPassagesResponse().get(k).getUrl()%>">
                                             <%
                                                 }
                                             %>
                                         </div>
                                     </div>
                                     <div class="right">
-                                        <%
-                                            for (int j = 0; j < getQuestionsResponse.size(); j++) {
-                                        %>
                                         <div class="top">
-                                            <span class="num"><%= ++previousIndex %></span>
+                                            <span class="num"><%= previousIndex %></span>
                                             <span class="txt"><%= getQuestionsResponse.get(j).getContent() %> <i> [5점]</i></span>
                                         </div>
                                         <%
-                                            }
+                                            if (!getQuestionsResponse.get(j).isSubjective()) {
+                                                GetOptionsResponse getOptionsResponse
+                                                        = getQuestionsResponse.get(j).getGetOptionsResponse();
+                                                for (int l = 0; l < getOptionsResponse.size(); l++) {
                                         %>
-                                        <ul class="answer-input-type radio horizontal-type">
+                                        <ul class="answer-input-type radio">
                                             <li>
-                                                <input type="radio" name="answer_153" id="answer_radio08_1" value="1">
-                                                <label for="answer_radio08_1">1</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="answer_153" id="answer_radio08_2" value="2">
-                                                <label for="answer_radio08_2">2</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="answer_153" id="answer_radio08_3" value="3">
-                                                <label for="answer_radio08_3">3</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="answer_153" id="answer_radio08_4" value="4">
-                                                <label for="answer_radio08_4">4</label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="answer_153" id="answer_radio08_5" value="5">
-                                                <label for="answer_radio08_5">5</label>
+                                                <input type="radio" name="answer_278"
+                                                       id="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"
+                                                       value="<%= previousIndex %>">
+                                                <label for="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(l).getOptionNo() %>
+                                                </label>
+                                                <%= getOptionsResponse.get(l).getHtml() %>
                                             </li>
                                         </ul>
+                                        <%
+                                                }
+                                            }
+                                        %>
+                                    </div>
+                                </div>
+                            </div>
+                            <canvas class="sketchpad" style="cursor: crosshair;" width="1260" height="1216"></canvas>
+                        </div>
+                    </div>
+                    <%
+                        }
+                    } else {
+                        for (int j = 0; j < getQuestionsResponse.size(); j++) {
+                            if (getQuestionsResponse.get(j).isSubjective()) {
+                    %>
+                    <div class="swiper-slide" id="item301">
+                        <input type="hidden" name="item_id" value="301">
+                        <input type="hidden" name="relation_id" value="">
+                        <input type="hidden" name="item_type" value="IT10">
+                        <input type="hidden" name="student_answer"
+                               value=''/>
+                        <div class="page">
+                            <div class="inner">
+                                <div class="question">
+                                    <div class="top">
+                                        <span class="num">서답형<%= ++subjectiveNumber %></span>
+                                        <%= getQuestionsResponse.get(j).getContent() %>
                                     </div>
                                 </div>
                             </div>
@@ -260,7 +289,6 @@
                     </div>
                     <%
                     } else {
-                        for (int j = 0; j < getQuestionsResponse.size(); j++) {
                     %>
                     <div class="swiper-slide" id="item278">
                         <input type="hidden" name="item_id" value="278">
@@ -275,78 +303,34 @@
                                         <span class="num"><%= ++previousIndex %></span>
                                         <span class="txt"><%= getQuestionsResponse.get(j).getContent() %> <i> [4점]</i> </span>
                                     </div>
-                                    <div class="img-box">
-                                        <img src="../../img/test/science2_img01_1.jpg" alt="" class="w60">
-                                    </div>
-                                    <div class="img-box">
-                                        <img src="../../img/test/science2_img01_2.jpg" alt="" class="w60">
-                                    </div>
+                                    <%
+                                        GetOptionsResponse getOptionsResponse = getQuestionsResponse.get(j).getGetOptionsResponse();
+                                        for (int k = 0; k < getOptionsResponse.size(); k++) {
+                                    %>
                                     <ul class="answer-input-type radio">
                                         <li>
-                                            <input type="radio" name="answer_278" id="answer_radio01_1" value="1">
-                                            <label for="answer_radio01_1">1</label>
-                                            <span class="txt">ㄱ, ㄴ</span>
-                                        </li>
-                                        <li>
-                                            <input type="radio" name="answer_278" id="answer_radio01_2" value="2">
-                                            <label for="answer_radio01_2">2</label>
-                                            <span class="txt">ㄱ, ㄷ</span>
-                                        </li>
-                                        <li>
-                                            <input type="radio" name="answer_278" id="answer_radio01_3" value="3">
-                                            <label for="answer_radio01_3">3</label>
-                                            <span class="txt">ㄴ, ㄹ</span>
-                                        </li>
-                                        <li>
-                                            <input type="radio" name="answer_278" id="answer_radio01_4" value="4">
-                                            <label for="answer_radio01_4">4</label>
-                                            <span class="txt">ㄷ, ㄹ</span>
-                                        </li>
-                                        <li>
-                                            <input type="radio" name="answer_278" id="answer_radio01_5" value="5">
-                                            <label for="answer_radio01_5">5</label>
-                                            <span class="txt">ㄹ, ㅁ</span>
+                                            <input type="radio" name="answer_278"
+                                                   id="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"
+                                                   value="<%= previousIndex %>">
+                                            <label for="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(k).getOptionNo() %>
+                                            </label>
+                                            <%= getOptionsResponse.get(k).getHtml() %>
                                         </li>
                                     </ul>
+                                    <%
+                                        }
+                                    %>
                                 </div>
                             </div>
                             <canvas class="sketchpad" style="cursor: crosshair;" width="1260" height="1216"></canvas>
                         </div>
                     </div>
                     <%
+                                    }
                                 }
                             }
                         }
                     %>
-                    <div class="swiper-slide" id="item301">
-                        <input type="hidden" name="item_id" value="301">
-                        <input type="hidden" name="relation_id" value="">
-                        <input type="hidden" name="item_type" value="IT10">
-                        <input type="hidden" name="student_answer"
-                               value=''/>
-                        <div class="page">
-                            <div class="inner">
-                                <div class="question">
-                                    <div class="top">
-                                        <span class="num">서답형5</span>
-                                        <span class="txt">그림 (가)와 (나)는 포화 수증기량과 실제 수증기량을 비교한 모식도이며, 각각 겨울철 문과 창문을 모두 닫은 방에 난방기를 켜기 전과 후를 순서에 관계없이 나타낸 것이다. </span>
-                                    </div>
-                                    <div class="img-box">
-                                        <img src="../../img/test/science2_img24.jpg" alt="">
-                                    </div>
-                                    <div class="answer-textarea-type">
-                                        ⑴ (가)와 (나)의 상대 습도를 비교하고, 그 까닭을 서술하시오.
-                                        <textarea name="" placeholder="입력" id="" cols="20" rows="5"></textarea>
-                                    </div>
-                                    <div class="answer-textarea-type">
-                                        ⑵ 맑은 날 새벽과 한낮의 모식도는 (가)와 (나) 중 각각 어디에 가까운지 쓰고, 그 까닭을 서술하시오.
-                                        <textarea name="" placeholder="입력" id="" cols="20" rows="5"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <canvas class="sketchpad" style="cursor: crosshair;" width="1260" height="1216"></canvas>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
