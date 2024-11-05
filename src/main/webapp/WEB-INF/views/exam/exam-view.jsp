@@ -1,4 +1,3 @@
-<%@ page import="java.time.LocalDateTime" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -10,9 +9,7 @@
 <%@ page import="bgaebalja.exsherpa.util.FormatValidator" %>
 <%@ page import="bgaebalja.exsherpa.passage.domain.GetPassagesResponse" %>
 <%@ page import="bgaebalja.exsherpa.question.domain.GetQuestionsResponse" %>
-<%@ page import="bgaebalja.exsherpa.passage.domain.GetPassageResponse" %>
 <%@ page import="bgaebalja.exsherpa.option.domain.GetOptionsResponse" %>
-<%@ page import="java.util.List" %>
 
 <%
     GetExamResponse getExamResponse = (GetExamResponse) request.getAttribute("getExamResponse");
@@ -105,8 +102,8 @@
     </style>
     <style>
         .passage {
-            line-height: 1.5; /* 텍스트 줄 간격 */
-            font-size: 14px; /* 텍스트 크기 조정 */
+            line-height: 1.5;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -181,6 +178,7 @@
         </div>
         <div class="viewer-paper">
             <div class="head">
+                // TODO: 과목 이름 넣기
                 <span class="txt">중3과학(1회)</span>
                 <i class="enterFullscreenBtn">
                     <img src="https://enaea.kice.re.kr/js/site/viewer/css/images/fullscreen_icon-icons.com_71635.png"
@@ -211,12 +209,11 @@
                                 for (int j = 0; j < getQuestionsResponse.size(); j++) {
                                     ++previousIndex;
                     %>
-                    <div class="swiper-slide" id="item153">
-                        <input type="hidden" name="item_id" value="153">
-                        <input type="hidden" name="relation_id" value="">
-                        <input type="hidden" name="item_type" value="IT01">
-                        <input type="hidden" name="student_answer"
-                               value='{}'/>
+                    <div class="swiper-slide" id="item<%= getQuestionsResponse.get(j).getId() %>"
+                         data-question-id="<%= getQuestionsResponse.get(j).getId() %>">
+                        <input type="hidden" name="question_id" value="<%= getQuestionsResponse.get(j).getId() %>">
+                        <input type="hidden" name="original_answer"
+                               value="<%= getQuestionsResponse.get(j).getAnswer() %>">
                         <div class="page type01">
                             <div class="inner">
                                 <div class="question type01">
@@ -245,7 +242,7 @@
                                         %>
                                         <ul class="answer-input-type radio">
                                             <li>
-                                                <input type="radio" name="answer_278"
+                                                <input type="radio" name="answer_<%= j %>"
                                                        id="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"
                                                        value="<%= previousIndex %>">
                                                 <label for="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(l).getOptionNo() %>
@@ -269,12 +266,11 @@
                         for (int j = 0; j < getQuestionsResponse.size(); j++) {
                             if (getQuestionsResponse.get(j).isSubjective()) {
                     %>
-                    <div class="swiper-slide" id="item301">
-                        <input type="hidden" name="item_id" value="301">
-                        <input type="hidden" name="relation_id" value="">
-                        <input type="hidden" name="item_type" value="IT10">
-                        <input type="hidden" name="student_answer"
-                               value=''/>
+                    <div class="swiper-slide" id="item<%= getQuestionsResponse.get(j).getId() %>"
+                         data-question-id="<%= getQuestionsResponse.get(j).getId() %>">
+                        <input type="hidden" name="question_id" value="<%= getQuestionsResponse.get(j).getId() %>">
+                        <input type="hidden" name="original_answer"
+                               value="<%= getQuestionsResponse.get(j).getAnswer() %>">
                         <div class="page">
                             <div class="inner">
                                 <div class="question">
@@ -290,12 +286,11 @@
                     <%
                     } else {
                     %>
-                    <div class="swiper-slide" id="item278">
-                        <input type="hidden" name="item_id" value="278">
-                        <input type="hidden" name="relation_id" value="">
-                        <input type="hidden" name="item_type" value="IT01">
-                        <input type="hidden" name="student_answer"
-                               value=''/>
+                    <div class="swiper-slide" id="item<%= getQuestionsResponse.get(j).getId() %>"
+                         data-question-id="<%= getQuestionsResponse.get(j).getId() %>">
+                        <input type="hidden" name="question_id" value="<%= getQuestionsResponse.get(j).getId() %>">
+                        <input type="hidden" name="original_answer"
+                               value="<%= getQuestionsResponse.get(j).getAnswer() %>">
                         <div class="page">
                             <div class="inner">
                                 <div class="question">
@@ -309,7 +304,7 @@
                                     %>
                                     <ul class="answer-input-type radio">
                                         <li>
-                                            <input type="radio" name="answer_278"
+                                            <input type="radio" name="answer_<%= j %>"
                                                    id="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"
                                                    value="<%= previousIndex %>">
                                             <label for="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(k).getOptionNo() %>
@@ -390,6 +385,41 @@
         }
     }, 1000);
 
+    function extractAnswers() {
+        const answers = [];
+        const questionSlides = document.querySelectorAll('.swiper-slide');
+
+        questionSlides.forEach((slide) => {
+            const questionId = slide.dataset.questionId;
+            const questionNumber = slide.querySelector('.num') ? slide.querySelector('.num').textContent.trim() : null;
+            const isSubjective = slide.querySelector('input.input_question_text_box') !== null;
+            let submittedAnswer;
+
+            if (isSubjective) {
+                const textAnswer = slide.querySelector('input.input_question_text_box');
+                submittedAnswer = textAnswer && textAnswer.length > 0 ? textAnswer.value.trim() : "미응답";
+            } else {
+                const selectedOption = slide.querySelector('input[type="radio"]:checked');
+                submittedAnswer = selectedOption ? selectedOption.nextElementSibling.textContent.trim() : "미응답";
+            }
+
+            const originalAnswer = slide.querySelector('input[name="original_answer"]').value;
+
+            answers.push({
+                questionId: questionId,
+                questionNumber: questionNumber,
+                isSubjective: isSubjective,
+                submittedAnswer: submittedAnswer,
+                originalAnswer: originalAnswer
+            });
+        });
+
+        answers.forEach(answer => {
+            console.log(`문제 ${answer.questionNumber}: ${JSON.stringify(answer, null, 2)}`);
+        });
+        return answers;
+    }
+
     function testItem(element, itemType) {
         const answerExtractor = new AnswerExtractor({
             el: element,
@@ -399,47 +429,34 @@
     }
 
     function completeExam(studentId) {
-        let itemDiv = document.querySelector('.swiper-slide-active > div.page')
-        let itemId = document.querySelector('.swiper-slide-active').querySelector('input[name=item_id]').value;
-        let itemType = document.querySelector('.swiper-slide-active').querySelector('input[name=item_type]').value;
-        let studentAnswer = testItem(itemDiv, itemType);
-        document.querySelector('.swiper-slide-active').querySelector('input[name=student_answer]').value = studentAnswer;
-        let message = '';
-        if (checkCompleteExam() === true) {
-            message = '최종 제출하시겠습니까?\n최종 제출하시면, 정답 수정이 불가합니다.'
-        } else {
-            message = '최종 제출하시겠습니까?\n최종 제출하시면, 정답 수정이 불가합니다.';
-        }
+        const extractedAnswers = extractAnswers();
+
+        let message = '최종 제출하시겠습니까?\n최종 제출하시면, 정답 수정이 불가합니다.';
         if (confirm(message)) {
-            fetch('/user/item/user-item-result', {
-                method: "POST",
+            fetch('/user/exam/submit', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    examResultId: 5558,
-                    itemId: itemId,
-                    studentId: studentId,
-                    studentAnswer: studentAnswer,
-                    itemProgressTime: saveTime - time
+                    answerRequests: extractedAnswers
                 }),
-            }).then(response => {
-                return response.json();
-            }).then((data) => {
-                fetch('/user/exam/complete-exam', {
-                    method: 'PUT',
-                    cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({'examResultId': 5558})
-                }).then((response) => response.json())
-                    .then((data) => {
-                        location.href = '/user/exam/report?school_level=SL02&exam_round=1&subject_id=18&year=2022';
-                    });
-            });
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("시험이 제출되었습니다.");
+                        // TODO: 학교 등급과 시험 종류(기출, B셀파 문제), 연도 정보 실제 데이터 추가
+                        location.href = "/user/exam/report?school_level=SL02&exam_round=2&year=2024&exam_id=${getExamResponse.id}";
+                    } else {
+                        console.error("응답 상태 코드: " + response.status);
+                        alert("제출에 실패했습니다. 다시 시도해 주세요.");
+                    }
+                })
+                .catch(error => {
+                    console.error("에러 발생: ", error);
+                    alert("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
+                });
         }
-
     }
 
     function leadingZeros(n, digits) {

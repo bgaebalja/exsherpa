@@ -4,14 +4,16 @@ import bgaebalja.exsherpa.exam.domain.GetExamResponse;
 import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
 import bgaebalja.exsherpa.exam.service.ExamService;
 import bgaebalja.exsherpa.examination.domain.ExamInformationResponse;
+import bgaebalja.exsherpa.examination.domain.SubmitResultRequest;
 import bgaebalja.exsherpa.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Controller
 @RequestMapping("/user/exam")
@@ -92,10 +94,13 @@ public class ExaminationController {
     @GetMapping("/report")
     public ModelAndView getReportPage(
             @RequestParam("school_level") String schoolLevel,
-            @RequestParam("year") String year
+            @RequestParam(value = "exam_round", defaultValue = "1") String examRound,
+            @RequestParam("year") String year,
+            @RequestParam(value = "exam_id", defaultValue = "1") String examId
     ) {
         ModelAndView modelAndView = new ModelAndView("user/exam/report");
-        modelAndView.addObject("examInformationResponse", ExamInformationResponse.of(schoolLevel, "1", year));
+        modelAndView
+                .addObject("examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year, examId));
 
         return modelAndView;
     }
@@ -107,5 +112,10 @@ public class ExaminationController {
                 = GetExamResponse.from(examService.getExam(FormatConverter.parseToLong(examId)));
 
         return new ModelAndView("exam/exam-view", "getExamResponse", getExamResponse);
+    }
+
+    @PostMapping("/submit")
+    public ResponseEntity<Void> submitResult(@RequestBody SubmitResultRequest submitResultRequest) {
+        return ResponseEntity.status(CREATED).build();
     }
 }
