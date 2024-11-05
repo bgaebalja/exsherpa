@@ -1,5 +1,7 @@
 package bgaebalja.exsherpa.option.domain;
 
+import bgaebalja.exsherpa.util.ContentExtractor;
+import bgaebalja.exsherpa.util.FormatValidator;
 import lombok.Getter;
 
 @Getter
@@ -13,6 +15,15 @@ public class GetOptionResponse {
     }
 
     public static GetOptionResponse from(Option option) {
-        return new GetOptionResponse(option.getOptionNo(), option.getHtml());
+        String html = option.getHtml();
+        System.out.println(html + "asdfl;kj");
+        StringBuilder totalContent = new StringBuilder();
+
+        if (FormatValidator.hasValue(html)) {
+            ContentExtractor.extractBodyContent(html, totalContent);
+        }
+        System.out.println(totalContent + "abcde");
+
+        return new GetOptionResponse(option.getOptionNo(), totalContent.toString());
     }
 }

@@ -16,4 +16,12 @@ public class GetOptionsResponse {
     public static GetOptionsResponse from(List<Option> options) {
         return new GetOptionsResponse(options.stream().map(GetOptionResponse::from).collect(Collectors.toList()));
     }
+
+    public int size() {
+        return getOptiosResponses.size();
+    }
+
+    public GetOptionResponse get(int index) {
+        return getOptiosResponses.get(index);
+    }
 }
