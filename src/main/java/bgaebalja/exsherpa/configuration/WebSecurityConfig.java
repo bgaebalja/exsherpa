@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.configuration;
 
+import bgaebalja.exsherpa.security.handler.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .clearAuthentication(true)
         .permitAll()
         .and()
-        .exceptionHandling();
+        .exceptionHandling()
+        .accessDeniedHandler(new CustomAccessDeniedHandler());
   }
 
   @Bean
