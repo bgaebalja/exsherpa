@@ -2,14 +2,17 @@ package bgaebalja.exsherpa.question.domain;
 
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.collection.domain.Collection;
+import bgaebalja.exsherpa.option.domain.Option;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 import static bgaebalja.exsherpa.util.EntityConstant.BOOLEAN_DEFAULT_FALSE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -64,6 +67,9 @@ public class Question extends BaseGeneralEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "collection_id")
     private Collection collection;
+
+    @OneToMany(mappedBy = "question", cascade = PERSIST)
+    private List<Option> options;
 
     // 배치순서 Column 추가
     @Column(name = "placement_number")
