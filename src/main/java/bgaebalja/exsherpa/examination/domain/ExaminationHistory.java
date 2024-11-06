@@ -3,15 +3,16 @@ package bgaebalja.exsherpa.examination.domain;
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.exam.domain.Exam;
 import bgaebalja.exsherpa.user.domain.Users;
+import bgaebalja.exsherpa.util.CountComputer;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 
 import static bgaebalja.exsherpa.util.EntityConstant.BOOLEAN_DEFAULT_FALSE;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -22,6 +23,9 @@ public class ExaminationHistory extends BaseGeneralEntity {
     @Column(nullable = false, columnDefinition = BOOLEAN_DEFAULT_FALSE)
     private boolean solvedYn;
 
+    @Column(nullable = false)
+    private short questionCount;
+
     private short answerCount;
 
     @ManyToOne(fetch = LAZY)
@@ -31,4 +35,26 @@ public class ExaminationHistory extends BaseGeneralEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "exam_id")
     private Exam exam;
+
+    @OneToMany(mappedBy = "examinationHistory", cascade = {PERSIST, MERGE, REMOVE}, fetch = FetchType.LAZY)
+    private List<SolvedQuestion> solvedQuestions;
+
+    @Builder
+    private ExaminationHistory(boolean solvedYn, short questionCount, short answerCount, Users user, Exam exam) {
+        this.user = user;
+        this.exam = exam;
+        this.solvedYn = solvedYn;
+        this.questionCount = questionCount;
+        this.answerCount = answerCount;
+    }
+
+    public static ExaminationHistory from(SubmitResultRequest submitResultRequest, Users user, Exam exam) {
+        return ExaminationHistory.builder()
+                .solvedYn(true)
+                .questionCount(submitResultRequest.size())
+                .answerCount(CountComputer.computeAnswerCount(submitResultRequest.getAnswerRequests()))
+                .user(user)
+                .exam(exam)
+                .build();
+    }
 }

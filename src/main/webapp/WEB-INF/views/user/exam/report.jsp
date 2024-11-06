@@ -14,7 +14,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>온라인 학업성취도 평가 (리포트)</title>
+    <title>EX셀파 (리포트)</title>
 
     <link rel="stylesheet" href="<c:url value="/css/report.css"><c:param name="ver" value="${nowDate}"/></c:url>"/>
 
@@ -96,19 +96,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                 <div class="tabmenu">
                     <ul class="justify_center">
                         <li id="tab1" class="tab_btn">
-                            <input type="radio" name="tabmenu" id="tmenu1" class="tab">
-                            <a href="/user/exam/user-exam-cbt?school_level=${examInformationResponse.schoolLevel}"
-                               class="tlabel2 label">CBT 대표유형</a>
-                        </li>
-                        <li id="tab1" class="tab_btn">
                             <input type="radio" name="tabmenu" id="tmenu2" class="tab">
                             <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=1&year=${examInformationResponse.year}"
-                               class="tlabel2 label">실전시험Ⅰ</a>
+                               class="tlabel2 label">기출 문제 풀이</a>
                         </li>
                         <li id="tab1" class="tab_btn">
                             <input type="radio" name="tabmenu" id="tmenu3" class="tab">
                             <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=2&year=${examInformationResponse.year}"
-                               class="tlabel2 label">실전시험Ⅱ</a>
+                               class="tlabel2 label">B셀파 문제 풀이</a>
                         </li>
                         <li id="tab1" class="tab_btn">
                             <input type="radio" checked name="tabmenu" id="tmenu4" class="tab">
@@ -1159,8 +1154,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         </button>
         <p>시험을 응시하지 않아 리포트가 제공되지 않습니다.<br>시험에 응시해 주세요.</p>
         <div class="btn-wrap">
-            <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=1&year=2022">실전시험I<br>응시하기</a>
-            <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=2&year=2022">실전시험II<br>응시하기</a>
+            <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=1&year=2022">기출
+                문제 풀이<br>응시하기</a>
+            <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=2&year=2022">B셀파
+                문제 풀이<br>응시하기</a>
         </div>
     </div>
 </c:if>

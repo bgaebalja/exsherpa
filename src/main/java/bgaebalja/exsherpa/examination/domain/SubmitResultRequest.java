@@ -6,6 +6,12 @@ import java.util.List;
 
 @Getter
 public class SubmitResultRequest {
+    private String email;
+    private String examId;
     private List<AnswerRequest> answerRequests;
+
+    public short size() {
+        return (short) answerRequests.size();
+    }
 }
 

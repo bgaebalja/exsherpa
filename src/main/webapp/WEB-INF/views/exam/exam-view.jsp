@@ -153,9 +153,8 @@
     <div class="header">
         <div class="logo" style="display: flex; align-items: center;">
 
-            <a href="/" style="width:100%;color: white;"><img src="../../../img/logo2.png" alt="logo"
-                                                              style="width: 20%; margin-left: 11px"><span
-                    style="margin-left: 11px;font-size: 24px;vertical-align: middle;">온라인 학업성취도 평가</span></a>
+            <a href="/" style="width:100%;color: white;"><span
+                    style="margin-left: 11px;font-size: 24px;vertical-align: middle;">B셀파 실전 모의고사</span></a>
         </div>
         <div class="top-area">
             <!-- s: 220711 추가 -->
@@ -169,7 +168,8 @@
                 <span class="txt">남은<br>시간</span>
                 <span class="time-txt" id="timer">60:00</span>
             </div>
-            <a href="javascript:completeExam('010-6369-2379');" class="btn-submit">최종제출</a>
+            <%--            TODO: 로그인 이메일 연동--%>
+            <a href="javascript:completeExam('tane9537@nate.com');" class="btn-submit">최종제출</a>
         </div>
     </div>
     <div class="container">
@@ -178,11 +178,8 @@
         </div>
         <div class="viewer-paper">
             <div class="head">
-                // TODO: 과목 이름 넣기
-                <span class="txt">중3과학(1회)</span>
+                <span class="txt"><%= getExamResponse.getExamName() + "(" + getExamResponse.getSubjectName() + ")" %></span>
                 <i class="enterFullscreenBtn">
-                    <img src="https://enaea.kice.re.kr/js/site/viewer/css/images/fullscreen_icon-icons.com_71635.png"
-                         alt="">
                 </i>
                 <div class="btn-wrap">
                     <div class="swiper-button-prev"></div>
@@ -190,7 +187,8 @@
                 </div>
             </div>
 
-            <input type="hidden" name="currentId" value="">
+            <input type="hidden" name="exam_id"
+                   value="<%= getExamResponse.getId() %>">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <%
@@ -242,7 +240,8 @@
                                         %>
                                         <ul class="answer-input-type radio">
                                             <li>
-                                                <input type="radio" name="answer_<%= j %>"
+                                                <input type="radio"
+                                                       name="answer_<%= getQuestionsResponse.get(j).getId() %>"
                                                        id="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"
                                                        value="<%= previousIndex %>">
                                                 <label for="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(l).getOptionNo() %>
@@ -275,7 +274,7 @@
                             <div class="inner">
                                 <div class="question">
                                     <div class="top">
-                                        <span class="num">서답형<%= ++subjectiveNumber %></span>
+                                        <span class="num"><%= ++previousIndex %></span>
                                         <%= getQuestionsResponse.get(j).getContent() %>
                                     </div>
                                 </div>
@@ -304,7 +303,7 @@
                                     %>
                                     <ul class="answer-input-type radio">
                                         <li>
-                                            <input type="radio" name="answer_<%= j %>"
+                                            <input type="radio" name="answer_<%= getQuestionsResponse.get(j).getId() %>"
                                                    id="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"
                                                    value="<%= previousIndex %>">
                                             <label for="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(k).getOptionNo() %>
@@ -428,7 +427,8 @@
         return answerExtractor.test();
     }
 
-    function completeExam(studentId) {
+    function completeExam(email) {
+        const examId = document.querySelector('input[name="exam_id"]').value;
         const extractedAnswers = extractAnswers();
 
         let message = '최종 제출하시겠습니까?\n최종 제출하시면, 정답 수정이 불가합니다.';
@@ -439,6 +439,8 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    email: email,
+                    examId: examId,
                     answerRequests: extractedAnswers
                 }),
             })

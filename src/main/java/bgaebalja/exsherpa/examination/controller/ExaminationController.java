@@ -5,6 +5,7 @@ import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
 import bgaebalja.exsherpa.exam.service.ExamService;
 import bgaebalja.exsherpa.examination.domain.ExamInformationResponse;
 import bgaebalja.exsherpa.examination.domain.SubmitResultRequest;
+import bgaebalja.exsherpa.examination.service.ExaminationService;
 import bgaebalja.exsherpa.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/user/exam")
 @RequiredArgsConstructor
 public class ExaminationController {
+    private final ExaminationService examinationService;
     private final ExamService examService;
 
     @GetMapping("/user-exam-cbt")
@@ -116,6 +118,8 @@ public class ExaminationController {
 
     @PostMapping("/submit")
     public ResponseEntity<Void> submitResult(@RequestBody SubmitResultRequest submitResultRequest) {
+        examinationService.registerResult(submitResultRequest);
+
         return ResponseEntity.status(CREATED).build();
     }
 }

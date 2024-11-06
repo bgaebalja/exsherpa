@@ -32,6 +32,14 @@ public class FormatConverter {
         }
     }
 
+    public static byte parseToByte(String value) {
+        try {
+            return Byte.parseByte(value);
+        } catch (NumberFormatException nfe) {
+            throw new ParsingByteException((String.format(PARSING_BYTE_EXCEPTION_MESSAGE, value)));
+        }
+    }
+
     public static float parseToFloat(String primeNumber) {
         try {
             return Float.parseFloat(primeNumber);
