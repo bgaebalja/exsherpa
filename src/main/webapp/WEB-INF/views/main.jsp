@@ -34,39 +34,24 @@
                 <!-- E: 로그인 후 노출되는 타이틀 주석 -->
                 <div class="tab-cnt on">
                     <ul class="cnt-list">
-                        <!--S: 220808 CBT 스타일 추가 -->
-                        <li class="cbt-box">
-                            <a href="#">
-                                <span class="tit">CBT기능/유형 연습</span>
-                                <span class="txt">실제 평가 시스템과<br>100% 동일한 화면으로<br>기능/ 유형 연습</span>
-                            </a>
-                            <div class="cbt-overlay">
-                                <div class="cbt-btn-list">
-                                    <a href="user/exam/user-exam-cbt?school_level=SL01">초등</a>
-                                    <a href="user/exam/user-exam-cbt?school_level=SL02">중등</a>
-                                    <a href="user/exam/user-exam-cbt?school_level=SL03">고등</a>
-                                </div>
-                            </div>
-                        </li>
-                        <!--E: 220808 CBT 스타일 추가 -->
                         <li>
                             <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                             <a href="user/exam/user-exam-subject?school_level=SL02&exam_round=1&year=2024">
-                                <span class="tit">기출 실전시험</span>
-                                <span class="txt">기출문제를 CBT로<br>재구성한 문제로<br>실전 모의고사 응시</span>
+                                <span class="tit">기출 문제 풀이</span>
+                                <span class="txt">기출 문제를 CBT로<br>재구성한 문제를 통한<br>실전 문제 풀이</span>
                             </a>
                         </li>
                         <li>
                             <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                             <a href="user/exam/user-exam-subject?school_level=SL02&exam_round=2&year=2024">
-                                <span class="tit">B셀파 실전시험</span>
-                                <span class="txt">B셀파에서 제작된<br>예상문제를 바탕으로<br>실전 모의고사 응시</span>
+                                <span class="tit">B셀파 문제 풀이</span>
+                                <span class="txt">B셀파에서 제작된<br>예상 문제를 바탕으로 한<br>실전 문제 풀이</span>
                             </a>
                         </li>
                         <li>
                             <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                             <a href="user/exam/report?school_level=SL02&year=2024">
-                                <span class="tit">시험결과 REPORT</span>
+                                <span class="tit">시험 결과 REPORT</span>
                                 <span class="txt">나의 성취도 파악과<br>취약점 분석,<br>시험 대비 학습 </span>
                             </a>
                         </li>

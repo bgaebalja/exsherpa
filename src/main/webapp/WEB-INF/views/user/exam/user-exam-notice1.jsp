@@ -12,7 +12,7 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EX셀파 (실전시험Ⅰ)</title>
+    <title>EX셀파 (기출 문제 풀이)</title>
 
     <link rel="icon" href="/img/fav.png">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css">
@@ -56,13 +56,9 @@
             <div class="container">
                 <div class="tabmenu">
                     <ul class="justify_center">
-                        <li id="tab1" class="tab_btn">
-                            <a href="/user/exam/user-exam-cbt?school_level=${examInformationResponse.schoolLevel}"
-                               class="tlabel2 label">CBT 대표유형</a>
-                        </li>
                         <li id="tab2" class="tab_btn">
                             <input type="radio" checked name="tabmenu" id="tmenu2" class="tab">
-                            <label class="tlabel2 label" for="tmenu2">실전시험Ⅰ</label>
+                            <label class="tlabel2 label" for="tmenu2">기출 문제 풀이</label>
                             <div class="tab_con">
                                 <div class="cnt_box">
                                     <div class="page_tit pb20"><em>주의사항</em> 및 <em>부정행위</em>안내</div>
@@ -94,7 +90,7 @@
                         </li>
                         <li id="tab3" class="tab_btn">
                             <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=2&year=${examInformationResponse.year}"
-                               class="tlabel2 label">실전시험Ⅱ</a>
+                               class="tlabel2 label">B셀파 문제 풀이</a>
                         </li>
                         <li id="tab4" class="tab_btn">
                             <a href="/user/exam/report?school_level=${examInformationResponse.schoolLevel}&year=${examInformationResponse.year}"
@@ -110,16 +106,4 @@
 </main>
 
 </body>
-<script>
-
-    /*const tab1 = document.getElementById("tab1");
-
-    tab1.addEventListener('click', function () {
-        location.href="/user/exam/user-exam-subject";
-    });*/
-    function tempSecondRound() {
-        alert('실전시험Ⅱ는 8월 18일부터 확인이 가능합니다.');
-    }
-
-</script>
 </html>

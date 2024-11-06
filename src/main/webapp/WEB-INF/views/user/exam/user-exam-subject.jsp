@@ -14,10 +14,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <c:choose>
         <c:when test="${examInformationResponse.examRound eq '1'}">
-            <title>EX셀파 (실전시험Ⅰ)</title>
+            <title>EX셀파 (기출 문제 풀이)</title>
         </c:when>
         <c:when test="${examInformationResponse.examRound eq '2'}">
-            <title>EX셀파 (실전시험Ⅱ)</title>
+            <title>EX셀파 (B셀파 문제 풀이)</title>
         </c:when>
     </c:choose>
     <!-- Google tag (gtag.js) -->
@@ -75,21 +75,17 @@
             <div class="container">
                 <div class="tabmenu">
                     <ul class="justify_center">
-                        <li id="tab1" class="tab_btn">
-                            <a href="/user/exam/user-exam-cbt?school_level=${examInformationResponse.schoolLevel}"
-                               class="tlabel2 label">CBT 대표유형</a>
-                        </li>
                         <c:choose>
                             <c:when test="${examInformationResponse.examRound eq '1'}">
                                 <li id="tab2" class="tab_btn">
                                     <input type="radio" checked name="tabmenu" id="tmenu2" class="tab">
-                                    <label class="tlabel2 label" for="tmenu2">실전시험Ⅰ</label>
+                                    <label class="tlabel2 label" for="tmenu2">기출 문제 풀이</label>
                                     <div class="tab_con">
                                         <div class="cnt_box">
-                                            <div class="page_tit pb20">시험 시간표 및 <em>시험응시</em></div>
-                                            <p class="page_info pb55">교시별 시험 과목을 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
+                                            <div class="page_tit pb20">시험 목록 및 <em>시험 응시</em></div>
+                                            <p class="page_info pb55">시험지 정보를 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
                                                 바랍니다.<br>
-                                                과목별 응시 순서는 사용자가 선택할 수 있으며 재응시 횟수에는 제한은 없습니다.
+                                                과목 별 응시 순서는 사용자가 선택할 수 있으며 재응시 횟수에는 제한은 없습니다.
                                             </p>
 
                                             <table class="tbl_list">
@@ -103,9 +99,9 @@
                                                 </colgroup>
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col" class="first">교시</th>
+                                                    <th scope="col" class="first">순번</th>
                                                     <th scope="col">과목</th>
-                                                    <th scope="col">시험시간</th>
+                                                    <th scope="col">시험 시간</th>
                                                     <th scope="col">문항 수</th>
                                                     <th scope="col">시험 응시</th>
                                                 </tr>
@@ -114,7 +110,7 @@
                                                 <c:forEach var="exam" items="${getExamsResponse.getExamResponses}"
                                                            varStatus="index">
                                                     <tr>
-                                                        <td class="first">${index.index + 1}교시</td>
+                                                        <td class="first">${index.index + 1}</td>
                                                         <td>
                                                             <c:choose>
                                                                 <c:when test="${exam.subjectName eq '국어'}">국어</c:when>
@@ -167,18 +163,18 @@
                                 </li>
                                 <li id="tab3" class="tab_btn">
                                     <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=2&year=${examInformationResponse.year}"
-                                       class="tlabel2 label">실전시험Ⅱ</a>
-                                        <%--                                            href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=2" class="tlabel2 label">실전시험Ⅱ</a>--%>
+                                       class="tlabel2 label">B셀파 문제 풀이</a>
                                 </li>
                             </c:when>
                             <c:when test="${examInformationResponse.examRound eq '2'}">
                                 <li id="tab2" class="tab_btn">
                                     <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=1&year=${examInformationResponse.year}"
-                                       class="tlabel2 label">실전시험Ⅰ</a>
+                                       class="tlabel2 label">기출 문제 풀이
+                                    </a>
                                 </li>
                                 <li id="tab3" class="tab_btn">
                                     <input type="radio" checked name="tabmenu" id="tmenu3" class="tab">
-                                    <label class="tlabel3 label" for="tmenu3">실전시험Ⅱ</label>
+                                    <label class="tlabel3 label" for="tmenu3">B셀파 문제 풀이</label>
                                     <div class="tab_con">
                                         <c:if test="${examInformationResponse.schoolLevel eq 'SL01'}">
                                             <div class="tabmenu2 type01">
@@ -207,10 +203,10 @@
                                             </div>
                                         </c:if>
                                         <div class="cnt_box mt50">
-                                            <div class="page_tit pb20">시험 시간표 및 <em>시험응시</em></div>
-                                            <p class="page_info pb55">교시별 시험 과목을 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
+                                            <div class="page_tit pb20">시험 시간표 및 <em>시험 응시</em></div>
+                                            <p class="page_info pb55">시험지 정보를 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
                                                 바랍니다.<br>
-                                                과목별 응시 순서는 사용자가 선택할 수 있으며 재응시 횟수에는 제한은 없습니다.
+                                                과목 별 응시 순서는 사용자가 선택할 수 있으며 재응시 횟수에는 제한은 없습니다.
                                             </p>
 
                                             <table class="tbl_list">
@@ -224,9 +220,9 @@
                                                 </colgroup>
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col" class="first">교시</th>
+                                                    <th scope="col" class="first">순번</th>
                                                     <th scope="col">과목</th>
-                                                    <th scope="col">시험시간</th>
+                                                    <th scope="col">시험 시간</th>
                                                     <th scope="col">문항 수</th>
                                                     <th scope="col">시험 응시</th>
                                                 </tr>
@@ -235,7 +231,7 @@
                                                 <c:forEach var="exam" items="${getExamsResponse.getExamResponses}"
                                                            varStatus="index">
                                                     <tr>
-                                                        <td class="first">${index.index + 1}교시</td>
+                                                        <td class="first">${index.index + 1}</td>
                                                         <td>
                                                             <c:choose>
                                                                 <c:when test="${exam.subjectName eq '국어'}">국어</c:when>

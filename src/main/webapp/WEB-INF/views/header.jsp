@@ -157,7 +157,7 @@
     <div class="container">
         <div class="top">
             <div class="justify_between">
-                <div class="site_tit" onclick="gotoMain();" style="cursor: pointer;">온라인 문제풀이 서비스 - EX셀파</div>
+                <div class="site_tit" onclick="gotoMain();" style="cursor: pointer;">B셀파 문제풀이 서비스 - EX셀파</div>
 
                 <ul class="justify_between user_info">
                     <%

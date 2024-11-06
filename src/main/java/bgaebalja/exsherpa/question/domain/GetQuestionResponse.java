@@ -75,7 +75,6 @@ public class GetQuestionResponse {
         if (!isSubjective) {
             getOptionsResponse = GetOptionsResponse.from(question.getOptions());
         }
-        System.out.println(totalContent + "abcde");
 
         return GetQuestionResponse.builder()
                 .id(question.getId())

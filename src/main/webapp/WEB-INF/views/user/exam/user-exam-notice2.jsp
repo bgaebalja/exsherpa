@@ -11,7 +11,7 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EX셀파 (실전시험Ⅱ)</title>
+    <title>EX셀파 (B셀파 문제 풀이)</title>
 
     <link rel="icon" href="/img/fav.png">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css">
@@ -55,17 +55,13 @@
             <div class="container">
                 <div class="tabmenu">
                     <ul class="justify_center">
-                        <li id="tab1" class="tab_btn">
-                            <a href="/user/exam/user-exam-cbt?school_level=${examInformationResponse.schoolLevel}"
-                               class="tlabel2 label">CBT 대표유형</a>
-                        </li>
                         <li id="tab2" class="tab_btn">
                             <a href="/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=1&year=${examInformationResponse.year}"
-                               class="tlabel2 label">실전시험Ⅰ</a>
+                               class="tlabel2 label">기출 문제 풀이</a>
                         </li>
                         <li id="tab3" class="tab_btn">
                             <input type="radio" checked name="tabmenu" id="tmenu3" class="tab">
-                            <label class="tlabel3 label" for="tmenu3">실전시험Ⅱ</label>
+                            <label class="tlabel3 label" for="tmenu3">B셀파 문제 풀이</label>
                             <div class="tab_con">
                                 <div class="cnt_box">
                                     <div class="page_tit pb20"><em>주의사항</em> 및 <em>부정행위</em>안내</div>

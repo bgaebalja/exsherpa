@@ -39,12 +39,11 @@ public class GetExamResponse {
 
     public static GetExamResponse from(Exam exam) {
         // TODO: 시간 제한 학년/과목 별로 연동
-        // TODO: 회원에 추가되는 학교 등급과 학년 정보 연동
         return GetExamResponse.builder()
                 .id(exam.getId())
                 .username(exam.getUser().getUsername())
-//                .className(exam.getUser().getClassName())
-//                .grade(exam.getUser().getGrade())
+                .className(exam.getUser().getClazz())
+                .grade(exam.getUser().getGrade())
                 .className("중")
                 .grade("3")
                 .examName(exam.getExamName())
