@@ -154,7 +154,7 @@
         <div class="logo" style="display: flex; align-items: center;">
 
             <a href="/" style="width:100%;color: white;"><span
-                    style="margin-left: 11px;font-size: 24px;vertical-align: middle;">B셀파 실전 모의고사</span></a>
+                    style="margin-left: 11px;font-size: 24px;vertical-align: middle;"><%= getExamResponse.getClassName() + "학교 " + getExamResponse.getGrade()%>학년 실전 모의고사</span></a>
         </div>
         <div class="top-area">
             <!-- s: 220711 추가 -->
@@ -166,7 +166,7 @@
             <!-- e: 220711 추가 -->
             <div class="time-box">
                 <span class="txt">남은<br>시간</span>
-                <span class="time-txt" id="timer">60:00</span>
+                <span class="time-txt" id="timer"><%= getExamResponse.getTimeLimit() %>:00</span>
             </div>
             <%--            TODO: 로그인 이메일 연동--%>
             <a href="javascript:completeExam('tane9537@nate.com');" class="btn-submit">최종제출</a>
@@ -367,8 +367,8 @@
         45 *
         60 + -339;
     let time =
-        45 *
-        60 + -339;
+    <%= getExamResponse.getTimeLimit() %> *
+    60;
 
     const x = setInterval(function () {
         const min = parseInt(time / 60);

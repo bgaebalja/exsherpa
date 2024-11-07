@@ -60,4 +60,15 @@ public class FormatConverter {
         return filename.replaceAll("\\s+", "-")
                 .replaceAll("[^a-zA-Z0-9._-]", "");
     }
+
+    public static String parseClassName(String clazz) {
+        if (clazz.equals("elementary")) {
+            return "초등";
+        }
+        if (clazz.equals("middle")) {
+            return "중";
+        }
+
+        return "고등";
+    }
 }
