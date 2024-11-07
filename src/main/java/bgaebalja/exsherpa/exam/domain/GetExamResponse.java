@@ -3,6 +3,8 @@ package bgaebalja.exsherpa.exam.domain;
 import bgaebalja.exsherpa.collection.domain.Collection;
 import bgaebalja.exsherpa.collection.domain.GetCollectionsResponse;
 import bgaebalja.exsherpa.examination.domain.GetExaminationHistoriesResponse;
+import bgaebalja.exsherpa.util.FormatConverter;
+import bgaebalja.exsherpa.util.TimeSelector;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -38,17 +40,17 @@ public class GetExamResponse {
     }
 
     public static GetExamResponse from(Exam exam) {
-        // TODO: 시간 제한 학년/과목 별로 연동
+        String className = FormatConverter.parseClassName(exam.getUser().getClazz());
+        String timeLimit = TimeSelector.selectTimeLimit(exam);
+
         return GetExamResponse.builder()
                 .id(exam.getId())
                 .username(exam.getUser().getUsername())
-                .className(exam.getUser().getClazz())
+                .className(className)
                 .grade(exam.getUser().getGrade())
-                .className("중")
-                .grade("3")
                 .examName(exam.getExamName())
                 .subjectName(exam.getBook().getSubject().getName())
-                .timeLimit("60")
+                .timeLimit(timeLimit)
                 .size(exam.getCollections().stream().map(Collection::getQuestionCount).reduce(0, Integer::sum))
                 .getCollectionsResponse(GetCollectionsResponse.from(exam.getCollections()))
                 .getExaminationHistoriesResponse(GetExaminationHistoriesResponse.from(exam.getExaminationHistories()))
