@@ -4,8 +4,12 @@ import bgaebalja.exsherpa.exam.domain.GetExamResponse;
 import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
 import bgaebalja.exsherpa.exam.service.ExamService;
 import bgaebalja.exsherpa.examination.domain.ExamInformationResponse;
+import bgaebalja.exsherpa.examination.domain.GetExaminationHistoriesResponse;
 import bgaebalja.exsherpa.examination.domain.SubmitResultRequest;
 import bgaebalja.exsherpa.examination.service.ExaminationService;
+import bgaebalja.exsherpa.question.domain.GetQuestionResponse;
+import bgaebalja.exsherpa.question.domain.Question;
+import bgaebalja.exsherpa.question.service.QuestionService;
 import bgaebalja.exsherpa.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class ExaminationController {
     private final ExaminationService examinationService;
     private final ExamService examService;
+    private final QuestionService questionService;
 
     @GetMapping("/user-exam-cbt")
     public ModelAndView getPracticeInformationPage(@RequestParam("school_level") String schoolLevel, HttpSession httpSession) {
@@ -104,15 +109,19 @@ public class ExaminationController {
             @RequestParam("school_level") String schoolLevel,
             @RequestParam(value = "exam_round", defaultValue = "1") String examRound,
             @RequestParam("year") String year,
-            @RequestParam(value = "exam_id", defaultValue = "1") String examId,
+            @RequestParam(value = "examination_sequence", defaultValue = "1") String examinationSequence,
             HttpSession session
     ) {
         ModelAndView modelAndView = new ModelAndView("user/exam/report");
         modelAndView.addObject(
-                "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year, examId)
+                "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
         );
         String email = session.getAttribute("email").toString();
-        modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getBsherpaExams(email)));
+        modelAndView.addObject(
+                "getExaminationHistoriesResponse",
+                GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistories(email))
+        );
+        modelAndView.addObject("examination_sequence", FormatConverter.parseToInt(examinationSequence));
 
         return modelAndView;
     }
@@ -130,5 +139,12 @@ public class ExaminationController {
         examinationService.registerResult(submitResultRequest);
 
         return ResponseEntity.status(CREATED).build();
+    }
+
+    @GetMapping("/report-answer")
+    public ModelAndView getReportAnswer(@RequestParam String questionId) {
+        Question question = questionService.getQuestion(FormatConverter.parseToLong(questionId));
+
+        return new ModelAndView("item/report-answer", "getQuestionResponse", GetQuestionResponse.from(question));
     }
 }
