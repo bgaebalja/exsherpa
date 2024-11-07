@@ -1,11 +1,31 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="bgaebalja.exsherpa.exam.domain.GetExamsResponse" %>
+<%@ page import="bgaebalja.exsherpa.examination.domain.GetExaminationHistoriesResponse" %>
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="bgaebalja.exsherpa.examination.domain.GetSolvedQuestionsResponse" %>
+<%@ page import="bgaebalja.exsherpa.util.FormatValidator" %>
+<%@ page import="bgaebalja.exsherpa.examination.domain.GetSolvedQuestionResponse" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:useBean id="today" class="java.util.Date"/>
 <fmt:formatDate value="${today}" pattern="yyyyMMdd" var="nowDate"/>
+<%
+    GetExaminationHistoriesResponse getExaminationHistoriesResponse
+            = (GetExaminationHistoriesResponse) request.getAttribute("getExaminationHistoriesResponse");
+    String examinationHistoriesJson = new Gson().toJson(getExaminationHistoriesResponse);
+    int examinationSequence = (Integer) request.getAttribute("examination_sequence");
+
+    String rawDate = String.valueOf(getExaminationHistoriesResponse.get(examinationSequence - 1).getModifiedAt());
+    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+    Date date = inputFormat.parse(rawDate);
+    SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String formattedDate = outputFormat.format(date);
+%>
 
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -77,7 +97,29 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             color: #222;
         }
     </style>
+    <style>
+        .question-content ul {
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+            line-height: 1.6;
+        }
 
+        .fa-solid.fa-rectangle-vertical {
+            width: 10px;
+            height: 100%;
+            display: inline-block;
+            border-radius: 0;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        #studnet_info ul li {
+            padding-left: 5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
@@ -111,69 +153,15 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                             <div class="tab_con pt40">
                                 <div class="flex_end3">
                                     <select class="select_box ml05" id="round_select" onchange="changeReportRound();">
-                                        <c:choose>
-                                            <c:when test="${examInformationResponse.schoolLevel eq 'SL01'}">
-                                                <option
-                                                        <c:if test="${examInformationResponse.examRound eq 1}">selected</c:if>
-                                                        value="2022-1">22년 1회
-                                                </option>
-                                                <option
-                                                        <c:if test="${examInformationResponse.year eq '2022' and examInformationResponse.examRound eq 2}">selected</c:if>
-                                                        value="2022-2">22년 2회
-                                                </option>
-                                                <option
-                                                        <c:if test="${examInformationResponse.year eq '2023' and examInformationResponse.examRound eq 2}">selected</c:if>
-                                                        value="2023-2">23년 2회
-                                                </option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option
-                                                        <c:if test="${examInformationResponse.examRound eq 1}">selected</c:if>
-                                                        value="2022-1">1회
-                                                </option>
-                                                <option
-                                                        <c:if test="${examInformationResponse.examRound eq 2}">selected</c:if>
-                                                        value="2022-2">2회
-                                                </option>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </select>
-                                    <select class="select_box mr05" id="subject_select"
-                                            onchange="changeReportSubject();">
-                                        <c:forEach var="subjectCodeValue" items="${examData.subjectId}">
-                                            <c:choose>
-                                                <c:when test="${subjectCodeValue eq 14}">
-                                                    <option value="${subjectCodeValue}"
-                                                            <c:if test="${exam.subjectId eq subjectCodeValue}">selected</c:if>>
-                                                        국어
-                                                    </option>
-                                                </c:when>
-                                                <c:when test="${subjectCodeValue eq 15}">
-                                                    <option value="${subjectCodeValue}"
-                                                            <c:if test="${exam.subjectId eq subjectCodeValue}">selected</c:if>>
-                                                        영어
-                                                    </option>
-                                                </c:when>
-                                                <c:when test="${subjectCodeValue eq 16}">
-                                                    <option value="${subjectCodeValue}"
-                                                            <c:if test="${exam.subjectId eq subjectCodeValue}">selected</c:if>>
-                                                        수학
-                                                    </option>
-                                                </c:when>
-                                                <c:when test="${subjectCodeValue eq 17}">
-                                                    <option value="${subjectCodeValue}"
-                                                            <c:if test="${exam.subjectId eq subjectCodeValue}">selected</c:if>>
-                                                        사회
-                                                    </option>
-                                                </c:when>
-                                                <c:when test="${subjectCodeValue eq 18}">
-                                                    <option value="${subjectCodeValue}"
-                                                            <c:if test="${exam.subjectId eq subjectCodeValue}">selected</c:if>>
-                                                        과학
-                                                    </option>
-                                                </c:when>
-                                            </c:choose>
-                                        </c:forEach>
+                                        <%
+                                            if (getExaminationHistoriesResponse.size() > 0) {
+                                                for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
+                                        %>
+                                        <option value="<%= i + 1 %>" data-sequence="<%= i + 1 %>"><%= i + 1 %>회</option>
+                                        <%
+                                                }
+                                            }
+                                        %>
                                     </select>
                                 </div>
                                 <div class="tabmenu2 mt40">
@@ -192,40 +180,37 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                             </div>
                                                             <div class="box box1" style="padding: 50px 70px;">
                                                                 <input type="hidden" id="nickname" value="${nickname}"/>
-                                                                <ul style="padding-bottom: 20px"><i
-                                                                        class="fa-solid fa-rectangle-vertical"
-                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>이름&nbsp&nbsp&nbsp&nbsp
-                                                                    <li>${nickname}</li>
-                                                                </ul>
-                                                                <ul style="padding-bottom: 20px"><i
-                                                                        class="fa-solid fa-rectangle-vertical"
-                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>학년&nbsp&nbsp&nbsp&nbsp
-                                                                    <li><c:choose>
-                                                                        <c:when test="${schoolLevel eq 'SL01'}">6학년</c:when>
-                                                                        <c:when test="${schoolLevel eq 'SL02'}">3학년</c:when>
-                                                                        <c:otherwise>2학년</c:otherwise>
-                                                                    </c:choose></li>
-                                                                </ul>
-                                                                <ul style="padding-bottom: 20px"><i
-                                                                        class="fa-solid fa-rectangle-vertical"
-                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>응시과목
-                                                                    <li class="last">
-                                                                        <c:if test="${examInformation.subject_id eq 14}">국어</c:if>
-                                                                        <c:if test="${examInformation.subject_id eq 15}">영어</c:if>
-                                                                        <c:if test="${examInformation.subject_id eq 16}">수학</c:if>
-                                                                        <c:if test="${examInformation.subject_id eq 17}">사회</c:if>
-                                                                        <c:if test="${examInformation.subject_id eq 18}">과학</c:if>
+                                                                <ul style="padding-bottom: 20px">
+                                                                    <i class="fa-solid fa-rectangle-vertical"
+                                                                       style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
+                                                                    아이디&nbsp&nbsp&nbsp&nbsp
+                                                                    <li id="username"><%= getExaminationHistoriesResponse.get(0).getUsername() %>
                                                                     </li>
                                                                 </ul>
-                                                                <input type="hidden" id="examStartTime"
-                                                                       name="examStartTime"
-                                                                       value="${examInformation.exam_start_time}">
-                                                                <ul style="padding-bottom: 20px"><i
-                                                                        class="fa-solid fa-rectangle-vertical"
-                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>응시일자
+                                                                <ul style="padding-bottom: 20px">
+                                                                    <i class="fa-solid fa-rectangle-vertical"
+                                                                       style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
+                                                                    학년&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                                                    <li id="grade"><%= getExaminationHistoriesResponse.get(0).getGrade() %>
+                                                                        학년
+                                                                    </li>
+                                                                </ul>
+                                                                <ul style="padding-bottom: 20px">
+                                                                    <i class="fa-solid fa-rectangle-vertical"
+                                                                       style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
+                                                                    응시과목
+                                                                    <li id="subjectName"><%= getExaminationHistoriesResponse.get(0).getSubjectName() %>
+                                                                    </li>
+                                                                </ul>
+                                                                <ul style="padding-bottom: 20px">
+                                                                    <i class="fa-solid fa-rectangle-vertical"
+                                                                       style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
+                                                                    응시일자&nbsp&nbsp&nbsp&nbsp
                                                                     <li class="last">
-                                                                        <div id="examStartTimeDiv"
-                                                                             style="overflow: hidden; white-space: nowrap; display: inline-block; vertical-align: middle;"></div>
+                                                                        <div id="modifiedAt"
+                                                                             style="overflow: hidden; white-space: nowrap; display: inline-block; vertical-align: middle;">
+                                                                            <%= formattedDate %>
+                                                                        </div>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -235,7 +220,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                 <div class="score_box">
                                                     <div class="score_txt">
                                                         <fmt:parseNumber value="${score}" pattern="0" var="num"/>
-                                                        <span class="score"><em>${num}점</em> / 100점</span>
+                                                        <span class="score"><em><%= getExaminationHistoriesResponse.get(examinationSequence - 1).getAnswerCount() == 0 ? 0 : Math.round((double) getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() / getExaminationHistoriesResponse.get(examinationSequence - 1).getQuestionCount() * 100)%>점</em> / 100점</span>
                                                     </div>
                                                 </div>
 
@@ -254,35 +239,47 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <%--@elvariable id="itemResultList" type="java.util.List"--%>
-                                                    <c:choose>
-                                                        <c:when test="${not empty not_exam}">
-                                                            <tr>
-                                                                <td colspan="3">응시 이력이 없습니다. 시험에 응시한 뒤 리포트를 조회해 주세요.
-                                                                </td>
-                                                            </tr>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <c:forEach var="item" items="${itemList}">
-                                                                <tr>
-                                                                    <td class="first">${item.itemOrderName}</td>
-                                                                    <c:choose>
-                                                                        <c:when test="${item.correctYn ne 'Y'}">
-                                                                            <td><i class="fa-regular fa-circle-xmark"
-                                                                                   style="color: red;"></i></td>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <td><i class="fa-regular fa-circle-check"
-                                                                                   style="color: green;"></i></td>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-                                                                    <td><a href="javascript:showItem('${item.itemId}');"
-                                                                           id="${item.itemId}" class="viewBtn">상세 보기</a>
-                                                                    </td>
-                                                                </tr>
-                                                            </c:forEach>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                    <%
+                                                        GetSolvedQuestionsResponse getSolvedQuestionsResponse
+                                                                = getExaminationHistoriesResponse
+                                                                .get(examinationSequence)
+                                                                .getGetSolvedQuestionsResponse();
+                                                        if (!FormatValidator.hasValue(getSolvedQuestionsResponse)) {
+                                                    %>
+                                                    <tr>
+                                                        <td colspan="3" style="text-align: center; color: red;">응시 이력이
+                                                            없습니다. 시험에 응시한 뒤 리포트를 조회해 주세요.
+                                                        </td>
+                                                    </tr>
+                                                    <%
+                                                    } else {
+                                                        for (int i = 0; i < getSolvedQuestionsResponse.size(); i++) {
+                                                            GetSolvedQuestionResponse getSolvedQuestionResponse
+                                                                    = getSolvedQuestionsResponse.get(i);
+                                                    %>
+                                                    <tr>
+                                                        <td class="first"><%= getSolvedQuestionResponse.getQuestionNumber() %>
+                                                        </td>
+
+                                                        <td>
+                                                            <% if (getSolvedQuestionResponse.isCorrect()) { %>
+                                                            <i class="fa-regular fa-circle-check"
+                                                               style="color: green;"></i>
+                                                            <% } else { %>
+                                                            <i class="fa-regular fa-circle-xmark"
+                                                               style="color: red;"></i>
+                                                            <% } %>
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="javascript:showItem('<%= getSolvedQuestionResponse.getQuestionId() %>');"
+                                                               class="viewBtn">상세 보기</a>
+                                                        </td>
+                                                    </tr>
+                                                    <%
+                                                            }
+                                                        }
+                                                    %>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -1251,26 +1248,21 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         closeBtn.on('click', popClose)
     })
 
-    function showItem(itemId, itemResultId) {
-        const el = document.getElementById('item_popup');
-        const options = 'height=800, width=1300';
-        const popup = window.open('/user/item/report-answer' +
-            '?schoolLevel=${exam.schoolLevel}&examRound=${exam.examRound}&subjectId=${exam.subjectId}&year=${exam.year}&item_id=' + itemId + '&result_id=' + itemResultId, "answer", options);
-        /*
-        const report = new Report({
-          el : el,
-          itemId : itemId
-        });
-
-         */
+    function showItem(questionId) {
+        console.log("Received questionId:", questionId);
+        const url = "/user/exam/report-answer?questionId=" + questionId;
+        console.log("Constructed URL:", url);
+        window.open(url, "_blank");
     }
 
     function changeReportRound() {
-        const subjectId = document.getElementById('subject_select').value;
-        const examYearRound = document.getElementById('round_select').value.split('-');
+        const roundSelect = document.getElementById('round_select');
+        const selectedOption = roundSelect.options[roundSelect.selectedIndex];
+        const examYearRound = selectedOption.value.split('-');
+        const examinationSequence = selectedOption.getAttribute('data-sequence'); // sequence 값 가져오기
         const year = examYearRound[0];
         const examRound = examYearRound[1];
-        location.href = '/user/exam/report?exam_round=' + examRound + '&year=' + year;
+        location.href = '/user/exam/report?school_level=SL02&exam_round=' + examRound + '&year=' + year + '&examination_sequence=' + examinationSequence;
     }
 
     function changeReportSubject() {
@@ -1278,7 +1270,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         const examYearRound = document.getElementById('round_select').value.split('-');
         const year = examYearRound[0];
         const examRound = examYearRound[1];
-        location.href = '/user/exam/report?subject_id=' + subjectId + '&exam_round=' + examRound + '&year=' + year;
+        location.href = '/user/exam/report?subject_id=' + subjectId + '&exam_round=' + examRound + '&year=' + year + '&examination_sequence=1';
     }
 
     let initGraph = false;
@@ -1478,5 +1470,32 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     }
 
 </script>
+<script type="application/json" id="examinationHistoriesData">
+    <%= examinationHistoriesJson %>
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script>
+    function displayExaminationHistory() {
+        const selectedIndex = document.getElementById("round_select").value;
+        const examinationHistories = JSON.parse(document.getElementById("examinationHistoriesData").textContent);
+
+        document.getElementById("username").innerText = examinationHistories[selectedIndex].username;
+        document.getElementById("grade").innerText = examinationHistories[selectedIndex].grade + " 학년";
+        document.getElementById("subjectName").innerText = examinationHistories[selectedIndex].subjectName;
+        document.getElementById("modifiedAt").innerText = examinationHistories[selectedIndex].modifiedAt;
+    }
+</script>
+
 <!-- e: 220722 추가 -->
 </html>

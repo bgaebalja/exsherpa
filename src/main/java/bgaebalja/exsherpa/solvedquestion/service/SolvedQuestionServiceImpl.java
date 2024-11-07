@@ -27,6 +27,7 @@ public class SolvedQuestionServiceImpl implements SolvedQuestionService {
             List<AnswerRequest> answerRequests, ExaminationHistory examinationHistory
     ) {
         List<SolvedQuestion> solvedQuestions = new ArrayList<>();
+        short questionNumber = 0;
         for (AnswerRequest answerRequest : answerRequests) {
             String questionId = answerRequest.getQuestionId();
             Question question
@@ -36,7 +37,7 @@ public class SolvedQuestionServiceImpl implements SolvedQuestionService {
                                     String.format(QUESTION_NOT_FOUND_EXCEPTION_MESSAGE, questionId)
                             )
                     );
-            solvedQuestions.add(SolvedQuestion.from(answerRequest, question, examinationHistory));
+            solvedQuestions.add(SolvedQuestion.from(++questionNumber, answerRequest, question, examinationHistory));
         }
 
         solvedQuestionRepository.saveAll(solvedQuestions);

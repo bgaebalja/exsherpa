@@ -4,8 +4,10 @@ import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.question.domain.Question;
 import bgaebalja.exsherpa.util.FormatConverter;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,10 +17,15 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 public class SolvedQuestion extends BaseGeneralEntity {
-    private boolean subjective_yn;
+    @Column(nullable = false)
+    private short questionNumber;
+
+    @Column(nullable = false)
+    private boolean subjectiveYn;
     private byte selectedOption;
-    private boolean correct_yn;
+    private boolean correctYn;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "question_id")
@@ -30,18 +37,19 @@ public class SolvedQuestion extends BaseGeneralEntity {
 
     @Builder
     private SolvedQuestion(
-            boolean subjective_yn, byte selectedOption, boolean correct_yn,
+            short questionNumber, boolean subjectiveYn, byte selectedOption, boolean correctYn,
             Question question, ExaminationHistory examinationHistory
     ) {
-        this.subjective_yn = subjective_yn;
+        this.questionNumber = questionNumber;
+        this.subjectiveYn = subjectiveYn;
         this.selectedOption = selectedOption;
-        this.correct_yn = correct_yn;
+        this.correctYn = correctYn;
         this.question = question;
         this.examinationHistory = examinationHistory;
     }
 
     public static SolvedQuestion from(
-            AnswerRequest answerRequest, Question question, ExaminationHistory examinationHistory
+            short questionNumber, AnswerRequest answerRequest, Question question, ExaminationHistory examinationHistory
     ) {
         boolean isSubjective = FormatConverter.parseToBoolean(answerRequest.getIsSubjective());
         String submittedAnswer = answerRequest.getSubmittedAnswer();
@@ -51,9 +59,10 @@ public class SolvedQuestion extends BaseGeneralEntity {
         }
 
         return SolvedQuestion.builder()
-                .subjective_yn(FormatConverter.parseToBoolean(answerRequest.getIsSubjective()))
+                .questionNumber(questionNumber)
+                .subjectiveYn(FormatConverter.parseToBoolean(answerRequest.getIsSubjective()))
                 .selectedOption(selectedOption)
-                .correct_yn(answerRequest.getSubmittedAnswer().equals(answerRequest.getOriginalAnswer()))
+                .correctYn(answerRequest.getSubmittedAnswer().equals(answerRequest.getOriginalAnswer()))
                 .question(question)
                 .examinationHistory(examinationHistory)
                 .build();
