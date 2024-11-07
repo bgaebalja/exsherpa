@@ -389,7 +389,7 @@
             }).then(data => {
                 if (data.result === true) {
                     alert("시험이 종료되었습니다.");
-                    location.href = "/user/exam/report?school_level=SL02&exam_round=1&subject_id=18";
+                    location.href = "/user/exam/report?school_level=<%= getExamResponse.getClassName().equals("초등") ? "SL01" : "SL02" %>&exam_round=1&year=2024&exam_id=<%= getExamResponse.getId() %>";
                 } else {
                     console.log(data.message);
                 }

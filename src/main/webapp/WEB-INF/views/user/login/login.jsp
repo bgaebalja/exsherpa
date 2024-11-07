@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/common.css">
     <link rel="icon" href="/img/fav.png">
-    <title>학업성취도 평가 관리자</title>
+    <title>EX셀파 (로그인)</title>
     <style>
       html {
         height: 100%;

@@ -5,9 +5,9 @@ import bgaebalja.exsherpa.exam.domain.Exam;
 import java.util.List;
 
 public interface ExamService {
-    List<Exam> getPastExams();
+    List<Exam> getPastExams(String email);
 
-    List<Exam> getBsherpaExams();
+    List<Exam> getBsherpaExams(String email);
 
     Exam getExam(Long examId);
 }

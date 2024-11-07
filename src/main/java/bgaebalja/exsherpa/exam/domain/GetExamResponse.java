@@ -56,4 +56,22 @@ public class GetExamResponse {
                 .getExaminationHistoriesResponse(GetExaminationHistoriesResponse.from(exam.getExaminationHistories()))
                 .build();
     }
+
+    public static GetExamResponse fromExams(Exam exam) {
+        String className = FormatConverter.parseClassName(exam.getUser().getClazz());
+        String timeLimit = TimeSelector.selectTimeLimit(exam);
+
+        return GetExamResponse.builder()
+                .id(exam.getId())
+                .username(exam.getUser().getUsername())
+                .className(className)
+                .grade(exam.getUser().getGrade())
+                .examName(exam.getExamName())
+                .subjectName(exam.getBook().getSubject().getName())
+                .timeLimit(timeLimit)
+                .size(exam.getCollections().stream().map(Collection::getQuestionCount).reduce(0, Integer::sum))
+                .getCollectionsResponse(GetCollectionsResponse.fromExams(exam.getCollections()))
+                .getExaminationHistoriesResponse(GetExaminationHistoriesResponse.from(exam.getExaminationHistories()))
+                .build();
+    }
 }

@@ -19,6 +19,12 @@ public class GetCollectionsResponse {
         );
     }
 
+    public static GetCollectionsResponse fromExams(List<Collection> collections) {
+        return new GetCollectionsResponse(
+                collections.stream().map(GetCollectionResponse::fromExams).collect(Collectors.toList())
+        );
+    }
+
     public int size() {
         return getCollectionResponses.size();
     }

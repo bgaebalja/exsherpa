@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Controller
@@ -24,7 +26,7 @@ public class ExaminationController {
     private final ExamService examService;
 
     @GetMapping("/user-exam-cbt")
-    public ModelAndView getPracticeInformationPage(@RequestParam("school_level") String schoolLevel) {
+    public ModelAndView getPracticeInformationPage(@RequestParam("school_level") String schoolLevel, HttpSession httpSession) {
         return new ModelAndView("user/exam/user-exam-cbt", "schoolLevel", schoolLevel);
     }
 
@@ -43,17 +45,21 @@ public class ExaminationController {
     public ModelAndView getExamSubjectPage(
             @RequestParam("school_level") String schoolLevel,
             @RequestParam("exam_round") String examRound,
-            @RequestParam("year") String year
+            @RequestParam("year") String year,
+            HttpSession session
     ) {
         ModelAndView modelAndView = new ModelAndView("user/exam/user-exam-subject");
-        modelAndView.addObject("examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year));
+        String email = session.getAttribute("email").toString();
+        modelAndView.addObject(
+                "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
+        );
 
         if (examRound.equals("1")) {
-            modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getPastExams()));
+            modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getPastExams(email)));
             return modelAndView;
         }
 
-        modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getBsherpaExams()));
+        modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getBsherpaExams(email)));
         return modelAndView;
     }
 
@@ -98,18 +104,21 @@ public class ExaminationController {
             @RequestParam("school_level") String schoolLevel,
             @RequestParam(value = "exam_round", defaultValue = "1") String examRound,
             @RequestParam("year") String year,
-            @RequestParam(value = "exam_id", defaultValue = "1") String examId
+            @RequestParam(value = "exam_id", defaultValue = "1") String examId,
+            HttpSession session
     ) {
         ModelAndView modelAndView = new ModelAndView("user/exam/report");
-        modelAndView
-                .addObject("examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year, examId));
+        modelAndView.addObject(
+                "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year, examId)
+        );
+        String email = session.getAttribute("email").toString();
+        modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getBsherpaExams(email)));
 
         return modelAndView;
     }
 
     @GetMapping("/exam-view")
     public ModelAndView getActualTestPage(@RequestParam(value = "exam_id") String examId) {
-        // TODO: 멀티스레드 시간 측정
         GetExamResponse getExamResponse
                 = GetExamResponse.from(examService.getExam(FormatConverter.parseToLong(examId)));
 
