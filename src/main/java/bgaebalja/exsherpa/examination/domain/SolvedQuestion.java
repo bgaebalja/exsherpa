@@ -49,6 +49,7 @@ public class SolvedQuestion extends BaseGeneralEntity {
         if (!isSubjective && !submittedAnswer.equals("미응답")) {
             selectedOption = FormatConverter.parseToByte(answerRequest.getSubmittedAnswer());
         }
+
         return SolvedQuestion.builder()
                 .subjective_yn(FormatConverter.parseToBoolean(answerRequest.getIsSubjective()))
                 .selectedOption(selectedOption)

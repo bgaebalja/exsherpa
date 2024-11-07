@@ -20,8 +20,13 @@ public class GetOptionResponse {
 
         if (FormatValidator.hasValue(html)) {
             ContentExtractor.extractBodyContent(html, totalContent);
+            System.out.println(totalContent + "옵션");
         }
 
         return new GetOptionResponse(option.getOptionNo(), totalContent.toString());
+    }
+
+    public static GetOptionResponse fromNoValue(int index) {
+        return new GetOptionResponse("" + index, ContentExtractor.createOption(index));
     }
 }
