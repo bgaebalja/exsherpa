@@ -28,4 +28,16 @@ public class GetCollectionResponse {
                 .getQuestionsResponse(GetQuestionsResponse.from(collection.getQuestions()))
                 .build();
     }
+
+    public static GetCollectionResponse fromExams(Collection collection) {
+        GetPassagesResponse getPassagesResponse = null;
+        if (FormatValidator.hasValue(collection.getPassages())) {
+            getPassagesResponse = GetPassagesResponse.fromExams(collection.getPassages());
+        }
+
+        return GetCollectionResponse.builder()
+                .getPassagesResponse(getPassagesResponse)
+                .getQuestionsResponse(GetQuestionsResponse.fromExams(collection.getQuestions()))
+                .build();
+    }
 }

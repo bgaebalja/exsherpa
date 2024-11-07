@@ -19,4 +19,8 @@ public class GetPassageResponse {
     public static GetPassageResponse from(Passage passage) {
         return new GetPassageResponse(passage.getId(), passage.getPassageId(), passage.getHtml(), passage.getUrl());
     }
+
+    public static GetPassageResponse fromExams(Passage passage) {
+        return new GetPassageResponse(passage.getId(), passage.getPassageId(), "", passage.getUrl());
+    }
 }
