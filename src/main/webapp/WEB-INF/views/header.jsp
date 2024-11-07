@@ -169,6 +169,7 @@
                             nickname = authentication.getName();
                         }
                         System.out.println("nickname = " + nickname);
+                        session.setAttribute("email", nickname);
                         assert nickname != null;
                         if (!nickname.equals("anonymousUser")) {
                             out.print("<li><a href=\"#none\">" + nickname + "</a></li><li class=\"ml25\"><a href=\"/users/logout\" class=\"btn logoutBtn\">로그아웃</a></li>");

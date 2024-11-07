@@ -14,7 +14,7 @@ public class GetExamsResponse {
     }
 
     public static GetExamsResponse from(List<Exam> exams) {
-        return new GetExamsResponse(exams.stream().map(GetExamResponse::from).collect(Collectors.toList()));
+        return new GetExamsResponse(exams.stream().map(GetExamResponse::fromExams).collect(Collectors.toList()));
     }
 
     public int size() {

@@ -101,6 +101,29 @@ public class GetQuestionResponse {
                 .build();
     }
 
+    public static GetQuestionResponse fromExams(Question question) {
+        return GetQuestionResponse.builder()
+                .id(question.getId())
+                .itemId(question.getItemId())
+                .content("")
+                .descriptionUrl(question.getDescriptionUrl())
+                .questionType(question.getQuestionType())
+                .getOptionsResponse(null)
+                .difficulty(question.getDifficulty())
+                .answer(question.getAnswer())
+                .answerUrl(question.getAnswerUrl())
+                .errorReportCount(question.getErrorReportCount())
+                .blockYn(question.isBlockYn())
+                .placementNumber(question.getPlacementNumber())
+                .largeChapterCode(question.getLargeChapterCode())
+                .largeChapterName(question.getLargeChapterName())
+                .mediumChapterCode(question.getMediumChapterCode())
+                .smallChapterCode(question.getSmallChapterCode())
+                .topicChapterCode(question.getTopicChapterCode())
+                .isSubjective(false)
+                .build();
+    }
+
     private static GetOptionsResponse addOptions(List<Option> options, GetOptionsResponse getOptionsResponse) {
         if (!FormatValidator.hasValue(options)) {
             for (int i = 0; i < 4; i++) {

@@ -33,14 +33,12 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public Long registerResult(SubmitResultRequest submitResultRequest) {
-        Users user = userRepository.findByUserId(submitResultRequest.getEmail())
-                .orElseThrow(
-                        () -> new UserNotFoundException(
-                                String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, "tane9537@nate.com")
-                        )
-                );
+        String email = submitResultRequest.getEmail();
+        Users user = userRepository.findByUserId(email)
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, email)));
         Exam exam = examService.getExam(FormatConverter.parseToLong(submitResultRequest.getExamId()));
         ExaminationHistory examinationHistory = ExaminationHistory.from(submitResultRequest, user, exam);
+
         examinationRepository.save(examinationHistory);
         solvedQuestionService.registerSolvedQuestions(submitResultRequest.getAnswerRequests(), examinationHistory);
         entityManager.refresh(examinationHistory);

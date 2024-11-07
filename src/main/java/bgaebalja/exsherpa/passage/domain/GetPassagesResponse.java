@@ -19,6 +19,12 @@ public class GetPassagesResponse {
         );
     }
 
+    public static GetPassagesResponse fromExams(List<Passage> passages) {
+        return new GetPassagesResponse(
+                passages.stream().map(GetPassageResponse::fromExams).collect(Collectors.toList())
+        );
+    }
+
     public int size() {
         return getPassageResponses.size();
     }
