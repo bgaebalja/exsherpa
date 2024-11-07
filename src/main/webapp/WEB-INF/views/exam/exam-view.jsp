@@ -233,10 +233,18 @@
                                             <span class="txt"><%= getQuestionsResponse.get(j).getContent() %> <i> [5점]</i></span>
                                         </div>
                                         <%
-                                            if (!getQuestionsResponse.get(j).isSubjective()) {
-                                                GetOptionsResponse getOptionsResponse
-                                                        = getQuestionsResponse.get(j).getGetOptionsResponse();
-                                                for (int l = 0; l < getOptionsResponse.size(); l++) {
+                                            if (getQuestionsResponse.get(j).isSubjective()) {
+                                        %>
+                                        <div class="subjective-answer">
+                                            <input type="text" class="input_question_text_box"
+                                                   name="subjective_answer_<%= getQuestionsResponse.get(j).getId() %>"
+                                                   placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;">
+                                        </div>
+                                        <%
+                                        } else {
+                                            GetOptionsResponse getOptionsResponse
+                                                    = getQuestionsResponse.get(j).getGetOptionsResponse();
+                                            for (int l = 0; l < getOptionsResponse.size(); l++) {
                                         %>
                                         <ul class="answer-input-type radio">
                                             <li>
@@ -276,6 +284,11 @@
                                     <div class="top">
                                         <span class="num"><%= ++previousIndex %></span>
                                         <%= getQuestionsResponse.get(j).getContent() %>
+                                    </div>
+                                    <div class="subjective-answer">
+                                        <input type="text" class="input_question_text_box"
+                                               name="subjective_answer_<%= getQuestionsResponse.get(j).getId() %>"
+                                               placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;">
                                     </div>
                                 </div>
                             </div>
@@ -396,7 +409,7 @@
 
             if (isSubjective) {
                 const textAnswer = slide.querySelector('input.input_question_text_box');
-                submittedAnswer = textAnswer && textAnswer.length > 0 ? textAnswer.value.trim() : "미응답";
+                submittedAnswer = textAnswer && textAnswer.value.trim().length > 0 ? textAnswer.value.trim() : "미응답";
             } else {
                 const selectedOption = slide.querySelector('input[type="radio"]:checked');
                 submittedAnswer = selectedOption ? selectedOption.nextElementSibling.textContent.trim() : "미응답";

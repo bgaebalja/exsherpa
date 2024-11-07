@@ -1,10 +1,13 @@
 package bgaebalja.exsherpa.question.domain;
 
 import bgaebalja.exsherpa.option.domain.GetOptionsResponse;
+import bgaebalja.exsherpa.option.domain.Option;
 import bgaebalja.exsherpa.util.ContentExtractor;
 import bgaebalja.exsherpa.util.FormatValidator;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class GetQuestionResponse {
@@ -64,7 +67,6 @@ public class GetQuestionResponse {
     public static GetQuestionResponse from(Question question) {
         String html = question.getHtml();
         StringBuilder totalContent = new StringBuilder();
-        System.out.println(html + "asdfl;kj");
 
         if (FormatValidator.hasValue(html)) {
             ContentExtractor.extractBodyContent(html, totalContent);
@@ -73,7 +75,8 @@ public class GetQuestionResponse {
         boolean isSubjective = question.getQuestionType().isSubjective();
         GetOptionsResponse getOptionsResponse = null;
         if (!isSubjective) {
-            getOptionsResponse = GetOptionsResponse.from(question.getOptions());
+            List<Option> options = question.getOptions();
+            getOptionsResponse = addOptions(options, getOptionsResponse);
         }
 
         return GetQuestionResponse.builder()
@@ -96,6 +99,17 @@ public class GetQuestionResponse {
                 .topicChapterCode(question.getTopicChapterCode())
                 .isSubjective(isSubjective)
                 .build();
+    }
+
+    private static GetOptionsResponse addOptions(List<Option> options, GetOptionsResponse getOptionsResponse) {
+        if (!FormatValidator.hasValue(options)) {
+            for (int i = 0; i < 4; i++) {
+                getOptionsResponse = GetOptionsResponse.fromNoValue();
+            }
+
+            return getOptionsResponse;
+        }
+        return GetOptionsResponse.from(options);
     }
 
     private static void extractContent(String html, StringBuilder totalContent) {
