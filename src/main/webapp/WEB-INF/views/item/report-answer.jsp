@@ -19,7 +19,7 @@
     <script src="https://kit.fontawesome.com/266dd736a0.js" crossorigin="anonymous"></script>
 
     <style>
-        .question-answer-url h2, .question-description-url h2 {
+        .question-url h2, .question-answer-url h2, .question-description-url h2 {
             font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 10px;
@@ -31,16 +31,17 @@
     <div class="question-url">
         <div>
             <% if (getQuestionResponse == null || getQuestionResponse.getContent() == null) { %>
-            <p>문제 내용이 제공되지 않았습니다.</p>
+            <p>문제가 제공되지 않았습니다.</p>
             <% } else { %>
-            <img src="<%= getQuestionResponse.getUrl() %>">
+            <h2>문제</h2>&nbsp;<img src="<%= getQuestionResponse.getUrl() %>">
             <% } %>
         </div>
     </div>
+    <br/>
 
     <div class="question-answer-url">
         <% if (getQuestionResponse == null || getQuestionResponse.getAnswerUrl() == null) { %>
-        <p>정답 URL이 제공되지 않았습니다.</p>
+        <p>정답이 제공되지 않았습니다.</p>
         <% } else { %>
         <h2>정답</h2>&nbsp;<img src="<%= getQuestionResponse.getAnswerUrl() %>" target="_blank">
         <% } %>
@@ -49,7 +50,7 @@
 
     <div class="question-description-url">
         <% if (getQuestionResponse == null || getQuestionResponse.getDescriptionUrl() == null) { %>
-        <p>해설 URL이 제공되지 않았습니다.</p>
+        <p>해설이 제공되지 않았습니다.</p>
         <% } else { %>
         <h2>해설</h2>&nbsp;<img src="<%= getQuestionResponse.getDescriptionUrl() %>" target="_blank">
         <% } %>
