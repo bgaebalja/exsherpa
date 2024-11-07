@@ -230,7 +230,7 @@
                                     <div class="right">
                                         <div class="top">
                                             <span class="num"><%= previousIndex %></span>
-                                            <span class="txt"><%= getQuestionsResponse.get(j).getContent() %> <i> [5점]</i></span>
+                                            <span class="txt"><%= getQuestionsResponse.get(j).getContent() %></span>
                                         </div>
                                         <%
                                             if (getQuestionsResponse.get(j).isSubjective()) {

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 import static bgaebalja.exsherpa.exception.ExceptionMessage.USER_NOT_FOUND_EXCEPTION_MESSAGE;
 import static org.springframework.transaction.annotation.Isolation.READ_UNCOMMITTED;
@@ -44,5 +45,14 @@ public class ExaminationServiceImpl implements ExaminationService {
         entityManager.refresh(examinationHistory);
 
         return examinationHistory.getId();
+    }
+
+    @Override
+    public List<ExaminationHistory> getSolvedExaminationHistories(String email) {
+        Users user = userRepository.findByUserId(email)
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, email)));
+        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByModifiedAtDesc(
+                user.getId()
+        );
     }
 }

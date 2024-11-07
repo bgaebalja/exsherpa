@@ -20,6 +20,9 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 public class ExaminationHistory extends BaseGeneralEntity {
+    @Column(nullable = false, length = 20)
+    private String subjectName;
+
     @Column(nullable = false, columnDefinition = BOOLEAN_DEFAULT_FALSE)
     private boolean solvedYn;
 
@@ -40,7 +43,10 @@ public class ExaminationHistory extends BaseGeneralEntity {
     private List<SolvedQuestion> solvedQuestions;
 
     @Builder
-    private ExaminationHistory(boolean solvedYn, short questionCount, short answerCount, Users user, Exam exam) {
+    private ExaminationHistory(
+            String subjectName, boolean solvedYn, short questionCount, short answerCount, Users user, Exam exam
+    ) {
+        this.subjectName = subjectName;
         this.user = user;
         this.exam = exam;
         this.solvedYn = solvedYn;
@@ -50,6 +56,7 @@ public class ExaminationHistory extends BaseGeneralEntity {
 
     public static ExaminationHistory from(SubmitResultRequest submitResultRequest, Users user, Exam exam) {
         return ExaminationHistory.builder()
+                .subjectName(exam.getBook().getSubject().getName())
                 .solvedYn(true)
                 .questionCount(submitResultRequest.size())
                 .answerCount(CountComputer.computeAnswerCount(submitResultRequest.getAnswerRequests()))

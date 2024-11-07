@@ -14,6 +14,7 @@ public class GetQuestionResponse {
     private Long id;
     private Long itemId;
     private String content;
+    private String url;
     private String descriptionUrl;
     private QuestionType questionType;
     private GetOptionsResponse getOptionsResponse;
@@ -35,7 +36,7 @@ public class GetQuestionResponse {
 
     @Builder
     private GetQuestionResponse(
-            Long id, Long itemId, String content, String descriptionUrl, QuestionType questionType,
+            Long id, Long itemId, String content, String url, String descriptionUrl, QuestionType questionType,
             GetOptionsResponse getOptionsResponse, Difficulty difficulty, String answer, String answerUrl,
             int errorReportCount, boolean blockYn, Integer placementNumber, String largeChapterCode,
             String largeChapterName, String mediumChapterCode, String mediumChapterName, String smallChapterCode,
@@ -44,6 +45,7 @@ public class GetQuestionResponse {
         this.id = id;
         this.itemId = itemId;
         this.content = content;
+        this.url = url;
         this.descriptionUrl = descriptionUrl;
         this.questionType = questionType;
         this.getOptionsResponse = getOptionsResponse;
@@ -83,6 +85,7 @@ public class GetQuestionResponse {
                 .id(question.getId())
                 .itemId(question.getItemId())
                 .content(totalContent.toString())
+                .url(question.getUrl())
                 .descriptionUrl(question.getDescriptionUrl())
                 .questionType(question.getQuestionType())
                 .getOptionsResponse(getOptionsResponse)
