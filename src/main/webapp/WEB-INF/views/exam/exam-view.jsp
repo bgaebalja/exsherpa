@@ -168,8 +168,7 @@
                 <span class="txt">남은<br>시간</span>
                 <span class="time-txt" id="timer"><%= getExamResponse.getTimeLimit() %>:00</span>
             </div>
-            <%--            TODO: 로그인 이메일 연동--%>
-            <a href="javascript:completeExam('tane9537@nate.com');" class="btn-submit">최종제출</a>
+            <a href="javascript:completeExam('<%= session.getAttribute("email") %>');" class="btn-submit">최종제출</a>
         </div>
     </div>
     <div class="container">
