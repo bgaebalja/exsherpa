@@ -8,6 +8,7 @@
 <%@ page import="bgaebalja.exsherpa.examination.domain.GetSolvedQuestionResponse" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -17,7 +18,6 @@
 <%
     GetExaminationHistoriesResponse getExaminationHistoriesResponse
             = (GetExaminationHistoriesResponse) request.getAttribute("getExaminationHistoriesResponse");
-    String examinationHistoriesJson = new Gson().toJson(getExaminationHistoriesResponse);
     int examinationSequence = (Integer) request.getAttribute("examination_sequence");
 
     String rawDate = String.valueOf(getExaminationHistoriesResponse.get(examinationSequence).getModifiedAt());
@@ -26,10 +26,9 @@
     SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String formattedDate = outputFormat.format(date);
 
-    int[] correctCounts = new int[5]; // 최하, 하, 중, 상, 최상 순서로 저장
+    int[] correctCounts = new int[5];
     int[] totalCounts = new int[5];
 
-    // getSolvedQuestionsResponse 가져오기
     GetSolvedQuestionsResponse solvedQuestionsResponse
             = getExaminationHistoriesResponse.get(examinationSequence).getGetSolvedQuestionsResponse();
 
@@ -71,6 +70,23 @@
     for (int i = 0; i < 5; i++) {
         achievementRates[i] = (totalCounts[i] > 0) ? (int) Math.round((double) correctCounts[i] / totalCounts[i] * 100) : 0;
     }
+
+    Map<String, Long> difficultyAnswerRate = (Map<String, Long>) request.getAttribute("difficulty_answer_rate");
+%>
+<%
+    String averageRatesJson = new Gson().toJson(new int[]{
+            difficultyAnswerRate.get("최하") != null ? difficultyAnswerRate.get("최하").intValue() : 0,
+            difficultyAnswerRate.get("하") != null ? difficultyAnswerRate.get("하").intValue() : 0,
+            difficultyAnswerRate.get("중") != null ? difficultyAnswerRate.get("중").intValue() : 0,
+            difficultyAnswerRate.get("상") != null ? difficultyAnswerRate.get("상").intValue() : 0,
+            difficultyAnswerRate.get("최상") != null ? difficultyAnswerRate.get("최상").intValue() : 0
+    });
+    String userAchievementRatesJson = new Gson().toJson(achievementRates);
+%>
+<%
+    Gson gson = new Gson();
+    String difficultyAnswerRateJson = gson.toJson(difficultyAnswerRate);
+    String achievementRatesJson = gson.toJson(achievementRates);
 %>
 
 <!DOCTYPE html
@@ -127,7 +143,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
             integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <style>
         .menu .container {
             height: 27px;
@@ -212,8 +227,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                 for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
                                         %>
                                         <option value="<%= i %>"
-                                                data-sequence="<%= i %>"<%= i == examinationSequence ? "selected" : "" %>><%= i + 1 %>
-                                            회
+                                                data-sequence="<%= i %>"<%= i == examinationSequence ? "selected" : "" %>>
+                                            <%= getExaminationHistoriesResponse.get(i).getExamName() %>
                                         </option>
                                         <%
                                                 }
@@ -486,48 +501,40 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                         <col width="10%">
                                                                         <col width="10%">
                                                                         <col width="10%">
+                                                                        <col width="10%">
+                                                                        <col width="10%">
+                                                                        <col width="10%">
                                                                     </colgroup>
                                                                     <thead>
                                                                     <tr>
-                                                                        <th scope="col">난이도</th>
-                                                                        <th scope="col">전체 평균</th>
-                                                                        <th scope="col" style="color:#4b78ca;">내 성취율
-                                                                        </th>
+                                                                        <th scope="col"></th>
+                                                                        <th scope="col">계산이해</th>
+                                                                        <th scope="col">추론</th>
+                                                                        <th scope="col">문제해결</th>
+                                                                        <th scope="col">정보처리</th>
+                                                                        <th scope="col">의사소통</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                     <tr>
-                                                                        <td>최상</td>
-                                                                        <td class="blue">-</td>
-                                                                        <td><%= achievementRates[4] %>%</td>
-                                                                        <!-- 최상 난이도 성취율 -->
+                                                                        <td>평균</td>
+                                                                        <td>90</td>
+                                                                        <td>75</td>
+                                                                        <td>80</td>
+                                                                        <td>75</td>
+                                                                        <td>65</td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>상</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td><%= achievementRates[3] %>%</td>
-                                                                        <!-- 상 난이도 성취율 -->
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>중</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td><%= achievementRates[2] %>%</td>
-                                                                        <!-- 중 난이도 성취율 -->
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>하</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td><%= achievementRates[1] %>%</td>
-                                                                        <!-- 하 난이도 성취율 -->
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>최하</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td><%= achievementRates[0] %>%</td>
-                                                                        <!-- 최하 난이도 성취율 -->
+                                                                    <tr class="blue">
+                                                                        <td>나천재</td>
+                                                                        <td>95</td>
+                                                                        <td>94</td>
+                                                                        <td>91</td>
+                                                                        <td>93</td>
+                                                                        <td>85</td>
                                                                     </tr>
                                                                     </tbody>
                                                                 </table>
+
 
                                                                 <!--그래프 영역-->
                                                                 <div class="graph_area">
@@ -537,10 +544,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                 <!--그래프 영역-->
                                                             </div>
                                                         </div>
-
                                                         <div class="box_wrap" id="difficulty_box">
                                                             <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>문항 난이도별
+                                                                    class="fa-regular fa-pen-to-square"></i>문항 난이도 별
                                                                 성취율
                                                             </div>
                                                             <div class="box box4">
@@ -559,34 +565,43 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                             <th scope="col"
                                                                                 style="color:#4b78ca;">내 성취율
                                                                             </th>
-
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>최상</td>
-                                                                            <td class="blue">-</td>
-                                                                            <td>-</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("최상") != null ? difficultyAnswerRate.get("최상") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[4] %>%</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>상</td>
-                                                                            <td class="blue">80</td>
-                                                                            <td>70</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("상") != null ? difficultyAnswerRate.get("상") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[3] %>%</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>중</td>
-                                                                            <td class="blue">80</td>
-                                                                            <td>75</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("중") != null ? difficultyAnswerRate.get("중") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[2] %>%</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>하</td>
-                                                                            <td class="blue">100</td>
-                                                                            <td>95</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("하") != null ? difficultyAnswerRate.get("하") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[1] %>%</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>최하</td>
-                                                                            <td class="blue">100</td>
-                                                                            <td>95</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("최하") != null ? difficultyAnswerRate.get("최하") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[0] %>%</td>
                                                                         </tr>
                                                                         </tbody>
                                                                     </table>
@@ -594,8 +609,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     <!--그래프 영역-->
                                                                     <div class="graph_area ml20">
                                                                         <canvas id="difficulty_graph" width="830"
-                                                                                height="350"
-                                                                                style="margin: auto;"></canvas>
+                                                                                height="350"></canvas>
                                                                     </div>
                                                                     <!--그래프 영역-->
                                                                 </div>
@@ -1290,8 +1304,61 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     <input type="hidden" id="marketing_yn" value="${examInformation.marketing_yn}"/>
     <input type="hidden" id="exam_round" value="${exam.examRound}"/>
 </div>
-<!-- e: 220722 추가 -->
 
+<script>
+    // JSON 데이터를 JavaScript 변수에 할당
+    const difficultyAnswerRate = JSON.parse('<%= difficultyAnswerRateJson %>');
+    const achievementRates = JSON.parse('<%= achievementRatesJson %>');
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const difficultyLabels = ['최상', '상', '중', '하', '최하'];
+
+        // difficultyAnswerRate 객체를 JavaScript 배열로 변환
+        const averageRates = [
+            difficultyAnswerRate["최상"] || 0,
+            difficultyAnswerRate["상"] || 0,
+            difficultyAnswerRate["중"] || 0,
+            difficultyAnswerRate["하"] || 0,
+            difficultyAnswerRate["최하"] || 0
+        ];
+
+        // achievementRates 배열에서 성취율만 추출
+        const myRates = achievementRates;
+
+        const difficultyCtx = document.getElementById('difficulty_graph').getContext('2d');
+        const difficultyChart = new Chart(difficultyCtx, {
+            type: 'bar',
+            data: {
+                labels: difficultyLabels,
+                datasets: [
+                    {
+                        label: '전체 평균',
+                        data: averageRates,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: '내 성취율',
+                        data: myRates,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 <%--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>--%>
 <script src="/js/html2canvas.js"></script>
@@ -1409,20 +1476,23 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         </c:when>
         <c:when test="${exam.subjectId eq 18}">'과학'
         </c:when>
+        <c:when test="${exam.subjectId eq 18}">'역사'
+        </c:when>
+        <c:when test="${exam.subjectId eq 18}">'도덕'
+        </c:when>
         <c:otherwise>''</c:otherwise>
         </c:choose>;
         const nickName = '${nickname}';
         const examRound = '${exam.examRound}';
         <fmt:parseDate value="${exam.examEndTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
         const endTime = '<fmt:formatDate pattern="yyMMdd" value="${parsedDateTime}"/>';
-        var pageWidth = 210; //가로 길이 a4 기준
-        var pageHeight = pageWidth * 1.414; //출력 페이지 세로길이
+        var pageWidth = 210;
+        var pageHeight = pageWidth * 1.414;
         var doc = new jsPDF("p", "mm", [pageHeight, pageWidth]);
         setTimeout(function () {
             html2canvas($('#student_summary'), {
                 background: "#FFFFFF",
                 onrendered: function (canvas) {
-                    // 한글깨짐현상때문에 jpeg->jspdf 전환
                     var imgData = canvas.toDataURL("image/jpeg");
                     var imgWidth = pageWidth - 20;
                     var imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1434,7 +1504,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             html2canvas($('#subject_ability_box'), {
                 background: "#FFFFFF",
                 onrendered: function (canvas) {
-                    // 한글깨짐현상때문에 jpeg->jspdf 전환
                     var imgData = canvas.toDataURL("image/jpeg");
                     var imgWidth = pageWidth - 20;
                     var imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1473,7 +1542,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             html2canvas($('#activity_box'), {
                 background: "#FFFFFF",
                 onrendered: function (canvas) {
-                    // 한글깨짐현상때문에 jpeg->jspdf 전환
                     var imgData = canvas.toDataURL("image/jpeg");
                     var imgWidth = pageWidth - 20;
                     var imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1512,7 +1580,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             html2canvas($('#box_answer'), {
                 background: "#FFFFFF",
                 onrendered: function (canvas) {
-                    // 한글깨짐현상때문에 jpeg->jspdf 전환
                     var imgData = canvas.toDataURL("image/jpeg");
                     var imgWidth = pageWidth - 20;
                     var imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1534,7 +1601,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             html2canvas($('#item_type_box'), {
                 background: "#FFFFFF",
                 onrendered: function (canvas) {
-                    // 한글깨짐현상때문에 jpeg->jspdf 전환
                     var imgData = canvas.toDataURL("image/jpeg");
                     var imgWidth = pageWidth - 20;
                     var imgHeight = canvas.height * imgWidth / canvas.width;
@@ -1561,28 +1627,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     }
 
 </script>
-<script type="application/json" id="examinationHistoriesData">
-    <%= examinationHistoriesJson %>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
 <script>
     function displayExaminationHistory() {
         const selectedIndex = parseInt(document.getElementById("round_select").value) - 1; // 1-based index adjustment
@@ -1602,6 +1646,4 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     const achievementPercentage = <%= achievementPercentage %>;
     setBarPosition(achievementPercentage);
 </script>
-
-<!-- e: 220722 추가 -->
 </html>

@@ -192,7 +192,6 @@
                 <div class="swiper-wrapper">
                     <%
                         int previousIndex = 0;
-                        int subjectiveNumber = 0;
                         GetCollectionsResponse getCollectionsResponse = getExamResponse.getGetCollectionsResponse();
                         for (int i = 0; i < getCollectionsResponse.size(); i++) {
                             GetPassagesResponse getPassagesResponse

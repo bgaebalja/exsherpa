@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface ExaminationRepository extends JpaRepository<ExaminationHistory, Long> {
     List<ExaminationHistory> findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByModifiedAtAsc(Long userId);
+
+    List<ExaminationHistory> findBySolvedYnTrueAndDeleteYnFalse();
+
+    List<ExaminationHistory> findByExamIdAndSolvedYnTrueAndDeleteYnFalse(Long examId);
 }
