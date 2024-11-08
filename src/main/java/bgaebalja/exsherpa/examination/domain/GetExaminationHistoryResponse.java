@@ -12,6 +12,7 @@ public class GetExaminationHistoryResponse {
     private String className;
     private String grade;
     private String subjectName;
+    private String examName;
     private boolean isSolved;
     private short questionCount;
     private short answerCount;
@@ -20,7 +21,7 @@ public class GetExaminationHistoryResponse {
 
     @Builder
     private GetExaminationHistoryResponse(
-            String username, String className, String grade, String subjectName,
+            String username, String className, String grade, String subjectName, String examName,
             boolean isSolved, short questionCount, short answerCount,
             GetSolvedQuestionsResponse getSolvedQuestionsResponse, LocalDateTime modifiedAt
     ) {
@@ -28,6 +29,7 @@ public class GetExaminationHistoryResponse {
         this.className = className;
         this.grade = grade;
         this.subjectName = subjectName;
+        this.examName = examName;
         this.isSolved = isSolved;
         this.questionCount = questionCount;
         this.answerCount = answerCount;
@@ -42,6 +44,7 @@ public class GetExaminationHistoryResponse {
                 .className(className)
                 .grade(examinationHistory.getUser().getGrade())
                 .subjectName(examinationHistory.getSubjectName())
+                .examName(examinationHistory.getExam().getExamName())
                 .isSolved(examinationHistory.isSolvedYn())
                 .questionCount(examinationHistory.getQuestionCount())
                 .answerCount(examinationHistory.getAnswerCount())
