@@ -109,7 +109,7 @@ public class ExaminationController {
             @RequestParam("school_level") String schoolLevel,
             @RequestParam(value = "exam_round", defaultValue = "1") String examRound,
             @RequestParam("year") String year,
-            @RequestParam(value = "examination_sequence", defaultValue = "1") String examinationSequence,
+            @RequestParam(value = "examination_sequence", defaultValue = "0") String examinationSequence,
             HttpSession session
     ) {
         ModelAndView modelAndView = new ModelAndView("user/exam/report");
@@ -135,10 +135,10 @@ public class ExaminationController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<Void> submitResult(@RequestBody SubmitResultRequest submitResultRequest) {
-        examinationService.registerResult(submitResultRequest);
+    public ResponseEntity<Integer> submitResult(@RequestBody SubmitResultRequest submitResultRequest) {
+        int examinationHistoriesSize = examinationService.registerResult(submitResultRequest);
 
-        return ResponseEntity.status(CREATED).build();
+        return ResponseEntity.status(CREATED).body(examinationHistoriesSize);
     }
 
     @GetMapping("/report-answer")

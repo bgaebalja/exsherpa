@@ -6,7 +6,7 @@ import bgaebalja.exsherpa.examination.domain.SubmitResultRequest;
 import java.util.List;
 
 public interface ExaminationService {
-    Long registerResult(SubmitResultRequest submitResultRequest);
+    int registerResult(SubmitResultRequest submitResultRequest);
 
     List<ExaminationHistory> getSolvedExaminationHistories(String email);
 }

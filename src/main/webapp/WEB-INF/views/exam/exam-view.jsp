@@ -459,17 +459,24 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        alert("시험이 제출되었습니다.");
-                        // TODO: 학교 등급과 시험 종류(기출, B셀파 문제), 연도 정보 실제 데이터 추가
-                        location.href = "/user/exam/report?school_level=SL02&exam_round=2&year=2024&exam_id=${getExamResponse.id}";
+                        return response.json()
                     } else {
                         console.error("응답 상태 코드: " + response.status);
                         alert("제출에 실패했습니다. 다시 시도해 주세요.");
+                        throw new Error("제출 실패");
                     }
                 })
+                .then(data => {
+                    // TODO: 학교 등급과 시험 종류(기출, B셀파 문제), 연도 정보 실제 데이터 추가
+                    const {schoolLevel, examRound, year, examId, examinationSequence} = data;
+
+                    alert("시험이 제출되었습니다.");
+                    const sequence = data - 1;
+
+                    location.href = `/user/exam/report?school_level=${schoolLevel}&exam_round=${examRound}&year=${year}&exam_id=${examId}&examination_sequence=` + sequence;
+                })
                 .catch(error => {
-                    console.error("에러 발생: ", error);
-                    alert("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
+                    console.error("오류:", error);
                 });
         }
     }
@@ -499,7 +506,7 @@
             body: JSON.stringify({
                 examResultId: 5558,
                 itemId: itemId,
-                studentId: '010-6369-2379',
+                studentId: 'tane9537@nate.com',
                 studentAnswer: studentAnswer,
                 itemProgressTime: saveTime
             }),
