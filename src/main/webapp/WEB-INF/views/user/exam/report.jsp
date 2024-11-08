@@ -20,7 +20,7 @@
     String examinationHistoriesJson = new Gson().toJson(getExaminationHistoriesResponse);
     int examinationSequence = (Integer) request.getAttribute("examination_sequence");
 
-    String rawDate = String.valueOf(getExaminationHistoriesResponse.get(examinationSequence - 1).getModifiedAt());
+    String rawDate = String.valueOf(getExaminationHistoriesResponse.get(examinationSequence).getModifiedAt());
     SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
     Date date = inputFormat.parse(rawDate);
     SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -157,7 +157,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                             if (getExaminationHistoriesResponse.size() > 0) {
                                                 for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
                                         %>
-                                        <option value="<%= i + 1 %>" data-sequence="<%= i + 1 %>"><%= i + 1 %>회</option>
+                                        <option value="<%= i %>"
+                                                data-sequence="<%= i %>"<%= i == examinationSequence ? "selected" : "" %>><%= i + 1 %>
+                                            회
+                                        </option>
                                         <%
                                                 }
                                             }
@@ -199,7 +202,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     <i class="fa-solid fa-rectangle-vertical"
                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
                                                                     응시과목
-                                                                    <li id="subjectName"><%= getExaminationHistoriesResponse.get(0).getSubjectName() %>
+                                                                    <li id="subjectName"><%= getExaminationHistoriesResponse.get(examinationSequence).getSubjectName() %>
                                                                     </li>
                                                                 </ul>
                                                                 <ul style="padding-bottom: 20px">
@@ -220,10 +223,22 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                 <div class="score_box">
                                                     <div class="score_txt">
                                                         <fmt:parseNumber value="${score}" pattern="0" var="num"/>
-                                                        <span class="score"><em><%= getExaminationHistoriesResponse.get(examinationSequence - 1).getAnswerCount() == 0 ? 0 : Math.round((double) getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() / getExaminationHistoriesResponse.get(examinationSequence - 1).getQuestionCount() * 100)%>점</em> / 100점</span>
+                                                        <span class="score">
+                                                            <%
+                                                                System.out.println(getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount());
+                                                                System.out.println(getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount());
+                                                            %>
+            <em><%=
+            examinationSequence > 0 && examinationSequence <= getExaminationHistoriesResponse.size()
+                    ? (getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() == 0
+                    ? 0
+                    : Math.round((double) getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() /
+                    getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount() * 100))
+                    : 0 %>점
+            </em> / 100점
+        </span>
                                                     </div>
                                                 </div>
-
                                                 <table class="tbl_list2 mt60">
                                                     <caption></caption>
                                                     <colgroup>
@@ -1484,10 +1499,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
 
 
+
+
+
+
 </script>
 <script>
     function displayExaminationHistory() {
-        const selectedIndex = document.getElementById("round_select").value;
+        const selectedIndex = parseInt(document.getElementById("round_select").value) - 1; // 1-based index adjustment
         const examinationHistories = JSON.parse(document.getElementById("examinationHistoriesData").textContent);
 
         document.getElementById("username").innerText = examinationHistories[selectedIndex].username;

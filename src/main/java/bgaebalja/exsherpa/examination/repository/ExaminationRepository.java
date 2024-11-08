@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ExaminationRepository extends JpaRepository<ExaminationHistory, Long> {
-    List<ExaminationHistory> findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByModifiedAtDesc(Long userId);
+    List<ExaminationHistory> findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByModifiedAtAsc(Long userId);
 }
