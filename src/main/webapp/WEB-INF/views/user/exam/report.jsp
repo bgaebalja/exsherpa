@@ -25,6 +25,52 @@
     Date date = inputFormat.parse(rawDate);
     SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String formattedDate = outputFormat.format(date);
+
+    int[] correctCounts = new int[5]; // 최하, 하, 중, 상, 최상 순서로 저장
+    int[] totalCounts = new int[5];
+
+    // getSolvedQuestionsResponse 가져오기
+    GetSolvedQuestionsResponse solvedQuestionsResponse
+            = getExaminationHistoriesResponse.get(examinationSequence).getGetSolvedQuestionsResponse();
+
+    for (int i = 0; i < solvedQuestionsResponse.size(); i++) {
+        GetSolvedQuestionResponse getSolvedQuestionResponse = solvedQuestionsResponse.get(i);
+        String difficulty = getSolvedQuestionResponse.getDifficulty();
+        boolean isCorrect = getSolvedQuestionResponse.isCorrect();
+
+        int index;
+        switch (difficulty) {
+            case "최하":
+                index = 0;
+                break;
+            case "하":
+                index = 1;
+                break;
+            case "중":
+                index = 2;
+                break;
+            case "상":
+                index = 3;
+                break;
+            case "최상":
+                index = 4;
+                break;
+            default:
+                index = -1;
+        }
+
+        if (index != -1) {
+            totalCounts[index]++;
+            if (isCorrect) {
+                correctCounts[index]++;
+            }
+        }
+    }
+
+    int[] achievementRates = new int[5];
+    for (int i = 0; i < 5; i++) {
+        achievementRates[i] = (totalCounts[i] > 0) ? (int) Math.round((double) correctCounts[i] / totalCounts[i] * 100) : 0;
+    }
 %>
 
 <!DOCTYPE html
@@ -189,7 +235,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                             <div class="box_tit"><i
                                                                     class="fa-regular fa-pen-to-square"></i>시험참여 정보
                                                             </div>
-                                                            <div class="box box1" style="padding: 50px 70px; height: 350px;">                                                                <input type="hidden" id="nickname" value="${nickname}"/>
+                                                            <div class="box box1"
+                                                                 style="padding: 50px 70px; height: 350px;"><input
+                                                                    type="hidden" id="nickname" value="${nickname}"/>
                                                                 <ul style="padding-bottom: 20px">
                                                                     <i class="fa-solid fa-rectangle-vertical"
                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
@@ -368,8 +416,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     </thead>
                                                                     <tbody>
                                                                     <tr>
-                                                                        <td><%= getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount() %></td>
-                                                                        <td><%= getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() %></td>
+                                                                        <td><%= getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount() %>
+                                                                        </td>
+                                                                        <td><%= getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() %>
+                                                                        </td>
                                                                         <td>
                                                                             <%
                                                                                 int questionCount = getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount();
@@ -436,40 +486,48 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                         <col width="10%">
                                                                         <col width="10%">
                                                                         <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
                                                                     </colgroup>
                                                                     <thead>
                                                                     <tr>
-                                                                        <th scope="col"></th>
-                                                                        <th scope="col">계산이해</th>
-                                                                        <th scope="col">추론</th>
-                                                                        <th scope="col">문제해결</th>
-                                                                        <th scope="col">정보처리</th>
-                                                                        <th scope="col">의사소통</th>
+                                                                        <th scope="col">난이도</th>
+                                                                        <th scope="col">전체 평균</th>
+                                                                        <th scope="col" style="color:#4b78ca;">내 성취율
+                                                                        </th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                     <tr>
-                                                                        <td>평균</td>
-                                                                        <td>90</td>
-                                                                        <td>75</td>
-                                                                        <td>80</td>
-                                                                        <td>75</td>
-                                                                        <td>65</td>
+                                                                        <td>최상</td>
+                                                                        <td class="blue">-</td>
+                                                                        <td><%= achievementRates[4] %>%</td>
+                                                                        <!-- 최상 난이도 성취율 -->
                                                                     </tr>
-                                                                    <tr class="blue">
-                                                                        <td>${nickname}</td>
-                                                                        <td>95</td>
-                                                                        <td>94</td>
-                                                                        <td>91</td>
-                                                                        <td>93</td>
-                                                                        <td>85</td>
+                                                                    <tr>
+                                                                        <td>상</td>
+                                                                        <td class="blue">80</td>
+                                                                        <td><%= achievementRates[3] %>%</td>
+                                                                        <!-- 상 난이도 성취율 -->
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>중</td>
+                                                                        <td class="blue">80</td>
+                                                                        <td><%= achievementRates[2] %>%</td>
+                                                                        <!-- 중 난이도 성취율 -->
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>하</td>
+                                                                        <td class="blue">100</td>
+                                                                        <td><%= achievementRates[1] %>%</td>
+                                                                        <!-- 하 난이도 성취율 -->
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>최하</td>
+                                                                        <td class="blue">100</td>
+                                                                        <td><%= achievementRates[0] %>%</td>
+                                                                        <!-- 최하 난이도 성취율 -->
                                                                     </tr>
                                                                     </tbody>
                                                                 </table>
-
 
                                                                 <!--그래프 영역-->
                                                                 <div class="graph_area">
@@ -532,7 +590,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                         </tr>
                                                                         </tbody>
                                                                     </table>
-
 
                                                                     <!--그래프 영역-->
                                                                     <div class="graph_area ml20">
@@ -1506,6 +1563,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 </script>
 <script type="application/json" id="examinationHistoriesData">
     <%= examinationHistoriesJson %>
+
+
 
 
 
