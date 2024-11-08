@@ -120,6 +120,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             vertical-align: middle;
         }
     </style>
+    <style>
+        .user_name {
+            position: absolute;
+            right: 0;
+            white-space: nowrap;
+            padding-left: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -181,8 +189,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                             <div class="box_tit"><i
                                                                     class="fa-regular fa-pen-to-square"></i>시험참여 정보
                                                             </div>
-                                                            <div class="box box1" style="padding: 50px 70px;">
-                                                                <input type="hidden" id="nickname" value="${nickname}"/>
+                                                            <div class="box box1" style="padding: 50px 70px; height: 350px;">                                                                <input type="hidden" id="nickname" value="${nickname}"/>
                                                                 <ul style="padding-bottom: 20px">
                                                                     <i class="fa-solid fa-rectangle-vertical"
                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
@@ -208,7 +215,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                 <ul style="padding-bottom: 20px">
                                                                     <i class="fa-solid fa-rectangle-vertical"
                                                                        style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
-                                                                    응시일자&nbsp&nbsp&nbsp&nbsp
+                                                                    시험지명
+                                                                    <li id="examName"><%= getExaminationHistoriesResponse.get(examinationSequence).getExamName() %>
+                                                                    </li>
+                                                                </ul>
+                                                                <ul style="padding-bottom: 20px">
+                                                                    <i class="fa-solid fa-rectangle-vertical"
+                                                                       style="width: 10px; border-radius: 0; vertical-align: middle;"></i>
+                                                                    응시일자&nbsp&nbsp&nbsp
                                                                     <li class="last">
                                                                         <div id="modifiedAt"
                                                                              style="overflow: hidden; white-space: nowrap; display: inline-block; vertical-align: middle;">
@@ -354,21 +368,26 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     </thead>
                                                                     <tbody>
                                                                     <tr>
-                                                                        <td><fmt:formatNumber
-                                                                                value="${detailReportInfo.item_cnt}"
-                                                                                type="number"/></td>
-                                                                        <td><fmt:formatNumber
-                                                                                value="${detailReportInfo.correct_item_cnt}"
-                                                                                type="number"/></td>
-                                                                        <td><fmt:formatNumber
-                                                                                value="${detailReportInfo.achievePer}"
-                                                                                type="percent"/></td>
-                                                                        <td><c:choose>
-                                                                            <c:when test="${detailReportInfo.achievePer >= 0 && detailReportInfo.achievePer <= 0.19}">1수준</c:when>
-                                                                            <c:when test="${detailReportInfo.achievePer >= 0.2 && detailReportInfo.achievePer <= 0.49}">2수준</c:when>
-                                                                            <c:when test="${detailReportInfo.achievePer >= 0.5 && detailReportInfo.achievePer <= 0.79}">3수준</c:when>
-                                                                            <c:otherwise>4수준</c:otherwise>
-                                                                        </c:choose></td>
+                                                                        <td><%= getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount() %></td>
+                                                                        <td><%= getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() %></td>
+                                                                        <td>
+                                                                            <%
+                                                                                int questionCount = getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount();
+                                                                                int answerCount = getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount();
+                                                                                double achievementRate = (questionCount > 0) ? (double) answerCount / questionCount : 0;
+                                                                                int achievementPercentage = (int) Math.round(achievementRate * 100);
+                                                                                pageContext.setAttribute("achievementPercentage", achievementPercentage);
+                                                                            %>
+                                                                            <%= achievementPercentage %>%
+                                                                        </td>
+                                                                        <td>
+                                                                            <c:choose>
+                                                                                <c:when test="${achievementPercentage <= 25}">1수준</c:when>
+                                                                                <c:when test="${achievementPercentage <= 50}">2수준</c:when>
+                                                                                <c:when test="${achievementPercentage <= 75}">3수준</c:when>
+                                                                                <c:otherwise>4수준</c:otherwise>
+                                                                            </c:choose>
+                                                                        </td>
                                                                     </tr>
                                                                     </tbody>
                                                                 </table>
@@ -1503,6 +1522,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
 
 
+
 </script>
 <script>
     function displayExaminationHistory() {
@@ -1514,6 +1534,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         document.getElementById("subjectName").innerText = examinationHistories[selectedIndex].subjectName;
         document.getElementById("modifiedAt").innerText = examinationHistories[selectedIndex].modifiedAt;
     }
+
+    function setBarPosition(achievementPercentage) {
+        let position = achievementPercentage + "%";
+        document.querySelector(".user_name").style.left = position;
+    }
+
+    const achievementPercentage = <%= achievementPercentage %>;
+    setBarPosition(achievementPercentage);
 </script>
 
 <!-- e: 220722 추가 -->
