@@ -3,7 +3,7 @@ package bgaebalja.exsherpa.examination.domain;
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.exam.domain.Exam;
 import bgaebalja.exsherpa.user.domain.Users;
-import bgaebalja.exsherpa.util.CountComputer;
+import bgaebalja.exsherpa.util.MathComputer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,7 +59,7 @@ public class ExaminationHistory extends BaseGeneralEntity {
                 .subjectName(exam.getBook().getSubject().getName())
                 .solvedYn(true)
                 .questionCount(submitResultRequest.size())
-                .answerCount(CountComputer.computeAnswerCount(submitResultRequest.getAnswerRequests()))
+                .answerCount(MathComputer.computeAnswerCount(submitResultRequest.getAnswerRequests()))
                 .user(user)
                 .exam(exam)
                 .build();

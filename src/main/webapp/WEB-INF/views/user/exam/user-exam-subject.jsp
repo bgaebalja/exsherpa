@@ -118,10 +118,12 @@
                                                                 <c:when test="${exam.subjectName eq '수학'}">수학</c:when>
                                                                 <c:when test="${exam.subjectName eq '사회'}">사회</c:when>
                                                                 <c:when test="${exam.subjectName eq '과학'}">과학</c:when>
+                                                                <c:when test="${exam.subjectName eq '역사'}">역사</c:when>
+                                                                <c:when test="${exam.subjectName eq '도덕'}">도덕</c:when>
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
                                                         </td>
-                                                        <td>응시 시각으로부터 ${exam.timeLimit}분</td>
+                                                        <td>${exam.timeLimit}분</td>
                                                         <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
@@ -217,11 +219,13 @@
                                                     <col width="20%">
                                                     <col width="10%">
                                                     <col width="10%">
+                                                    <col width="10%">
                                                 </colgroup>
                                                 <thead>
                                                 <tr>
                                                     <th scope="col" class="first">순번</th>
                                                     <th scope="col">과목</th>
+                                                    <th scope="col">시험지명</th>
                                                     <th scope="col">시험 시간</th>
                                                     <th scope="col">문항 수</th>
                                                     <th scope="col">시험 응시</th>
@@ -239,10 +243,13 @@
                                                                 <c:when test="${exam.subjectName eq '수학'}">수학</c:when>
                                                                 <c:when test="${exam.subjectName eq '사회'}">사회</c:when>
                                                                 <c:when test="${exam.subjectName eq '과학'}">과학</c:when>
+                                                                <c:when test="${exam.subjectName eq '역사'}">역사</c:when>
+                                                                <c:when test="${exam.subjectName eq '도덕'}">도덕</c:when>
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
                                                         </td>
-                                                        <td>응시 시각으로부터 ${exam.timeLimit}분</td>
+                                                        <td>${exam.examName}</td>
+                                                        <td>${exam.timeLimit}분</td>
                                                         <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>

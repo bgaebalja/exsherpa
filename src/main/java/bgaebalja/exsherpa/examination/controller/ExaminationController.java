@@ -11,6 +11,7 @@ import bgaebalja.exsherpa.question.domain.GetQuestionResponse;
 import bgaebalja.exsherpa.question.domain.Question;
 import bgaebalja.exsherpa.question.service.QuestionService;
 import bgaebalja.exsherpa.util.FormatConverter;
+import bgaebalja.exsherpa.util.MathComputer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -117,11 +119,18 @@ public class ExaminationController {
                 "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
         );
         String email = session.getAttribute("email").toString();
-        modelAndView.addObject(
-                "getExaminationHistoriesResponse",
-                GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistories(email))
+        GetExaminationHistoriesResponse getExaminationHistoriesResponse
+                = GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistories(email));
+        modelAndView.addObject("getExaminationHistoriesResponse", getExaminationHistoriesResponse);
+        Long examId = getExaminationHistoriesResponse.get(FormatConverter.parseToInt(examinationSequence)).getExamId();
+        GetExaminationHistoriesResponse getAllExaminationHistoriesResponse = GetExaminationHistoriesResponse.from(
+                examinationService.getSolvedExaminationHistoriesFromExam(examId)
         );
+
+        Map<String, Long> difficultyAnswerRate
+                = MathComputer.computeDifficultyAnswerRate(getAllExaminationHistoriesResponse);
         modelAndView.addObject("examination_sequence", FormatConverter.parseToInt(examinationSequence));
+        modelAndView.addObject("difficulty_answer_rate", difficultyAnswerRate);
 
         return modelAndView;
     }
