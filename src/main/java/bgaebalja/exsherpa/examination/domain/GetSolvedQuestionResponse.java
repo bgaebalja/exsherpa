@@ -13,11 +13,12 @@ public class GetSolvedQuestionResponse {
     private String smallChapterName;
     private String topicChapterName;
     private String submittedAnswer;
+    private String questionType;
 
     @Builder
     private GetSolvedQuestionResponse(
-            Long id, Long questionId, short questionNumber, boolean isCorrect,
-            String difficulty, String smallChapterName, String topicChapterName, String submittedAnswer
+            Long id, Long questionId, short questionNumber, boolean isCorrect, String difficulty,
+            String smallChapterName, String topicChapterName, String submittedAnswer, String questionType
     ) {
         this.id = id;
         this.questionId = questionId;
@@ -27,6 +28,7 @@ public class GetSolvedQuestionResponse {
         this.smallChapterName = smallChapterName;
         this.topicChapterName = topicChapterName;
         this.submittedAnswer = submittedAnswer;
+        this.questionType = questionType;
     }
 
     public static GetSolvedQuestionResponse from(SolvedQuestion solvedQuestion) {
@@ -39,6 +41,7 @@ public class GetSolvedQuestionResponse {
                 .smallChapterName(solvedQuestion.getQuestion().getSmallChapterName())
                 .topicChapterName(solvedQuestion.getQuestion().getTopicChapterName())
                 .submittedAnswer(solvedQuestion.getSubmittedAnswer())
+                .questionType(solvedQuestion.getQuestion().getQuestionType().getName())
                 .build();
     }
 }
