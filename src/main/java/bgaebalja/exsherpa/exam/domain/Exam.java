@@ -44,4 +44,7 @@ public class Exam extends BaseGeneralEntity {
 
     @OneToMany(mappedBy = "exam", cascade = PERSIST)
     private List<ExaminationHistory> examinationHistories;
+
+    public void addStatus() {
+    }
 }

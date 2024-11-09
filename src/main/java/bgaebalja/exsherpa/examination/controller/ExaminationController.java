@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.examination.controller;
 
+import bgaebalja.exsherpa.exam.domain.Exam;
 import bgaebalja.exsherpa.exam.domain.GetExamResponse;
 import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
 import bgaebalja.exsherpa.exam.service.ExamService;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -62,12 +65,29 @@ public class ExaminationController {
                 "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
         );
 
+        List<GetExamResponse> getExamResponses = new ArrayList<>();
+
         if (examRound.equals("1")) {
-            modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getPastExams(email)));
+            List<Exam> exams = examService.getPastExams();
+            for (Exam exam : exams) {
+                ExaminationHistory examinationHistory
+                        = examinationService.getCachedExaminationHistory(email, exam.getId());
+                getExamResponses.add(GetExamResponse.from(exam, examinationHistory));
+            }
+            modelAndView.addObject("getExamsResponse", GetExamsResponse.of(getExamResponses));
+
             return modelAndView;
         }
 
-        modelAndView.addObject("getExamsResponse", GetExamsResponse.from(examService.getBsherpaExams(email)));
+        List<Exam> exams = examService.getBsherpaExams(email);
+        for (Exam exam : exams) {
+            ExaminationHistory examinationHistory
+                    = examinationService.getCachedExaminationHistory(email, exam.getId());
+            getExamResponses.add(GetExamResponse.from(exam, examinationHistory));
+        }
+
+        modelAndView.addObject("getExamsResponse", GetExamsResponse.of(getExamResponses));
+
         return modelAndView;
     }
 
@@ -108,15 +128,37 @@ public class ExaminationController {
     }
 
     @GetMapping("/exam-view")
-    public ModelAndView getActualTestPage(@RequestParam(value = "exam_id") String examId) {
-        GetExamResponse getExamResponse
-                = GetExamResponse.from(examService.getExam(FormatConverter.parseToLong(examId)));
+    public ModelAndView getActualTestPage(
+            @RequestParam(value = "exam_id") String examId,
+            @RequestParam(value = "is_cached", defaultValue = "false") String isCached,
+            HttpSession session
+    ) {
+        Long parsedExamId = FormatConverter.parseToLong(examId);
+
+        if (FormatConverter.parseToBoolean(isCached)) {
+            ExaminationHistory cachedExaminationHistory = examinationService.getCachedExaminationHistory(
+                    session.getAttribute("email").toString(), parsedExamId
+            );
+            GetExamResponse getExamResponse = GetExamResponse.from(
+                    examService.getExam(parsedExamId), GetExaminationHistoryResponse.from(cachedExaminationHistory)
+            );
+
+            return new ModelAndView("exam/exam-view", "getExamResponse", getExamResponse);
+        }
+
+        GetExamResponse getExamResponse = GetExamResponse.from(examService.getExam(parsedExamId));
 
         return new ModelAndView("exam/exam-view", "getExamResponse", getExamResponse);
     }
 
     @PostMapping("/submit")
     public ResponseEntity<Integer> submitResult(@RequestBody SubmitResultRequest submitResultRequest) {
+        if (FormatConverter.parseToBoolean(submitResultRequest.getIsCache())) {
+            examinationService.registerCacheData(submitResultRequest);
+
+            return ResponseEntity.status(CREATED).body(-1);
+        }
+
         int examinationHistoriesSize = examinationService.registerResult(submitResultRequest);
 
         return ResponseEntity.status(CREATED).body(examinationHistoriesSize);
@@ -153,10 +195,11 @@ public class ExaminationController {
 
         modelAndView.addObject("getExaminationHistoriesResponse", getMyExaminationHistoriesResponse);
         Long examId = getMyExaminationHistoriesResponse.get(FormatConverter.parseToInt(examinationSequence)).getExamId();
-        GetExaminationHistoriesResponse getAllExaminationHistoriesFromExamResponse = GetExaminationHistoriesResponse.from(
-                examinationService.getSolvedExaminationHistoriesFromExam(examId)
+        GetExaminationHistoriesResponse getAllExaminationHistoriesFromExamResponse
+                = GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistoriesFromExam(examId)
         );
-        GetExaminationHistoriesResponse getMyExaminationHistoriesFromExamResponse = GetExaminationHistoriesResponse.from(
+        GetExaminationHistoriesResponse getMyExaminationHistoriesFromExamResponse
+                = GetExaminationHistoriesResponse.from(
                 examinationService.getSolvedExaminationHistoriesFromExam(examId, email)
         );
 

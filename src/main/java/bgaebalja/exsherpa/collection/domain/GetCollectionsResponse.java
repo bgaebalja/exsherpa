@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.collection.domain;
 
+import bgaebalja.exsherpa.examination.domain.GetExaminationHistoryResponse;
 import lombok.Getter;
 
 import java.util.List;
@@ -16,6 +17,16 @@ public class GetCollectionsResponse {
     public static GetCollectionsResponse from(List<Collection> collections) {
         return new GetCollectionsResponse(
                 collections.stream().map(GetCollectionResponse::from).collect(Collectors.toList())
+        );
+    }
+
+    public static GetCollectionsResponse from(
+            List<Collection> collections, GetExaminationHistoryResponse cachedExaminationHistory
+    ) {
+        return new GetCollectionsResponse(
+                collections.stream()
+                        .map((collection) -> GetCollectionResponse.from(collection, cachedExaminationHistory))
+                        .collect(Collectors.toList())
         );
     }
 

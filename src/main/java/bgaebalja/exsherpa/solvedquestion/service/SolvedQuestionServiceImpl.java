@@ -51,6 +51,27 @@ public class SolvedQuestionServiceImpl implements SolvedQuestionService {
     }
 
     @Override
+    public List<SolvedQuestion> registerCachedSolvedQuestions(
+            List<AnswerRequest> answerRequests, ExaminationHistory examinationHistory
+    ) {
+        List<SolvedQuestion> solvedQuestions = new ArrayList<>();
+        short questionNumber = 0;
+        for (AnswerRequest answerRequest : answerRequests) {
+            String questionId = answerRequest.getQuestionId();
+            Question question
+                    = questionRepository.findById(FormatConverter.parseToLong(questionId))
+                    .orElseThrow(
+                            () -> new QuestionNotFoundException(
+                                    String.format(QUESTION_NOT_FOUND_EXCEPTION_MESSAGE, questionId)
+                            )
+                    );
+            solvedQuestions.add(SolvedQuestion.from(++questionNumber, answerRequest, question, examinationHistory));
+        }
+
+        return solvedQuestions;
+    }
+
+    @Override
     public SolvedQuestion getSolvedQuestion(Long id) {
         return solvedQuestionRepository.findByIdAndDeleteYnFalse(id).orElseThrow(
                 () -> new SolvedQuestionNotFoundException(
