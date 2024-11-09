@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.question.domain;
 
+import bgaebalja.exsherpa.examination.domain.GetSolvedQuestionResponse;
 import bgaebalja.exsherpa.option.domain.GetOptionsResponse;
 import bgaebalja.exsherpa.option.domain.Option;
 import bgaebalja.exsherpa.util.ContentExtractor;
@@ -72,6 +73,44 @@ public class GetQuestionResponse {
 
         if (FormatValidator.hasValue(html)) {
             ContentExtractor.extractBodyContent(html, totalContent);
+        }
+
+        boolean isSubjective = question.getQuestionType().isSubjective();
+        GetOptionsResponse getOptionsResponse = null;
+        if (!isSubjective) {
+            List<Option> options = question.getOptions();
+            getOptionsResponse = addOptions(options, getOptionsResponse);
+        }
+
+        return GetQuestionResponse.builder()
+                .id(question.getId())
+                .itemId(question.getItemId())
+                .content(totalContent.toString())
+                .url(question.getUrl())
+                .descriptionUrl(question.getDescriptionUrl())
+                .questionType(question.getQuestionType())
+                .getOptionsResponse(getOptionsResponse)
+                .difficulty(question.getDifficulty())
+                .answer(question.getAnswer())
+                .answerUrl(question.getAnswerUrl())
+                .errorReportCount(question.getErrorReportCount())
+                .blockYn(question.isBlockYn())
+                .placementNumber(question.getPlacementNumber())
+                .largeChapterCode(question.getLargeChapterCode())
+                .largeChapterName(question.getLargeChapterName())
+                .mediumChapterCode(question.getMediumChapterCode())
+                .smallChapterCode(question.getSmallChapterCode())
+                .topicChapterCode(question.getTopicChapterCode())
+                .isSubjective(isSubjective)
+                .build();
+    }
+
+    public static GetQuestionResponse from(Question question, GetSolvedQuestionResponse cachedSolvedQuestion) {
+        String html = question.getHtml();
+        StringBuilder totalContent = new StringBuilder();
+
+        if (FormatValidator.hasValue(html)) {
+            ContentExtractor.extractBodyContent(html, totalContent, cachedSolvedQuestion.getSubmittedAnswer());
         }
 
         boolean isSubjective = question.getQuestionType().isSubjective();

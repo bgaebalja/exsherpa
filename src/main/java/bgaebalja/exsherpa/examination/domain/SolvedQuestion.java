@@ -3,6 +3,7 @@ package bgaebalja.exsherpa.examination.domain;
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.question.domain.Question;
 import bgaebalja.exsherpa.util.FormatConverter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class SolvedQuestion extends BaseGeneralEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "examination_id")
+    @JsonBackReference
     private ExaminationHistory examinationHistory;
 
     @Builder

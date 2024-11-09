@@ -8,6 +8,7 @@ import java.util.List;
 public class SubmitResultRequest {
     private String email;
     private String examId;
+    private String isCache;
     private List<AnswerRequest> answerRequests;
 
     public short size() {

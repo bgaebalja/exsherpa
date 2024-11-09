@@ -9,5 +9,7 @@ import java.util.List;
 public interface SolvedQuestionService {
     void registerSolvedQuestions(List<AnswerRequest> answerRequests, ExaminationHistory examinationHistory);
 
+    List<SolvedQuestion> registerCachedSolvedQuestions(List<AnswerRequest> answerRequests, ExaminationHistory examinationHistory);
+
     SolvedQuestion getSolvedQuestion(Long id);
 }

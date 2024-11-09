@@ -8,6 +8,10 @@ import java.util.List;
 public interface ExaminationService {
     int registerResult(SubmitResultRequest submitResultRequest);
 
+    ExaminationHistory registerCacheData(SubmitResultRequest submitResultRequest);
+
+    ExaminationHistory getCachedExaminationHistory(String email, Long examId);
+
     List<ExaminationHistory> getSolvedExaminationHistories();
 
     List<ExaminationHistory> getSolvedExaminationHistories(String email);
