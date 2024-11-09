@@ -180,6 +180,30 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             padding-left: 5px;
         }
     </style>
+    <style>
+        .icon-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border: 1px solid #5a9bd5;
+            border-radius: 4px;
+            background-color: #5a9bd5;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .icon-button:hover {
+            background-color: #4a89c6;
+            cursor: pointer;
+        }
+
+        .icon-button i {
+            margin-left: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -212,7 +236,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                             <label class="tlabel4 label" for="tmenu4">Report</label>
                             <div class="tab_con pt40">
                                 <div class="flex_end3">
-                                    <select class="select_box ml05" id="round_select" onchange="changeReportRound();">
+                                    <select class="select_box ml05" id="round_select" onchange="changeReportRound();"
+                                            style="width: auto; text-align: center;">
                                         <%
                                             if (getExaminationHistoriesResponse.size() > 0) {
                                                 for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
@@ -920,10 +945,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                         <td><%= getSolvedQuestionResponse.getTopicChapterName() %>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:showItem('<%= getSolvedQuestionResponse.getQuestionId() %>');">정답</a>
+                                                                            <a href="javascript:showItem('<%= getSolvedQuestionResponse.getQuestionId() %>');"
+                                                                               class="icon-button">정답</a>
                                                                         </td>
                                                                         <td>
-                                                                            <a href="javascript:showMyItem('<%= getSolvedQuestionResponse.getId() %>');">답안</a>
+                                                                            <a href="javascript:showMyItem('<%= getSolvedQuestionResponse.getId() %>');"
+                                                                               class="icon-button">답안</a>
                                                                         </td>
 
 
@@ -964,10 +991,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                                     </td>
                                                                                     <td>${item.largeChapter}</td>
                                                                                     <td>
-                                                                                        <a href="javascript:showItem('${item.itemId}');">정답</a>
+                                                                                        <a href="javascript:showItem('${item.itemId}');"
+                                                                                           class="icon-button">정답</a>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <a href="javascript:showItem('${item.itemId}','${item.itemResultId}');">답안</a>
+                                                                                        <a href="javascript:showItem('${item.itemId}','${item.itemResultId}');"
+                                                                                           class="icon-button">답안</a>
                                                                                     </td>
                                                                                     <c:choose>
                                                                                         <c:when test="${item.correctYn ne 'Y'}">
