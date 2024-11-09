@@ -473,7 +473,6 @@
                     }
                 })
                 .then(data => {
-                    // TODO: 학교 등급과 시험 종류(기출, B셀파 문제), 연도 정보 실제 데이터 추가
                     const {schoolLevel, examRound, year, examId, examinationSequence} = data;
 
                     alert("시험이 제출되었습니다.");
