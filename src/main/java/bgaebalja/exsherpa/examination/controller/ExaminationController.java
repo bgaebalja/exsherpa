@@ -141,21 +141,31 @@ public class ExaminationController {
                 "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
         );
         String email = session.getAttribute("email").toString();
-        GetExaminationHistoriesResponse getExaminationHistoriesResponse
+        GetExaminationHistoriesResponse getMyExaminationHistoriesResponse
                 = GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistories(email));
-        modelAndView.addObject("getExaminationHistoriesResponse", getExaminationHistoriesResponse);
-        Long examId = getExaminationHistoriesResponse.get(FormatConverter.parseToInt(examinationSequence)).getExamId();
-        GetExaminationHistoriesResponse getAllExaminationHistoriesResponse = GetExaminationHistoriesResponse.from(
+        modelAndView.addObject("getExaminationHistoriesResponse", getMyExaminationHistoriesResponse);
+        Long examId = getMyExaminationHistoriesResponse.get(FormatConverter.parseToInt(examinationSequence)).getExamId();
+        GetExaminationHistoriesResponse getAllExaminationHistoriesFromExamResponse = GetExaminationHistoriesResponse.from(
                 examinationService.getSolvedExaminationHistoriesFromExam(examId)
+        );
+        GetExaminationHistoriesResponse getMyExaminationHistoriesFromExamResponse = GetExaminationHistoriesResponse.from(
+                examinationService.getSolvedExaminationHistoriesFromExam(examId, email)
         );
 
         Map<String, Long> difficultyAnswerRate
-                = MathComputer.computeDifficultyAnswerRate(getAllExaminationHistoriesResponse);
+                = MathComputer.computeDifficultyAnswerRate(getAllExaminationHistoriesFromExamResponse);
         Map<String, Long> questionAnswerRate
-                = MathComputer.computeQuestionAnswerRate(getAllExaminationHistoriesResponse);
+                = MathComputer.computeQuestionAnswerRate(getAllExaminationHistoriesFromExamResponse);
+        Map<String, Long> allQuestionTypeAnswerRate
+                = MathComputer.computeQuestionTypeAnswerRate(getAllExaminationHistoriesFromExamResponse);
+        Map<String, Long> myQuestionTypeAnswerRate
+                = MathComputer.computeQuestionTypeAnswerRate(getMyExaminationHistoriesFromExamResponse);
+
         modelAndView.addObject("examination_sequence", FormatConverter.parseToInt(examinationSequence));
         modelAndView.addObject("difficulty_answer_rate", difficultyAnswerRate);
         modelAndView.addObject("question_answer_rate", questionAnswerRate);
+        modelAndView.addObject("all_question_type_answer_rate", allQuestionTypeAnswerRate);
+        modelAndView.addObject("my_question_type_answer_rate", myQuestionTypeAnswerRate);
 
         return modelAndView;
     }

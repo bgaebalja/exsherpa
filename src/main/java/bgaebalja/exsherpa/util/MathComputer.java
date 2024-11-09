@@ -77,4 +77,24 @@ public class MathComputer {
 
         return answerRate;
     }
+
+    public static Map<String, Long> computeQuestionTypeAnswerRate(
+            GetExaminationHistoriesResponse getExaminationHistoriesResponse
+    ) {
+        Map<String, int[]> questionTypeMap = new HashMap<>();
+        Map<String, Long> answerRate = new HashMap<>();
+
+        for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
+            GetSolvedQuestionsResponse getSolvedQuestionsResponse
+                    = getExaminationHistoriesResponse.get(i).getGetSolvedQuestionsResponse();
+
+            for (int j = 0; j < getSolvedQuestionsResponse.size(); j++) {
+                GetSolvedQuestionResponse getSolvedQuestionResponse = getSolvedQuestionsResponse.get(j);
+                String key = getSolvedQuestionResponse.getQuestionType();
+                computeAnswerRate(questionTypeMap, key, answerRate, getSolvedQuestionResponse);
+            }
+        }
+
+        return answerRate;
+    }
 }
