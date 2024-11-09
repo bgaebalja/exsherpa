@@ -24,7 +24,10 @@ public class SolvedQuestion extends BaseGeneralEntity {
 
     @Column(nullable = false)
     private boolean subjectiveYn;
-    private byte selectedOption;
+
+    @Column(nullable = false, length = 500)
+    private String submittedAnswer;
+
     private boolean correctYn;
 
     @ManyToOne(fetch = LAZY)
@@ -37,12 +40,12 @@ public class SolvedQuestion extends BaseGeneralEntity {
 
     @Builder
     private SolvedQuestion(
-            short questionNumber, boolean subjectiveYn, byte selectedOption, boolean correctYn,
+            short questionNumber, boolean subjectiveYn, String submittedAnswer, boolean correctYn,
             Question question, ExaminationHistory examinationHistory
     ) {
         this.questionNumber = questionNumber;
         this.subjectiveYn = subjectiveYn;
-        this.selectedOption = selectedOption;
+        this.submittedAnswer = submittedAnswer;
         this.correctYn = correctYn;
         this.question = question;
         this.examinationHistory = examinationHistory;
@@ -51,17 +54,12 @@ public class SolvedQuestion extends BaseGeneralEntity {
     public static SolvedQuestion from(
             short questionNumber, AnswerRequest answerRequest, Question question, ExaminationHistory examinationHistory
     ) {
-        boolean isSubjective = FormatConverter.parseToBoolean(answerRequest.getIsSubjective());
         String submittedAnswer = answerRequest.getSubmittedAnswer();
-        byte selectedOption = -1;
-        if (!isSubjective && !submittedAnswer.equals("미응답")) {
-            selectedOption = FormatConverter.parseToByte(answerRequest.getSubmittedAnswer());
-        }
 
         return SolvedQuestion.builder()
                 .questionNumber(questionNumber)
                 .subjectiveYn(FormatConverter.parseToBoolean(answerRequest.getIsSubjective()))
-                .selectedOption(selectedOption)
+                .submittedAnswer(submittedAnswer)
                 .correctYn(answerRequest.getSubmittedAnswer().equals(answerRequest.getOriginalAnswer()))
                 .question(question)
                 .examinationHistory(examinationHistory)

@@ -25,6 +25,7 @@ public class MathComputer {
             GetExaminationHistoriesResponse getExaminationHistoriesResponse
     ) {
         Map<String, int[]> difficultyMap = new HashMap<>();
+        Map<String, Long> answerRate = new HashMap<>();
 
         for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
             GetSolvedQuestionsResponse getSolvedQuestionsResponse
@@ -32,23 +33,46 @@ public class MathComputer {
 
             for (int j = 0; j < getSolvedQuestionsResponse.size(); j++) {
                 GetSolvedQuestionResponse getSolvedQuestionResponse = getSolvedQuestionsResponse.get(j);
-                String difficulty = getSolvedQuestionResponse.getDifficulty();
-                boolean isCorrect = getSolvedQuestionResponse.isCorrect();
-
-                difficultyMap.putIfAbsent(difficulty, new int[]{0, 0});
-                int[] answerData = difficultyMap.get(difficulty);
-
-                if (isCorrect) {
-                    ++answerData[0];
-                }
-                ++answerData[1];
+                String key = getSolvedQuestionResponse.getDifficulty();
+                computeAnswerRate(difficultyMap, key, answerRate, getSolvedQuestionResponse);
             }
         }
 
+        return answerRate;
+    }
+
+    public static void computeAnswerRate(
+            Map<String, int[]> map, String key, Map<String, Long> answerRate,
+            GetSolvedQuestionResponse getSolvedQuestionResponse
+    ) {
+        boolean isCorrect = getSolvedQuestionResponse.isCorrect();
+
+        map.putIfAbsent(key, new int[]{0, 0});
+        int[] answerData = map.get(key);
+
+        if (isCorrect) {
+            ++answerData[0];
+        }
+        ++answerData[1];
+
+        answerRate.put(key, Math.round((double) answerData[0] * 100 / answerData[1]));
+    }
+
+    public static Map<String, Long> computeQuestionAnswerRate(
+            GetExaminationHistoriesResponse getExaminationHistoriesResponse
+    ) {
+        Map<String, int[]> questionMap = new HashMap<>();
         Map<String, Long> answerRate = new HashMap<>();
-        for (String key : difficultyMap.keySet()) {
-            int[] answerData = difficultyMap.get(key);
-            answerRate.put(key, Math.round((double) answerData[0] * 100 / answerData[1]));
+
+        for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
+            GetSolvedQuestionsResponse getSolvedQuestionsResponse
+                    = getExaminationHistoriesResponse.get(i).getGetSolvedQuestionsResponse();
+
+            for (int j = 0; j < getSolvedQuestionsResponse.size(); j++) {
+                GetSolvedQuestionResponse getSolvedQuestionResponse = getSolvedQuestionsResponse.get(j);
+                String key = getSolvedQuestionResponse.getQuestionId().toString();
+                computeAnswerRate(questionMap, key, answerRate, getSolvedQuestionResponse);
+            }
         }
 
         return answerRate;
