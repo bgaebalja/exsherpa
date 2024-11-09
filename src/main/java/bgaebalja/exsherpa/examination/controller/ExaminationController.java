@@ -160,10 +160,16 @@ public class ExaminationController {
                 = MathComputer.computeQuestionTypeAnswerRate(getAllExaminationHistoriesFromExamResponse);
         Map<String, Long> myQuestionTypeAnswerRate
                 = MathComputer.computeQuestionTypeAnswerRate(getMyExaminationHistoriesFromExamResponse);
+        Map<String, Long> allObSubAnswerRate
+                = MathComputer.computeObSubAnswerRate(getAllExaminationHistoriesFromExamResponse);
+        Map<String, Long> myObSubAnswerRate
+                = MathComputer.computeObSubAnswerRate(getMyExaminationHistoriesFromExamResponse);
 
         modelAndView.addObject("examination_sequence", FormatConverter.parseToInt(examinationSequence));
         modelAndView.addObject("difficulty_answer_rate", difficultyAnswerRate);
         modelAndView.addObject("question_answer_rate", questionAnswerRate);
+        modelAndView.addObject("all_sub_ob_answer_rate", allObSubAnswerRate);
+        modelAndView.addObject("my_sub_ob_answer_rate", myObSubAnswerRate);
         modelAndView.addObject("all_question_type_answer_rate", allQuestionTypeAnswerRate);
         modelAndView.addObject("my_question_type_answer_rate", myQuestionTypeAnswerRate);
 

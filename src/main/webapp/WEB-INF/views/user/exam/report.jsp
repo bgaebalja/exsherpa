@@ -1152,7 +1152,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                     <div class="justify_between mb90">
                                                         <div class="box_wrap" id="item_type_box">
                                                             <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>문제 유형 별
+                                                                    class="fa-regular fa-pen-to-square"></i>객관식/주관식 별
                                                                 정답률
                                                             </div>
                                                             <div class="box box10">
@@ -1174,40 +1174,31 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                    <tr>
-                                                                        <td>단순 제시형</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>80</td>
+                                                                    <%
+                                                                        Map<String, Long> allObSubAnswerRate = (Map<String, Long>) request.getAttribute("all_sub_ob_answer_rate");
+                                                                        Map<String, Long> myObSubAnswerRate = (Map<String, Long>) request.getAttribute("my_sub_ob_answer_rate");
 
-                                                                    </tr>
+                                                                        for (String obSub : myObSubAnswerRate.keySet()) {
+                                                                    %>
                                                                     <tr>
-                                                                        <td>정보 활용형</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>80</td>
+                                                                        <td><%= obSub %>
+                                                                        </td>
+                                                                        <td class="blue"><%= allObSubAnswerRate.get(obSub) %>
+                                                                            %
+                                                                        </td>
+                                                                        <td><%= myObSubAnswerRate.get(obSub) %>%</td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>미디어 활용형</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>70</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>조작형</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>대화형</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td>80</td>
-                                                                    </tr>
+                                                                    <%
+                                                                        }
+                                                                    %>
                                                                     </tbody>
                                                                 </table>
 
 
                                                                 <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="item_type_graph" width="478"
-                                                                            height="290"></canvas>
+                                                                <div class="graph_area mt20">
+                                                                    <canvas id="ob_sub_graph" width="830"
+                                                                            height="350"></canvas>
                                                                 </div>
                                                                 <!--그래프 영역-->
                                                             </div>
@@ -1246,8 +1237,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     <tr>
                                                                         <td><%= questionType %>
                                                                         </td>
-                                                                        <td class="blue"><%= allQuestionTypeAnswerRate.get(questionType) %>%</td>
-                                                                        <td><%= myQuestionTypeAnswerRate.get(questionType) %>%</td>
+                                                                        <td class="blue"><%= allQuestionTypeAnswerRate.get(questionType) %>
+                                                                            %
+                                                                        </td>
+                                                                        <td><%= myQuestionTypeAnswerRate.get(questionType) %>
+                                                                            %
+                                                                        </td>
                                                                     </tr>
                                                                     <%
                                                                         }
@@ -1258,7 +1253,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
                                                                 <!--그래프 영역-->
                                                                 <div class="graph_area mt20">
-                                                                    <canvas id="response_graph" width="830" height="350"></canvas>
+                                                                    <canvas id="response_graph" width="830"
+                                                                            height="350"></canvas>
                                                                 </div>
                                                                 <!--그래프 영역-->
                                                             </div>
@@ -1391,6 +1387,52 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     });
 </script>
 <script>
+    // JSON 데이터를 JavaScript 변수에 할당
+    const allObSubAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(allObSubAnswerRate) %>');
+    const myObSubAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(myObSubAnswerRate) %>');
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const obSubTypes = Object.keys(myObSubAnswerRate);
+
+        const averageRates = obSubTypes.map(type => allObSubAnswerRate[type] || 0);
+        const myRates = obSubTypes.map(type => myObSubAnswerRate[type] || 0);
+
+        const obSubCtx = document.getElementById('ob_sub_graph').getContext('2d');
+        const obSubChart = new Chart(obSubCtx, {
+            type: 'bar',
+            data: {
+                labels: obSubTypes,
+                datasets: [
+                    {
+                        label: '전체 평균',
+                        data: averageRates,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: '내 정답률',
+                        data: myRates,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script>
+    // JSON 데이터를 JavaScript 변수에 할당
     const allQuestionTypeAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(allQuestionTypeAnswerRate) %>');
     const myQuestionTypeAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(myQuestionTypeAnswerRate) %>');
 

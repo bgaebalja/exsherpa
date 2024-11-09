@@ -11,4 +11,6 @@ public interface ExaminationRepository extends JpaRepository<ExaminationHistory,
     List<ExaminationHistory> findBySolvedYnTrueAndDeleteYnFalse();
 
     List<ExaminationHistory> findByExamIdAndSolvedYnTrueAndDeleteYnFalse(Long examId);
+
+    List<ExaminationHistory> findByExamIdAndUserIdAndSolvedYnTrueAndDeleteYnFalse(Long examId, Long userId);
 }
