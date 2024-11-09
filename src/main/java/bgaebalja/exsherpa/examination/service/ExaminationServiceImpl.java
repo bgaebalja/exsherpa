@@ -68,4 +68,12 @@ public class ExaminationServiceImpl implements ExaminationService {
     public List<ExaminationHistory> getSolvedExaminationHistoriesFromExam(Long examId) {
         return examinationRepository.findByExamIdAndSolvedYnTrueAndDeleteYnFalse(examId);
     }
+
+    @Override
+    public List<ExaminationHistory> getSolvedExaminationHistoriesFromExam(Long examId, String email) {
+        Users user = userRepository.findByUserId(email)
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, email)));
+
+        return examinationRepository.findByExamIdAndUserIdAndSolvedYnTrueAndDeleteYnFalse(examId, user.getId());
+    }
 }

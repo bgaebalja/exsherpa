@@ -97,4 +97,24 @@ public class MathComputer {
 
         return answerRate;
     }
+
+    public static Map<String, Long> computeObSubAnswerRate(
+            GetExaminationHistoriesResponse getExaminationHistoriesResponse
+    ) {
+        Map<String, int[]> questionTypeMap = new HashMap<>();
+        Map<String, Long> answerRate = new HashMap<>();
+
+        for (int i = 0; i < getExaminationHistoriesResponse.size(); i++) {
+            GetSolvedQuestionsResponse getSolvedQuestionsResponse
+                    = getExaminationHistoriesResponse.get(i).getGetSolvedQuestionsResponse();
+
+            for (int j = 0; j < getSolvedQuestionsResponse.size(); j++) {
+                GetSolvedQuestionResponse getSolvedQuestionResponse = getSolvedQuestionsResponse.get(j);
+                String key = getSolvedQuestionResponse.isSubjective() ? "주관식" : "객관식";
+                computeAnswerRate(questionTypeMap, key, answerRate, getSolvedQuestionResponse);
+            }
+        }
+
+        return answerRate;
+    }
 }
