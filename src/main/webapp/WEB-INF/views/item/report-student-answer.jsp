@@ -1,17 +1,14 @@
 <%@ page import="bgaebalja.exsherpa.question.domain.GetQuestionResponse" %>
+<%@ page import="bgaebalja.exsherpa.examination.domain.GetSolvedQuestionResponse" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <jsp:useBean id="today" class="java.util.Date"/>
 <fmt:formatDate value="${today}" pattern="yyyyMMdd" var="nowDate"/>
 
-<%
-    GetQuestionResponse getQuestionResponse = (GetQuestionResponse) request.getAttribute("getQuestionResponse");
-%>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>EX셀파 (정답 및 해설)</title>
+    <title>EX셀파 (내가 선택한 답안)</title>
     <link rel="stylesheet" href="/css/report.css?ver=${nowDate}">
     <link href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css" rel="stylesheet">
     <link href="https://webfontworld.github.io/SCoreDream/SCoreDream.css" rel="stylesheet">
@@ -29,14 +26,24 @@
             padding: 20px;
         }
 
-        .question-url h2, .question-answer-url h2, .question-description-url h2 {
+        .question-url h2, .question-answer h2 {
             font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .question-answer h3 {
+            font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
+<%
+    GetQuestionResponse getQuestionResponse = (GetQuestionResponse) request.getAttribute("getQuestionResponse");
+    GetSolvedQuestionResponse getSolvedQuestionResponse = (GetSolvedQuestionResponse) request.getAttribute("getSolvedQuestionResponse");
+%>
 <div class="container">
     <div class="question-url">
         <div>
@@ -49,22 +56,16 @@
     </div>
     <br/>
 
-    <div class="question-answer-url">
+    <div class="question-answer">
         <% if (getQuestionResponse == null || getQuestionResponse.getAnswerUrl() == null) { %>
         <p>정답이 제공되지 않았습니다.</p>
         <% } else { %>
-        <h2>정답</h2>&nbsp;<img src="<%= getQuestionResponse.getAnswerUrl() %>" target="_blank">
+        <h2>내가 제출한 답안</h2>
+        <h3><%= getSolvedQuestionResponse.getSubmittedAnswer() %>
+        </h3>
         <% } %>
     </div>
-    <br/>
-
-    <div class="question-description-url">
-        <% if (getQuestionResponse == null || getQuestionResponse.getDescriptionUrl() == null) { %>
-        <p>해설이 제공되지 않았습니다.</p>
-        <% } else { %>
-        <h2>해설</h2>&nbsp;<img src="<%= getQuestionResponse.getDescriptionUrl() %>" target="_blank">
-        <% } %>
-    </div>
+</div>
 </div>
 </body>
 </html>

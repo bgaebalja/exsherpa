@@ -72,16 +72,7 @@
     }
 
     Map<String, Long> difficultyAnswerRate = (Map<String, Long>) request.getAttribute("difficulty_answer_rate");
-%>
-<%
-    String averageRatesJson = new Gson().toJson(new int[]{
-            difficultyAnswerRate.get("최하") != null ? difficultyAnswerRate.get("최하").intValue() : 0,
-            difficultyAnswerRate.get("하") != null ? difficultyAnswerRate.get("하").intValue() : 0,
-            difficultyAnswerRate.get("중") != null ? difficultyAnswerRate.get("중").intValue() : 0,
-            difficultyAnswerRate.get("상") != null ? difficultyAnswerRate.get("상").intValue() : 0,
-            difficultyAnswerRate.get("최상") != null ? difficultyAnswerRate.get("최상").intValue() : 0
-    });
-    String userAchievementRatesJson = new Gson().toJson(achievementRates);
+    Map<String, Long> questionAnswerRate = (Map<String, Long>) request.getAttribute("question_answer_rate");
 %>
 <%
     Gson gson = new Gson();
@@ -630,7 +621,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     <c:when test="${examInformation.subject_id eq 17}">(사회)</c:when>
                                                                     <c:when test="${examInformation.subject_id eq 18}">(과학)</c:when>
                                                                 </c:choose> 교과
-                                                                내용 영역별 성취율
+                                                                내용 영역 별 성취율
                                                             </div>
                                                             <div class="box box5">
                                                                 <table class="tbl_list4 mb30">
@@ -702,7 +693,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     <c:when test="${examInformation.subject_id eq 17}">(사회)</c:when>
                                                                     <c:when test="${examInformation.subject_id eq 18}">(과학)</c:when>
                                                                 </c:choose> 교과
-                                                                행동 영역별 성취율
+                                                                행동 영역 별 성취율
                                                             </div>
                                                             <div class="box box6">
                                                                 <table class="tbl_list4 mb50">
@@ -824,7 +815,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                         <div class="box_wrap" id="content_time_box">
                                                             <div class="box_tit"><i
                                                                     class="fa-regular fa-pen-to-square"></i>교과 내용
-                                                                영역별 평균 풀이 소요 시간
+                                                                영역 별 평균 풀이 소요 시간
                                                             </div>
                                                             <div class="box box8">
                                                                 <table class="tbl_list4 mb30">
@@ -890,7 +881,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                     <div class="justify_between mb90">
                                                         <div class="box_wrap" id="box_answer">
                                                             <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>문항별 정오표
+                                                                    class="fa-regular fa-pen-to-square"></i>문항 별 정오표
                                                             </div>
                                                             <div class="box box9">
                                                                 <table class="tbl_list2">
@@ -911,10 +902,50 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                         <th scope="col">관련 단원</th>
                                                                         <th scope="col">정답</th>
                                                                         <th scope="col">본인 응답</th>
-                                                                        <th scope="col">채점결과</th>
-                                                                        <th scope="col">시험응시자 평균 정답률</th>
+                                                                        <th scope="col">채점 결과</th>
+                                                                        <th scope="col">시험 응시자 평균 정답률</th>
                                                                     </tr>
                                                                     </thead>
+                                                                    <tbody>
+                                                                    <%
+                                                                        for (int i = 0; i < getSolvedQuestionsResponse.size(); i++) {
+                                                                            GetSolvedQuestionResponse getSolvedQuestionResponse = getSolvedQuestionsResponse.get(i);
+                                                                            Long questionAnswerRateData = questionAnswerRate.get(getSolvedQuestionResponse.getQuestionId().toString());
+                                                                    %>
+                                                                    <tr>
+                                                                        <td class="first">1</td>
+                                                                        <td>
+                                                                            <%= getSolvedQuestionResponse.getSmallChapterName() %>
+                                                                        </td>
+                                                                        <td><%= getSolvedQuestionResponse.getTopicChapterName() %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="javascript:showItem('<%= getSolvedQuestionResponse.getQuestionId() %>');">정답</a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="javascript:showMyItem('<%= getSolvedQuestionResponse.getId() %>');">답안</a>
+                                                                        </td>
+
+
+                                                                        <td>
+                                                                            <%
+                                                                                if (getSolvedQuestionResponse.isCorrect()) {
+                                                                            %>
+                                                                            <i class="fa-regular fa-circle-check"
+                                                                               style="color: green;"></i>
+                                                                            <%
+                                                                            } else {
+                                                                            %>
+                                                                            <i class="fa-regular fa-circle-xmark"
+                                                                               style="color: red;"></i>
+                                                                            <%
+                                                                                }
+                                                                            %>
+                                                                        </td>
+                                                                        <td><%= questionAnswerRateData %>%</td>
+                                                                    </tr>
+                                                                    <% } %>
+                                                                    </tbody>
                                                                     <tbody>
                                                                     <c:choose>
                                                                         <c:when test="${not empty not_exam}">
@@ -1091,7 +1122,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                     <div class="justify_between mb90">
                                                         <div class="box_wrap" id="item_type_box">
                                                             <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>문제 유형별
+                                                                    class="fa-regular fa-pen-to-square"></i>문제 유형 별
                                                                 정답률
                                                             </div>
                                                             <div class="box box10">
@@ -1155,7 +1186,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                         <div class="box_wrap" id="response_box">
                                                             <div class="box_tit"><i
                                                                     class="fa-regular fa-pen-to-square"></i>응답
-                                                                유형별 정답률
+                                                                유형 별 정답률
                                                             </div>
                                                             <div class="box box11">
                                                                 <table class="tbl_list4 mb10">
@@ -1409,6 +1440,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     function showItem(questionId) {
         console.log("Received questionId:", questionId);
         const url = "/user/exam/report-answer?questionId=" + questionId;
+        console.log("Constructed URL:", url);
+        window.open(url, "_blank");
+    }
+
+    function showMyItem(solvedQuestionId) {
+        console.log("Received questionId:", solvedQuestionId);
+        const url = "/user/exam/report-student-answer?solvedQuestionId=" + solvedQuestionId;
         console.log("Constructed URL:", url);
         window.open(url, "_blank");
     }
