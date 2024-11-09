@@ -96,11 +96,13 @@
                                                     <col width="20%">
                                                     <col width="10%">
                                                     <col width="10%">
+                                                    <col width="10%">
                                                 </colgroup>
                                                 <thead>
                                                 <tr>
                                                     <th scope="col" class="first">순번</th>
                                                     <th scope="col">과목</th>
+                                                    <th scope="col">시험지명</th>
                                                     <th scope="col">시험 시간</th>
                                                     <th scope="col">문항 수</th>
                                                     <th scope="col">시험 응시</th>
@@ -123,6 +125,7 @@
                                                                 <c:otherwise>-</c:otherwise>
                                                             </c:choose>
                                                         </td>
+                                                        <td>${exam.examName}</td>
                                                         <td>${exam.timeLimit}분</td>
                                                         <td>${exam.size}문항</td>
                                                         <td>

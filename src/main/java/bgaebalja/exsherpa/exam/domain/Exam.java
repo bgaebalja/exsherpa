@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+import static bgaebalja.exsherpa.util.EntityConstant.BOOLEAN_DEFAULT_FALSE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -27,26 +28,20 @@ public class Exam extends BaseGeneralEntity {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @Column(name = "exam_name")
+    @Column(nullable = false)
     private String examName;
 
-    @Column(name = "total_count")
     private Long totalCount;
 
-    @Column(name = "open_yn")
-    private Boolean openYn;
+    @Column(nullable = false, columnDefinition = BOOLEAN_DEFAULT_FALSE)
+    private boolean customYn;
+
+    @Column(nullable = false, columnDefinition = BOOLEAN_DEFAULT_FALSE)
+    private boolean openYn;
 
     @OneToMany(mappedBy = "exam", cascade = PERSIST)
     private List<Collection> collections;
 
     @OneToMany(mappedBy = "exam", cascade = PERSIST)
     private List<ExaminationHistory> examinationHistories;
-
-    public Exam(Users user, String examName, Long totalCount, Boolean openYn, List<Collection> collections) {
-        this.user = user;
-        this.examName = examName;
-        this.totalCount = totalCount;
-        this.openYn = openYn;
-        this.collections = collections;
-    }
 }
