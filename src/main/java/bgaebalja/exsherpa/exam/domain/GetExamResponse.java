@@ -102,6 +102,7 @@ public class GetExamResponse {
                         GetCollectionsResponse.from(exam.getCollections(), cachedExaminationHistory)
                 )
                 .getExaminationHistoriesResponse(GetExaminationHistoriesResponse.from(exam.getExaminationHistories()))
+                .cachedExaminationHistoryResponse(cachedExaminationHistory)
                 .build();
     }
 
