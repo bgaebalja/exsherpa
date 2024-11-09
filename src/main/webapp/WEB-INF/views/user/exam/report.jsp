@@ -9,6 +9,7 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -1214,7 +1215,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
                                                         <div class="box_wrap" id="response_box">
                                                             <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>응답
+                                                                    class="fa-regular fa-pen-to-square"></i>문제
                                                                 유형 별 정답률
                                                             </div>
                                                             <div class="box box11">
@@ -1236,55 +1237,28 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                    <tr>
-                                                                        <td>선다형</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>80</td>
+                                                                    <%
+                                                                        Map<String, Long> allQuestionTypeAnswerRate = (Map<String, Long>) request.getAttribute("all_question_type_answer_rate");
+                                                                        Map<String, Long> myQuestionTypeAnswerRate = (Map<String, Long>) request.getAttribute("my_question_type_answer_rate");
 
-                                                                    </tr>
+                                                                        for (String questionType : myQuestionTypeAnswerRate.keySet()) {
+                                                                    %>
                                                                     <tr>
-                                                                        <td>확장 선택형</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>80</td>
+                                                                        <td><%= questionType %>
+                                                                        </td>
+                                                                        <td class="blue"><%= allQuestionTypeAnswerRate.get(questionType) %>%</td>
+                                                                        <td><%= myQuestionTypeAnswerRate.get(questionType) %>%</td>
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>자료 연결형</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>70</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>순서 배열형</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td>60</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>단답형</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td>70</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>서술형</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>수정형</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>그래프 그림 완성형</td>
-                                                                        <td class="blue">100</td>
-                                                                        <td>90</td>
-                                                                    </tr>
+                                                                    <%
+                                                                        }
+                                                                    %>
                                                                     </tbody>
                                                                 </table>
 
 
                                                                 <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="response_graph" width="478"
-                                                                            height="210"></canvas>
+                                                                <div class="graph_area mt20">
+                                                                    <canvas id="response_graph" width="830" height="350"></canvas>
                                                                 </div>
                                                                 <!--그래프 영역-->
                                                             </div>
@@ -1366,14 +1340,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 </div>
 
 <script>
-    // JSON 데이터를 JavaScript 변수에 할당
     const difficultyAnswerRate = JSON.parse('<%= difficultyAnswerRateJson %>');
     const achievementRates = JSON.parse('<%= achievementRatesJson %>');
 
     document.addEventListener("DOMContentLoaded", function () {
         const difficultyLabels = ['최상', '상', '중', '하', '최하'];
 
-        // difficultyAnswerRate 객체를 JavaScript 배열로 변환
         const averageRates = [
             difficultyAnswerRate["최상"] || 0,
             difficultyAnswerRate["상"] || 0,
@@ -1382,7 +1354,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             difficultyAnswerRate["최하"] || 0
         ];
 
-        // achievementRates 배열에서 성취율만 추출
         const myRates = achievementRates;
 
         const difficultyCtx = document.getElementById('difficulty_graph').getContext('2d');
@@ -1400,6 +1371,50 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                     },
                     {
                         label: '내 성취율',
+                        data: myRates,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script>
+    const allQuestionTypeAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(allQuestionTypeAnswerRate) %>');
+    const myQuestionTypeAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(myQuestionTypeAnswerRate) %>');
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const questionTypes = Object.keys(myQuestionTypeAnswerRate);
+
+        const averageRates = questionTypes.map(type => allQuestionTypeAnswerRate[type] || 0);
+        const myRates = questionTypes.map(type => myQuestionTypeAnswerRate[type] || 0);
+
+        const responseCtx = document.getElementById('response_graph').getContext('2d');
+        const responseChart = new Chart(responseCtx, {
+            type: 'bar',
+            data: {
+                labels: questionTypes,
+                datasets: [
+                    {
+                        label: '전체 평균',
+                        data: averageRates,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: '내 정답률',
                         data: myRates,
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',
@@ -1655,7 +1670,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                     doc.addImage(imgData, "JPEG", 10, 10, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
 
-                    // 한 페이지 이상일 경우 루프 돌면서 출력
                     while (heightLeft >= 20) {
                         position = heightLeft - imgHeight;
                         doc.addPage();
