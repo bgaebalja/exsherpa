@@ -251,7 +251,7 @@
                                         </div>
                                         <%
                                             if (getQuestionsResponse.get(j).isSubjective()) {
-                                                if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"")) {
+                                                if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"") && !getQuestionsResponse.get(j).getContent().contains("class=\"txt input_txt\"")) {
                                         %>
                                         <div class="subjective-answer">
                                             <input type="text" class="input_question_text_box"
@@ -320,7 +320,7 @@
                                     </div>
                                     <%
                                         if (getQuestionsResponse.get(j).isSubjective()) {
-                                            if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"")) {
+                                            if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"") && !getQuestionsResponse.get(j).getContent().contains("class=\"txt input_txt\"")) {
                                     %>
                                     <div class="subjective-answer">
                                         <input type="text" class="input_question_text_box"

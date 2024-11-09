@@ -109,11 +109,9 @@ public class GetQuestionResponse {
         String html = question.getHtml();
         StringBuilder totalContent = new StringBuilder();
 
-        if (FormatValidator.hasValue(html)) {
-            ContentExtractor.extractBodyContent(html, totalContent, cachedSolvedQuestion.getSubmittedAnswer());
-        }
-
         boolean isSubjective = question.getQuestionType().isSubjective();
+        selectExtractor(html, isSubjective, totalContent, cachedSolvedQuestion);
+
         GetOptionsResponse getOptionsResponse = null;
         if (!isSubjective) {
             List<Option> options = question.getOptions();
@@ -141,6 +139,24 @@ public class GetQuestionResponse {
                 .topicChapterCode(question.getTopicChapterCode())
                 .isSubjective(isSubjective)
                 .build();
+    }
+
+    private static void selectExtractor(
+            String html, boolean isSubjective,
+            StringBuilder totalContent, GetSolvedQuestionResponse cachedSolvedQuestion
+    ) {
+        if (
+                FormatValidator.hasValue(html)
+                        && isSubjective
+                        && (html.contains("class=\"input_question_text_box\"")
+                        || html.contains("class=\"txt input_txt\""))
+        ) {
+            ContentExtractor.extractBodyContent(html, totalContent, cachedSolvedQuestion.getSubmittedAnswer());
+
+            return;
+        }
+
+        ContentExtractor.extractBodyContent(html, totalContent);
     }
 
     public static GetQuestionResponse fromExams(Question question) {
@@ -175,14 +191,6 @@ public class GetQuestionResponse {
             return getOptionsResponse;
         }
         return GetOptionsResponse.from(options);
-    }
-
-    private static void extractContent(String html, StringBuilder totalContent) {
-        String[] contents = html.split("<span class=\"txt \">");
-        for (String content : contents) {
-            String[] splitContents = content.split("</span>");
-            addContent(splitContents, totalContent);
-        }
     }
 
     private static void addContent(String[] splitContents, StringBuilder totalContent) {
