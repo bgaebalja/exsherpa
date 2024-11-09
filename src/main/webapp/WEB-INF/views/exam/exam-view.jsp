@@ -232,6 +232,7 @@
                                         </div>
                                         <%
                                             if (getQuestionsResponse.get(j).isSubjective()) {
+                                                if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"")) {
                                         %>
                                         <div class="subjective-answer">
                                             <input type="text" class="input_question_text_box"
@@ -239,6 +240,7 @@
                                                    placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;">
                                         </div>
                                         <%
+                                            }
                                         } else {
                                             GetOptionsResponse getOptionsResponse
                                                     = getQuestionsResponse.get(j).getGetOptionsResponse();
@@ -283,11 +285,17 @@
                                         <span class="num"><%= ++previousIndex %></span>
                                         <%= getQuestionsResponse.get(j).getContent() %>
                                     </div>
+                                    <%
+                                        if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"")) {
+                                    %>
                                     <div class="subjective-answer">
                                         <input type="text" class="input_question_text_box"
                                                name="subjective_answer_<%= getQuestionsResponse.get(j).getId() %>"
                                                placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;">
                                     </div>
+                                    <%
+                                        }
+                                    %>
                                 </div>
                             </div>
                             <canvas class="sketchpad" style="cursor: crosshair;" width="1260" height="1216"></canvas>
