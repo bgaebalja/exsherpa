@@ -10,9 +10,13 @@
 <%@ page import="bgaebalja.exsherpa.passage.domain.GetPassagesResponse" %>
 <%@ page import="bgaebalja.exsherpa.question.domain.GetQuestionsResponse" %>
 <%@ page import="bgaebalja.exsherpa.option.domain.GetOptionsResponse" %>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
+<%@ page import="bgaebalja.exsherpa.examination.domain.GetSolvedQuestionResponse" %>
 
 <%
     GetExamResponse getExamResponse = (GetExamResponse) request.getAttribute("getExamResponse");
+    String email = session.getAttribute("email").toString();
+    boolean hasCachedData = FormatValidator.hasValue(getExamResponse.getCachedExaminationHistoryResponse());
 %>
 
 <html lang="ko">
@@ -168,7 +172,7 @@
                 <span class="txt">남은<br>시간</span>
                 <span class="time-txt" id="timer"><%= getExamResponse.getTimeLimit() %>:00</span>
             </div>
-            <a href="javascript:completeExam('<%= session.getAttribute("email") %>');" class="btn-submit">최종제출</a>
+            <a href="javascript:completeExam('<%= email %>');" class="btn-submit">최종제출</a>
         </div>
     </div>
     <div class="container">
@@ -186,6 +190,7 @@
                 </div>
             </div>
 
+            <input type="hidden" id="user_email" value="<%= email %>">
             <input type="hidden" name="exam_id"
                    value="<%= getExamResponse.getId() %>">
             <div class="swiper mySwiper">
@@ -204,10 +209,24 @@
                                 int endIndex = startIndex + getQuestionsResponse.size() - 1;
                                 for (int j = 0; j < getQuestionsResponse.size(); j++) {
                                     ++previousIndex;
+                                    Long questionId = getQuestionsResponse.get(j).getId();
+                                    String submittedAnswer = "";
+                                    boolean isChecked = false;
+
+                                    if (hasCachedData) {
+                                        for (
+                                                GetSolvedQuestionResponse solvedQuestion : getExamResponse.getCachedExaminationHistoryResponse().getGetSolvedQuestionsResponse().getGetSolvedQuestionResponses()
+                                        ) {
+                                            if (solvedQuestion.getQuestionId().equals(questionId)) {
+                                                submittedAnswer = solvedQuestion.getSubmittedAnswer().equals("미응답") ? "" : solvedQuestion.getSubmittedAnswer();
+                                                isChecked = true;
+                                                break;
+                                            }
+                                        }
+                                    }
                     %>
-                    <div class="swiper-slide" id="item<%= getQuestionsResponse.get(j).getId() %>"
-                         data-question-id="<%= getQuestionsResponse.get(j).getId() %>">
-                        <input type="hidden" name="question_id" value="<%= getQuestionsResponse.get(j).getId() %>">
+                    <div class="swiper-slide" id="item<%= questionId %>" data-question-id="<%= questionId %>">
+                        <input type="hidden" name="question_id" value="<%= questionId %>">
                         <input type="hidden" name="original_answer"
                                value="<%= getQuestionsResponse.get(j).getAnswer() %>">
                         <div class="page type01">
@@ -215,11 +234,11 @@
                                 <div class="question type01">
                                     <div class="left">
                                         <div class="passage">
-                                            <span>문제 <%= startIndex %> <%= getQuestionsResponse.size() > 1 ? " ~ " + endIndex : ""%></span>
+                                            <span>문제 <%= startIndex %> <%= getQuestionsResponse.size() > 1 ? " ~ " + endIndex : "" %></span>
                                             <%
                                                 for (int k = 0; k < getPassagesResponse.size(); k++) {
                                             %>
-                                            <img src="<%= getCollectionsResponse.get(i).getGetPassagesResponse().get(k).getUrl()%>">
+                                            <img src="<%= getCollectionsResponse.get(i).getGetPassagesResponse().get(k).getUrl() %>">
                                             <%
                                                 }
                                             %>
@@ -232,27 +251,29 @@
                                         </div>
                                         <%
                                             if (getQuestionsResponse.get(j).isSubjective()) {
-                                                if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"")) {
+                                                if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"") && !getQuestionsResponse.get(j).getContent().contains("class=\"txt input_txt\"")) {
                                         %>
                                         <div class="subjective-answer">
                                             <input type="text" class="input_question_text_box"
-                                                   name="subjective_answer_<%= getQuestionsResponse.get(j).getId() %>"
-                                                   placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;">
+                                                   name="subjective_answer_<%= questionId %>"
+                                                   placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;"
+                                                   value="<%= isChecked ? submittedAnswer : "" %>">
                                         </div>
                                         <%
                                             }
                                         } else {
-                                            GetOptionsResponse getOptionsResponse
-                                                    = getQuestionsResponse.get(j).getGetOptionsResponse();
+                                            GetOptionsResponse getOptionsResponse = getQuestionsResponse.get(j).getGetOptionsResponse();
                                             for (int l = 0; l < getOptionsResponse.size(); l++) {
+                                                boolean optionChecked = isChecked && submittedAnswer.equals(getOptionsResponse.get(l).getOptionNo());
                                         %>
                                         <ul class="answer-input-type radio">
                                             <li>
-                                                <input type="radio"
-                                                       name="answer_<%= getQuestionsResponse.get(j).getId() %>"
+                                                <input type="radio" name="answer_<%= questionId %>"
                                                        id="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"
-                                                       value="<%= previousIndex %>">
-                                                <label for="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(l).getOptionNo() %>
+                                                       value="<%= getOptionsResponse.get(l).getOptionNo() %>"
+                                                    <%= optionChecked ? "checked" : "" %>>
+                                                <label for="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>">
+                                                    <%= getOptionsResponse.get(l).getOptionNo() %>
                                                 </label>
                                                 <%= getOptionsResponse.get(l).getHtml() %>
                                             </li>
@@ -271,66 +292,63 @@
                         }
                     } else {
                         for (int j = 0; j < getQuestionsResponse.size(); j++) {
-                            if (getQuestionsResponse.get(j).isSubjective()) {
+                            ++previousIndex;
+                            Long questionId = getQuestionsResponse.get(j).getId();
+                            String submittedAnswer = "";
+                            boolean isChecked = false;
+
+                            if (hasCachedData) {
+                                for (GetSolvedQuestionResponse solvedQuestion : getExamResponse.getCachedExaminationHistoryResponse().getGetSolvedQuestionsResponse().getGetSolvedQuestionResponses()) {
+                                    if (solvedQuestion.getQuestionId().equals(questionId)) {
+                                        submittedAnswer = solvedQuestion.getSubmittedAnswer().equals("미응답") ? "" : solvedQuestion.getSubmittedAnswer();
+                                        isChecked = true;
+                                        break;
+                                    }
+                                }
+                            }
                     %>
-                    <div class="swiper-slide" id="item<%= getQuestionsResponse.get(j).getId() %>"
-                         data-question-id="<%= getQuestionsResponse.get(j).getId() %>">
-                        <input type="hidden" name="question_id" value="<%= getQuestionsResponse.get(j).getId() %>">
+                    <div class="swiper-slide" id="item<%= questionId %>" data-question-id="<%= questionId %>">
+                        <input type="hidden" name="question_id" value="<%= questionId %>">
                         <input type="hidden" name="original_answer"
                                value="<%= getQuestionsResponse.get(j).getAnswer() %>">
                         <div class="page">
                             <div class="inner">
                                 <div class="question">
                                     <div class="top">
-                                        <span class="num"><%= ++previousIndex %></span>
-                                        <%= getQuestionsResponse.get(j).getContent() %>
+                                        <span class="num"><%= previousIndex %></span>
+                                        <span class="txt"><%= getQuestionsResponse.get(j).getContent() %></span>
                                     </div>
                                     <%
-                                        if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"")) {
+                                        if (getQuestionsResponse.get(j).isSubjective()) {
+                                            if (!getQuestionsResponse.get(j).getContent().contains("class=\"input_question_text_box\"") && !getQuestionsResponse.get(j).getContent().contains("class=\"txt input_txt\"")) {
                                     %>
                                     <div class="subjective-answer">
                                         <input type="text" class="input_question_text_box"
-                                               name="subjective_answer_<%= getQuestionsResponse.get(j).getId() %>"
-                                               placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;">
+                                               name="subjective_answer_<%= questionId %>"
+                                               placeholder="답변을 입력하세요" style="width: 100%; margin-top: 10px;"
+                                               value="<%= isChecked ? submittedAnswer : "" %>">
                                     </div>
                                     <%
                                         }
-                                    %>
-                                </div>
-                            </div>
-                            <canvas class="sketchpad" style="cursor: crosshair;" width="1260" height="1216"></canvas>
-                        </div>
-                    </div>
-                    <%
-                    } else {
-                    %>
-                    <div class="swiper-slide" id="item<%= getQuestionsResponse.get(j).getId() %>"
-                         data-question-id="<%= getQuestionsResponse.get(j).getId() %>">
-                        <input type="hidden" name="question_id" value="<%= getQuestionsResponse.get(j).getId() %>">
-                        <input type="hidden" name="original_answer"
-                               value="<%= getQuestionsResponse.get(j).getAnswer() %>">
-                        <div class="page">
-                            <div class="inner">
-                                <div class="question">
-                                    <div class="top">
-                                        <span class="num"><%= ++previousIndex %></span>
-                                        <span class="txt"><%= getQuestionsResponse.get(j).getContent() %> <i> [4점]</i> </span>
-                                    </div>
-                                    <%
+                                    } else {
                                         GetOptionsResponse getOptionsResponse = getQuestionsResponse.get(j).getGetOptionsResponse();
-                                        for (int k = 0; k < getOptionsResponse.size(); k++) {
+                                        for (int l = 0; l < getOptionsResponse.size(); l++) {
+                                            boolean optionChecked = isChecked && submittedAnswer.equals(getOptionsResponse.get(l).getOptionNo());
                                     %>
                                     <ul class="answer-input-type radio">
                                         <li>
-                                            <input type="radio" name="answer_<%= getQuestionsResponse.get(j).getId() %>"
-                                                   id="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"
-                                                   value="<%= previousIndex %>">
-                                            <label for="answer_radio0<%= getOptionsResponse.get(k).getOptionNo() %>_<%= previousIndex %>"><%= getOptionsResponse.get(k).getOptionNo() %>
+                                            <input type="radio" name="answer_<%= questionId %>"
+                                                   id="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>"
+                                                   value="<%= getOptionsResponse.get(l).getOptionNo() %>"
+                                                <%= optionChecked ? "checked" : "" %>>
+                                            <label for="answer_radio0<%= getOptionsResponse.get(l).getOptionNo() %>_<%= previousIndex %>">
+                                                <%= getOptionsResponse.get(l).getOptionNo() %>
                                             </label>
-                                            <%= getOptionsResponse.get(k).getHtml() %>
+                                            <%= getOptionsResponse.get(l).getHtml() %>
                                         </li>
                                     </ul>
                                     <%
+                                            }
                                         }
                                     %>
                                 </div>
@@ -339,7 +357,6 @@
                         </div>
                     </div>
                     <%
-                                    }
                                 }
                             }
                         }
@@ -446,6 +463,35 @@
         return answerExtractor.test();
     }
 
+    function sendAnswerToCache() {
+        const email = document.querySelector('#user_email').value;
+        const examId = document.querySelector('input[name="exam_id"]').value;
+        const extractedAnswers = extractAnswers();
+
+        fetch('/user/exam/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                examId: examId,
+                isCache: true,
+                answerRequests: extractedAnswers
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error("캐시 저장 실패: " + response.status);
+                }
+            })
+            .catch(error => {
+                console.error("오류:", error);
+            });
+    }
+
+    setInterval(sendAnswerToCache, 10000);
+
     function completeExam(email) {
         const examId = document.querySelector('input[name="exam_id"]').value;
         const extractedAnswers = extractAnswers();
@@ -460,6 +506,7 @@
                 body: JSON.stringify({
                     email: email,
                     examId: examId,
+                    isCache: false,
                     answerRequests: extractedAnswers
                 }),
             })
@@ -528,7 +575,6 @@
 
     const audioList = document.querySelectorAll('audio');
     if (audioList.length > 0) {
-        // alert("듣기는 한 번만 재생할 수 있으며, 페이지 이동 시 연계 문제가 아닐 경우 듣기가 자동으로 중지됩니다.");
     }
     audioList.forEach((item, index) => {
         item.controlsList.add('noplaybackrate');
@@ -575,5 +621,27 @@
             doNotAudio(this);
         });
     */
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cachedData = <%= getExamResponse.getCachedExaminationHistoryResponse() != null ? new ObjectMapper().writeValueAsString(getExamResponse.getCachedExaminationHistoryResponse().getGetSolvedQuestionsResponse().getGetSolvedQuestionResponses()) : "[]" %>;
+
+        cachedData.forEach(question => {
+            const questionId = question.questionId;
+            const submittedAnswer = question.submittedAnswer;
+
+            if (question.isSubjective) {
+                const inputField = document.querySelector(`input[name="subjective_answer_${questionId}"]`);
+                if (inputField) {
+                    inputField.value = submittedAnswer;
+                }
+            } else {
+                const radioOption = document.querySelector(`input[name="answer_${questionId}"][value="${submittedAnswer}"]`);
+                if (radioOption) {
+                    radioOption.checked = true;
+                }
+            }
+        });
+    });
 </script>
 </html>

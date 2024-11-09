@@ -130,12 +130,12 @@
                                                         <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'true'}">
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
-                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'false'}">
+                                                                <c:when test="${exam.cached eq 'true'}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ee9490;">이어하기</a>
@@ -256,15 +256,15 @@
                                                         <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'true'}">
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
-                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 and exam.getExaminationHistoriesResponse.get(exam.getExaminationHistoriesResponse.size() - 1).solved eq 'false'}">
-                                                                    <a href"/user/exam/exam-view?exam_id=${exam.id}"
-                                                                    class="startBtn"
-                                                                    style="background-color: #ee9490;">이어하기</a>
+                                                                <c:when test="${exam.cached eq 'true'}"> <a
+                                                                        href="/user/exam/exam-view?exam_id=${exam.id}&is_cached=true"
+                                                                        class="startBtn"
+                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
                                                                 <c:when test="${exam.getExaminationHistoriesResponse.size() == 0}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"

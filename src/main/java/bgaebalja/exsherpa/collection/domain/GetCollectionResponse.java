@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.collection.domain;
 
+import bgaebalja.exsherpa.examination.domain.GetExaminationHistoryResponse;
 import bgaebalja.exsherpa.passage.domain.GetPassagesResponse;
 import bgaebalja.exsherpa.question.domain.GetQuestionsResponse;
 import bgaebalja.exsherpa.util.FormatValidator;
@@ -26,6 +27,23 @@ public class GetCollectionResponse {
         return GetCollectionResponse.builder()
                 .getPassagesResponse(getPassagesResponse)
                 .getQuestionsResponse(GetQuestionsResponse.from(collection.getQuestions()))
+                .build();
+    }
+
+    public static GetCollectionResponse from(
+            Collection collection, GetExaminationHistoryResponse cachedExaminationHistory
+    ) {
+        GetPassagesResponse getPassagesResponse = null;
+        if (FormatValidator.hasValue(collection.getPassages())) {
+            getPassagesResponse = GetPassagesResponse.from(collection.getPassages());
+        }
+
+        return GetCollectionResponse.builder()
+                .getPassagesResponse(getPassagesResponse)
+                .getQuestionsResponse(
+                        GetQuestionsResponse.from(collection.getQuestions(),
+                                cachedExaminationHistory.getGetSolvedQuestionsResponse())
+                )
                 .build();
     }
 

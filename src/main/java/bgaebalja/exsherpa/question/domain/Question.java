@@ -3,7 +3,6 @@ package bgaebalja.exsherpa.question.domain;
 import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.collection.domain.Collection;
 import bgaebalja.exsherpa.option.domain.Option;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,13 +32,11 @@ public class Question extends BaseGeneralEntity {
     // enum으로 저장
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    @JsonDeserialize(using = QuestionTypeDeserializer.class)
     private QuestionType questionType;
 
     // enum으로 저장
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    @JsonDeserialize(using = DifficultyDeserializer.class)
     private Difficulty difficulty;
 
     @Column(name = "description_url", nullable = false)

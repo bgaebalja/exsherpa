@@ -22,10 +22,8 @@ public class ExamServiceImpl implements ExamService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Exam> getPastExams(String email) {
-        Users user = userRepository.getUserWithRoles(email);
-
-        return examRepository.findByUserIdAndCustomYnFalseAndDeleteYnFalseAndOpenYnTrue(user.getId());
+    public List<Exam> getPastExams() {
+        return examRepository.findByCustomYnFalseAndDeleteYnFalseAndOpenYnTrue();
     }
 
     @Override

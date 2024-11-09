@@ -4,9 +4,11 @@ import bgaebalja.exsherpa.audit.BaseGeneralEntity;
 import bgaebalja.exsherpa.exam.domain.Exam;
 import bgaebalja.exsherpa.user.domain.Users;
 import bgaebalja.exsherpa.util.MathComputer;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.List;
@@ -40,6 +42,7 @@ public class ExaminationHistory extends BaseGeneralEntity {
     private Exam exam;
 
     @OneToMany(mappedBy = "examinationHistory", cascade = {PERSIST, MERGE, REMOVE}, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<SolvedQuestion> solvedQuestions;
 
     @Builder
@@ -63,5 +66,14 @@ public class ExaminationHistory extends BaseGeneralEntity {
                 .user(user)
                 .exam(exam)
                 .build();
+    }
+
+    @PostLoad
+    private void init() {
+        Hibernate.initialize(solvedQuestions);
+    }
+
+    public void addSolvedQuestions(List<SolvedQuestion> solvedQuestions) {
+        this.solvedQuestions = solvedQuestions;
     }
 }

@@ -1,5 +1,6 @@
 package bgaebalja.exsherpa.question.domain;
 
+import bgaebalja.exsherpa.examination.domain.GetSolvedQuestionResponse;
 import bgaebalja.exsherpa.option.domain.GetOptionsResponse;
 import bgaebalja.exsherpa.option.domain.Option;
 import bgaebalja.exsherpa.util.ContentExtractor;
@@ -104,6 +105,60 @@ public class GetQuestionResponse {
                 .build();
     }
 
+    public static GetQuestionResponse from(Question question, GetSolvedQuestionResponse cachedSolvedQuestion) {
+        String html = question.getHtml();
+        StringBuilder totalContent = new StringBuilder();
+
+        boolean isSubjective = question.getQuestionType().isSubjective();
+        selectExtractor(html, isSubjective, totalContent, cachedSolvedQuestion);
+
+        GetOptionsResponse getOptionsResponse = null;
+        if (!isSubjective) {
+            List<Option> options = question.getOptions();
+            getOptionsResponse = addOptions(options, getOptionsResponse);
+        }
+
+        return GetQuestionResponse.builder()
+                .id(question.getId())
+                .itemId(question.getItemId())
+                .content(totalContent.toString())
+                .url(question.getUrl())
+                .descriptionUrl(question.getDescriptionUrl())
+                .questionType(question.getQuestionType())
+                .getOptionsResponse(getOptionsResponse)
+                .difficulty(question.getDifficulty())
+                .answer(question.getAnswer())
+                .answerUrl(question.getAnswerUrl())
+                .errorReportCount(question.getErrorReportCount())
+                .blockYn(question.isBlockYn())
+                .placementNumber(question.getPlacementNumber())
+                .largeChapterCode(question.getLargeChapterCode())
+                .largeChapterName(question.getLargeChapterName())
+                .mediumChapterCode(question.getMediumChapterCode())
+                .smallChapterCode(question.getSmallChapterCode())
+                .topicChapterCode(question.getTopicChapterCode())
+                .isSubjective(isSubjective)
+                .build();
+    }
+
+    private static void selectExtractor(
+            String html, boolean isSubjective,
+            StringBuilder totalContent, GetSolvedQuestionResponse cachedSolvedQuestion
+    ) {
+        if (
+                FormatValidator.hasValue(html)
+                        && isSubjective
+                        && (html.contains("class=\"input_question_text_box\"")
+                        || html.contains("class=\"txt input_txt\""))
+        ) {
+            ContentExtractor.extractBodyContent(html, totalContent, cachedSolvedQuestion.getSubmittedAnswer());
+
+            return;
+        }
+
+        ContentExtractor.extractBodyContent(html, totalContent);
+    }
+
     public static GetQuestionResponse fromExams(Question question) {
         return GetQuestionResponse.builder()
                 .id(question.getId())
@@ -136,14 +191,6 @@ public class GetQuestionResponse {
             return getOptionsResponse;
         }
         return GetOptionsResponse.from(options);
-    }
-
-    private static void extractContent(String html, StringBuilder totalContent) {
-        String[] contents = html.split("<span class=\"txt \">");
-        for (String content : contents) {
-            String[] splitContents = content.split("</span>");
-            addContent(splitContents, totalContent);
-        }
     }
 
     private static void addContent(String[] splitContents, StringBuilder totalContent) {
