@@ -5,6 +5,7 @@ import bgaebalja.exsherpa.exam.domain.GetExamsResponse;
 import bgaebalja.exsherpa.exam.service.ExamService;
 import bgaebalja.exsherpa.examination.domain.*;
 import bgaebalja.exsherpa.examination.service.ExaminationService;
+import bgaebalja.exsherpa.exception.UserNotFoundException;
 import bgaebalja.exsherpa.question.domain.GetQuestionResponse;
 import bgaebalja.exsherpa.question.domain.Question;
 import bgaebalja.exsherpa.question.service.QuestionService;
@@ -140,9 +141,16 @@ public class ExaminationController {
         modelAndView.addObject(
                 "examInformationResponse", ExamInformationResponse.of(schoolLevel, examRound, year)
         );
+
         String email = session.getAttribute("email").toString();
-        GetExaminationHistoriesResponse getMyExaminationHistoriesResponse
-                = GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistories(email));
+        GetExaminationHistoriesResponse getMyExaminationHistoriesResponse = null;
+        try {
+            getMyExaminationHistoriesResponse
+                    = GetExaminationHistoriesResponse.from(examinationService.getSolvedExaminationHistories(email));
+        } catch (UserNotFoundException unfe) {
+            return new ModelAndView("user/login/login");
+        }
+
         modelAndView.addObject("getExaminationHistoriesResponse", getMyExaminationHistoriesResponse);
         Long examId = getMyExaminationHistoriesResponse.get(FormatConverter.parseToInt(examinationSequence)).getExamId();
         GetExaminationHistoriesResponse getAllExaminationHistoriesFromExamResponse = GetExaminationHistoriesResponse.from(
