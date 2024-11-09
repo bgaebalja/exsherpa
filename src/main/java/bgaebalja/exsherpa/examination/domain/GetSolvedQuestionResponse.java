@@ -14,11 +14,13 @@ public class GetSolvedQuestionResponse {
     private String topicChapterName;
     private String submittedAnswer;
     private String questionType;
+    private boolean isSubjective;
 
     @Builder
     private GetSolvedQuestionResponse(
             Long id, Long questionId, short questionNumber, boolean isCorrect, String difficulty,
-            String smallChapterName, String topicChapterName, String submittedAnswer, String questionType
+            String smallChapterName, String topicChapterName, String submittedAnswer, String questionType,
+            boolean isSubjective
     ) {
         this.id = id;
         this.questionId = questionId;
@@ -29,6 +31,7 @@ public class GetSolvedQuestionResponse {
         this.topicChapterName = topicChapterName;
         this.submittedAnswer = submittedAnswer;
         this.questionType = questionType;
+        this.isSubjective = isSubjective;
     }
 
     public static GetSolvedQuestionResponse from(SolvedQuestion solvedQuestion) {
@@ -42,6 +45,7 @@ public class GetSolvedQuestionResponse {
                 .topicChapterName(solvedQuestion.getQuestion().getTopicChapterName())
                 .submittedAnswer(solvedQuestion.getSubmittedAnswer())
                 .questionType(solvedQuestion.getQuestion().getQuestionType().getName())
+                .isSubjective(solvedQuestion.isSubjectiveYn())
                 .build();
     }
 }

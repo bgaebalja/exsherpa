@@ -13,4 +13,6 @@ public interface ExaminationService {
     List<ExaminationHistory> getSolvedExaminationHistories(String email);
 
     List<ExaminationHistory> getSolvedExaminationHistoriesFromExam(Long examId);
+
+    List<ExaminationHistory> getSolvedExaminationHistoriesFromExam(Long examId, String email);
 }
