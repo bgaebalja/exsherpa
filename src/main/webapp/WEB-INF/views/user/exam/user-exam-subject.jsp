@@ -59,7 +59,43 @@
     <script src="https://kit.fontawesome.com/266dd736a0.js" crossorigin="anonymous"></script>
     <script src="<c:url value="/js/main.js"><c:param name="ver" value="${nowDate}"/></c:url>"></script>
 
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
+        .page-link {
+            padding: 8px 12px;
+            margin: 0 5px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .current-page {
+            padding: 8px 12px;
+            margin: 0 5px;
+            font-weight: bold;
+            color: #333;
+            cursor: default;
+        }
+
+        .page-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+    </style>
+    <style>
+        .btn_info > .btn {
+            margin-bottom: 10px;
+        }
+
+        .btn_info > p {
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
 <main id="main">
@@ -112,7 +148,7 @@
                                                 <c:forEach var="exam" items="${getExamsResponse.getExamResponses}"
                                                            varStatus="index">
                                                     <tr>
-                                                        <td class="first">${index.index + 1}</td>
+                                                        <td class="first">${page_information.pageNumber * page_information.size + index.index + 1}</td>
                                                         <td>
                                                             <c:choose>
                                                                 <c:when test="${exam.subjectName eq '국어'}">국어</c:when>
@@ -152,12 +188,44 @@
                                                 </c:forEach>
                                                 </tbody>
                                             </table>
+                                            <div class="pagination">
+                                                <c:if test="${not page_information.first}">
+                                                    <a href="?pageNumber=${page_information.pageNumber - 1}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
+                                                       class="page-link">이전</a>
+                                                </c:if>
+
+                                                <c:forEach begin="0" end="${page_information.totalPages - 1}"
+                                                           var="page">
+                                                    <c:choose>
+                                                        <c:when test="${page == page_information.pageNumber}">
+                                                            <span class="current-page">${page + 1}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="?pageNumber=${page}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
+                                                               class="page-link">${page + 1}</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+
+                                                <c:if test="${not page_information.last}">
+                                                    <a href="?pageNumber=${page_information.pageNumber + 1}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
+                                                       class="page-link">다음</a>
+                                                </c:if>
+                                            </div>
                                             <div class="btn_info mt40">
                                                 <div class="btn ml60" style="background-color: #ffae00;">재응시</div>
                                                 <p style="font-size: 13px;">시험을 재응시 할 수 있는 상태</p>
-                                                <div class="btn ml60" style="background-color: #ee9490;">이어하기</div>
-                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태</p>
-                                                <div class="btn blue ml60">응시하기</div>
+                                                <br/>
+
+                                                <div class="btn ml60"
+                                                     style="background-color: #ee9490; margin-left: 160px !important;">
+                                                    이어하기
+                                                </div>
+                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태(1일 간 유지)</p>
+                                                <br/>
+
+                                                <div class="btn blue ml60" style="margin-left: 45px !important;">응시하기
+                                                </div>
                                                 <p style="font-size: 13px;">시험에 응시할 수 있는 상태</p>
                                             </div>
                                             <a class="btn resultBtn  mt100"
@@ -256,10 +324,11 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+                                                <tbody>
                                                 <c:forEach var="exam" items="${getExamsResponse.getExamResponses}"
                                                            varStatus="index">
                                                     <tr>
-                                                        <td class="first">${index.index + 1}</td>
+                                                        <td class="first">${page_information.pageNumber * page_information.size + index.index + 1}</td>
                                                         <td>
                                                             <c:choose>
                                                                 <c:when test="${exam.subjectName eq '국어'}">국어</c:when>
@@ -282,10 +351,10 @@
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
-                                                                <c:when test="${exam.cached eq 'true'}"> <a
-                                                                        href="/user/exam/exam-view?exam_id=${exam.id}&is_cached=true"
-                                                                        class="startBtn"
-                                                                        style="background-color: #ee9490;">이어하기</a>
+                                                                <c:when test="${exam.cached eq 'true'}">
+                                                                    <a href="/user/exam/exam-view?exam_id=${exam.id}"
+                                                                       class="startBtn"
+                                                                       style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
                                                                 <c:when test="${exam.getExaminationHistoriesResponse.size() == 0}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"
@@ -299,12 +368,44 @@
                                                 </c:forEach>
                                                 </tbody>
                                             </table>
+                                            <div class="pagination">
+                                                <c:if test="${not page_information.first}">
+                                                    <a href="?pageNumber=${page_information.pageNumber - 1}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
+                                                       class="page-link">이전</a>
+                                                </c:if>
+
+                                                <c:forEach begin="0" end="${page_information.totalPages - 1}"
+                                                           var="page">
+                                                    <c:choose>
+                                                        <c:when test="${page == page_information.pageNumber}">
+                                                            <span class="current-page">${page + 1}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="?pageNumber=${page}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
+                                                               class="page-link">${page + 1}</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+
+                                                <c:if test="${not page_information.last}">
+                                                    <a href="?pageNumber=${page_information.pageNumber + 1}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
+                                                       class="page-link">다음</a>
+                                                </c:if>
+                                            </div>
                                             <div class="btn_info mt40">
                                                 <div class="btn ml60" style="background-color: #ffae00;">재응시</div>
                                                 <p style="font-size: 13px;">시험을 재응시 할 수 있는 상태</p>
-                                                <div class="btn ml60" style="background-color: #ee9490;">이어하기</div>
-                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태</p>
-                                                <div class="btn blue ml60">응시하기</div>
+                                                <br/>
+
+                                                <div class="btn ml60"
+                                                     style="background-color: #ee9490; margin-left: 160px !important;">
+                                                    이어하기
+                                                </div>
+                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태(1일 간 유지)</p>
+                                                <br/>
+
+                                                <div class="btn blue ml60" style="margin-left: 45px !important;">응시하기
+                                                </div>
                                                 <p style="font-size: 13px;">시험에 응시할 수 있는 상태</p>
                                             </div>
                                             <a class="btn resultBtn  mt100"
