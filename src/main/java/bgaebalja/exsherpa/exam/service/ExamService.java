@@ -1,13 +1,13 @@
 package bgaebalja.exsherpa.exam.service;
 
 import bgaebalja.exsherpa.exam.domain.Exam;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ExamService {
-    List<Exam> getPastExams();
+    Page<Exam> getPastExams(Pageable pageable);
 
-    List<Exam> getBsherpaExams(String email);
+    Page<Exam> getBsherpaExams(Pageable pageable, String email, boolean isMine);
 
     Exam getExam(Long examId);
 }

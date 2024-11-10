@@ -6,10 +6,10 @@ import bgaebalja.exsherpa.exam.repository.ExamRepository;
 import bgaebalja.exsherpa.user.domain.Users;
 import bgaebalja.exsherpa.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static bgaebalja.exsherpa.exam.exception.ExceptionMessage.EXAM_NOT_FOUND_EXCEPTION_MESSAGE;
 import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
@@ -22,19 +22,19 @@ public class ExamServiceImpl implements ExamService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Exam> getPastExams() {
-        return examRepository.findByCustomYnFalseAndDeleteYnFalseAndOpenYnTrue();
+    public Page<Exam> getPastExams(Pageable pageable) {
+        return examRepository.findByCustomYnFalseAndDeleteYnFalseAndOpenYnTrue(pageable);
     }
 
     @Override
-    public List<Exam> getBsherpaExams(String email, boolean isMine) {
+    public Page<Exam> getBsherpaExams(Pageable pageable, String email, boolean isMine) {
         if (isMine) {
             Users user = userRepository.getUserWithRoles(email);
 
-            return examRepository.findByUserIdAndCustomYnTrueAndDeleteYnFalseAndOpenYnTrue(user.getId());
+            return examRepository.findByUserIdAndCustomYnTrueAndDeleteYnFalseAndOpenYnTrue(user.getId(), pageable);
         }
 
-        return examRepository.findByCustomYnTrueAndDeleteYnFalseAndOpenYnTrue();
+        return examRepository.findByCustomYnTrueAndDeleteYnFalseAndOpenYnTrue(pageable);
     }
 
     @Override

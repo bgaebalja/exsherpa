@@ -1,6 +1,7 @@
 package bgaebalja.exsherpa.util;
 
 import bgaebalja.exsherpa.exception.*;
+import org.springframework.data.domain.Sort;
 
 import static bgaebalja.exsherpa.exception.ExceptionMessage.*;
 
@@ -70,5 +71,10 @@ public class FormatConverter {
         }
 
         return "고등";
+    }
+
+    public static Sort parseSortString(String sort) {
+        String[] parts = sort.split(",");
+        return Sort.by(Sort.Direction.fromString(parts[1]), parts[0]);
     }
 }
