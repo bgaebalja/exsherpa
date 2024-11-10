@@ -27,10 +27,14 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<Exam> getBsherpaExams(String email) {
-        Users user = userRepository.getUserWithRoles(email);
+    public List<Exam> getBsherpaExams(String email, boolean isMine) {
+        if (isMine) {
+            Users user = userRepository.getUserWithRoles(email);
 
-        return examRepository.findByUserIdAndCustomYnTrueAndDeleteYnFalseAndOpenYnTrue(user.getId());
+            return examRepository.findByUserIdAndCustomYnTrueAndDeleteYnFalseAndOpenYnTrue(user.getId());
+        }
+
+        return examRepository.findByCustomYnTrueAndDeleteYnFalseAndOpenYnTrue();
     }
 
     @Override
