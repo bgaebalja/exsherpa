@@ -64,10 +64,7 @@ public class ExaminationServiceImpl implements ExaminationService {
         solvedQuestionService.registerSolvedQuestions(submitResultRequest.getAnswerRequests(), examinationHistory);
         entityManager.refresh(examinationHistory);
 
-        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc(
-                        user.getId()
-                )
-                .size();
+        return examinationRepository.findLatestExaminationsByUserId(user.getId()).size();
     }
 
     @Override
@@ -103,8 +100,7 @@ public class ExaminationServiceImpl implements ExaminationService {
     public List<ExaminationHistory> getSolvedExaminationHistories(String email) {
         Users user = userRepository.findByUserId(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, email)));
-        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc(
-                user.getId()
+        return examinationRepository.findLatestExaminationsByUserId(user.getId()
         );
     }
 
