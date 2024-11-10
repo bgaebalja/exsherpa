@@ -96,6 +96,15 @@
             margin-bottom: 15px;
         }
     </style>
+    <style>
+        #subjectSelect {
+            width: 150px;
+            height: 50px;
+            font-size: 20px;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
 <main id="main">
@@ -118,6 +127,38 @@
                                     <label class="tlabel2 label" for="tmenu2">기출 문제 풀이</label>
                                     <div class="tab_con">
                                         <div class="cnt_box">
+                                            <div style="text-align: right; margin-top: 20px;">
+                                                <select id="subjectSelect" onchange="filterBySubject()">
+                                                    <option value="국어"
+                                                            <c:if test="${param.subject_name == '국어'}">selected</c:if>>
+                                                        국어
+                                                    </option>
+                                                    <option value="영어"
+                                                            <c:if test="${param.subject_name == '영어'}">selected</c:if>>
+                                                        영어
+                                                    </option>
+                                                    <option value="수학"
+                                                            <c:if test="${param.subject_name == '수학'}">selected</c:if>>
+                                                        수학
+                                                    </option>
+                                                    <option value="사회"
+                                                            <c:if test="${param.subject_name == '사회'}">selected</c:if>>
+                                                        사회
+                                                    </option>
+                                                    <option value="과학"
+                                                            <c:if test="${param.subject_name == '과학'}">selected</c:if>>
+                                                        과학
+                                                    </option>
+                                                    <option value="역사"
+                                                            <c:if test="${param.subject_name == '역사'}">selected</c:if>>
+                                                        역사
+                                                    </option>
+                                                    <option value="도덕"
+                                                            <c:if test="${param.subject_name == '도덕'}">selected</c:if>>
+                                                        도덕
+                                                    </option>
+                                                </select>
+                                            </div>
                                             <div class="page_tit pb20"><em>시험 목록</em></div>
                                             <p class="page_info pb55">시험지 정보를 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
                                                 바랍니다.<br>
@@ -172,7 +213,7 @@
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
                                                                 <c:when test="${exam.cached eq 'true'}">
-                                                                    <a href="/user/exam/exam-view?exam_id=${exam.id}"
+                                                                    <a href="/user/exam/exam-view?exam_id=${exam.id}&is_cached=true"
                                                                        class="startBtn"
                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
@@ -188,30 +229,6 @@
                                                 </c:forEach>
                                                 </tbody>
                                             </table>
-                                            <div class="pagination">
-                                                <c:if test="${not page_information.first}">
-                                                    <a href="?pageNumber=${page_information.pageNumber - 1}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
-                                                       class="page-link">이전</a>
-                                                </c:if>
-
-                                                <c:forEach begin="0" end="${page_information.totalPages - 1}"
-                                                           var="page">
-                                                    <c:choose>
-                                                        <c:when test="${page == page_information.pageNumber}">
-                                                            <span class="current-page">${page + 1}</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <a href="?pageNumber=${page}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
-                                                               class="page-link">${page + 1}</a>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:forEach>
-
-                                                <c:if test="${not page_information.last}">
-                                                    <a href="?pageNumber=${page_information.pageNumber + 1}&school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=${param.is_mine}"
-                                                       class="page-link">다음</a>
-                                                </c:if>
-                                            </div>
                                             <div class="btn_info mt40">
                                                 <div class="btn ml60" style="background-color: #ffae00;">재응시</div>
                                                 <p style="font-size: 13px;">시험을 재응시 할 수 있는 상태</p>
@@ -221,7 +238,7 @@
                                                      style="background-color: #ee9490; margin-left: 160px !important;">
                                                     이어하기
                                                 </div>
-                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태(1일 간 유지)</p>
+                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태 (1일 간 유지)</p>
                                                 <br/>
 
                                                 <div class="btn blue ml60" style="margin-left: 45px !important;">응시하기
@@ -352,7 +369,7 @@
                                                                        style="background-color: #ffae00;">재응시</a>
                                                                 </c:when>
                                                                 <c:when test="${exam.cached eq 'true'}">
-                                                                    <a href="/user/exam/exam-view?exam_id=${exam.id}"
+                                                                    <a href="/user/exam/exam-view?exam_id=${exam.id}&is_cached=true"
                                                                        class="startBtn"
                                                                        style="background-color: #ee9490;">이어하기</a>
                                                                 </c:when>
@@ -401,7 +418,7 @@
                                                      style="background-color: #ee9490; margin-left: 160px !important;">
                                                     이어하기
                                                 </div>
-                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태(1일 간 유지)</p>
+                                                <p style="font-size: 13px;">진행 중인 시험을 이어할 수 있는 상태 (1일 간 유지)</p>
                                                 <br/>
 
                                                 <div class="btn blue ml60" style="margin-left: 45px !important;">응시하기
@@ -468,6 +485,21 @@
         event.preventDefault();
     }
 
+</script>
+<script>
+    function filterBySubject() {
+        const subjectName = document.getElementById("subjectSelect").value;
+        const urlQuery = new URLSearchParams(location.search);
+
+        urlQuery.delete("subjectName");
+        if (subjectName) {
+            urlQuery.set("subject_name", subjectName);
+        } else {
+            urlQuery.delete("subject_name");
+        }
+
+        location.href = '/user/exam/user-exam-subject?' + urlQuery.toString();
+    }
 </script>
 
 </html>
