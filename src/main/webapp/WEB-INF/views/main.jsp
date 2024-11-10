@@ -22,34 +22,23 @@
     </jsp:include>
 
     <div class="wrap">
-        <!-- container -->
         <div class="container">
             <div class="tab-wrap">
-                <!-- S: 로그인 후 노출되는 타이틀 주석-->
-                <!--<ul class="tab-btn">
-                    <li class="on">
-                        <a href="#">초등</a>
-                    </li>
-                </ul>-->
-                <!-- E: 로그인 후 노출되는 타이틀 주석 -->
                 <div class="tab-cnt on">
                     <ul class="cnt-list">
                         <li>
-                            <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                             <a href="user/exam/user-exam-subject?school_level=SL02&exam_round=1&year=2024">
                                 <span class="tit">기출 문제 풀이</span>
                                 <span class="txt">기출 문제를 CBT로<br>재구성한 문제를 통한<br>실전 문제 풀이</span>
                             </a>
                         </li>
                         <li>
-                            <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                             <a href="user/exam/user-exam-subject?school_level=SL02&exam_round=2&year=2024">
                                 <span class="tit">B셀파 문제 풀이</span>
                                 <span class="txt">B셀파에서 제작된<br>예상 문제를 바탕으로 한<br>실전 문제 풀이</span>
                             </a>
                         </li>
                         <li>
-                            <!-- TODO: 로그인한 회원의 초등, 중/고등 여부 연결 -->
                             <a href="user/exam/report?school_level=SL02&year=2024">
                                 <span class="tit">시험 결과 REPORT</span>
                                 <span class="txt">나의 성취도 파악과<br>취약점 분석,<br>시험 대비 학습 </span>
@@ -59,45 +48,6 @@
                     <a href="https://bsherpa.com" class="ft-btn">B셀파 방문하기</a>
                 </div>
             </div>
-        </div>
-        <!-- footer -->
-        <div class="footer">
-            <div class="notice-list">
-                <div class="inner">
-						<span class="tit">
-							공지사항
-							<em>NOTICE</em>
-						</span>
-                    <div class="swiper mySwiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="tit">
-                                    <em class="cate">오픈</em>
-                                    <span class="txt">EX셀파 공지사항 입니다.</span>
-                                </div>
-                                <span class="date">2024.11.03</span>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="tit">
-                                    <em class="cate">오픈</em>
-                                    <span class="txt">EX셀파 공지사항 입니다.</span>
-                                </div>
-                                <span class="date">2024.11.04</span>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="tit">
-                                    <em class="cate">오픈</em>
-                                    <span class="txt">EX셀파 공지사항 입니다.</span>
-                                </div>
-                                <span class="date">2024.11.05</span>
-                            </div>
-                        </div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                    </div>
-                </div>
-            </div>
-            <span class="copyright">COPYRIGHT(C) 2022 by KICE. ALL RIGHTS RESERVED.</span>
         </div>
     </div>
 </main>
