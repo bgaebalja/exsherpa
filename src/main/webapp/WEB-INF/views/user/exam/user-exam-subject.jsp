@@ -82,7 +82,7 @@
                                     <label class="tlabel2 label" for="tmenu2">기출 문제 풀이</label>
                                     <div class="tab_con">
                                         <div class="cnt_box">
-                                            <div class="page_tit pb20">시험 목록 및 <em>시험 응시</em></div>
+                                            <div class="page_tit pb20"><em>시험 목록</em></div>
                                             <p class="page_info pb55">시험지 정보를 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
                                                 바랍니다.<br>
                                                 과목 별 응시 순서는 사용자가 선택할 수 있으며 재응시 횟수에는 제한은 없습니다.
@@ -207,8 +207,29 @@
                                                 </ul>
                                             </div>
                                         </c:if>
+                                        <div class="tabmenu">
+                                            <ul class="justify_center">
+                                                <li id="tab_all_exams" class="tab_btn">
+                                                    <input type="radio" name="examTab" id="allExamsTab" class="tab"
+                                                           <c:if test="${empty param.is_mine or param.is_mine != 'true'}">checked</c:if>>
+                                                    <label class="tlabel_all label" for="allExamsTab"
+                                                           onclick="location.href='/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}'">
+                                                        전체 시험지
+                                                    </label>
+                                                </li>
+
+                                                <li id="tab_my_exams" class="tab_btn">
+                                                    <input type="radio" name="examTab" id="myExamsTab" class="tab"
+                                                           <c:if test="${param.is_mine == 'true'}">checked</c:if>>
+                                                    <label class="tlabel_my label" for="myExamsTab"
+                                                           onclick="location.href='/user/exam/user-exam-subject?school_level=${examInformationResponse.schoolLevel}&exam_round=${examInformationResponse.examRound}&year=${examInformationResponse.year}&is_mine=true'">
+                                                        내 시험지
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
                                         <div class="cnt_box mt50">
-                                            <div class="page_tit pb20">시험 시간표 및 <em>시험 응시</em></div>
+                                            <div class="page_tit pb20"><em>시험 목록</em></div>
                                             <p class="page_info pb55">시험지 정보를 확인하고 <em>우측의 [응시하기] 버튼을 클릭</em>하여 주시기
                                                 바랍니다.<br>
                                                 과목 별 응시 순서는 사용자가 선택할 수 있으며 재응시 횟수에는 제한은 없습니다.
