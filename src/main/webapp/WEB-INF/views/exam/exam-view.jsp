@@ -546,7 +546,7 @@
                     alert("시험이 제출되었습니다.");
                     const sequence = data - 1;
 
-                    location.href = `/user/exam/report?school_level=SL02&exam_round=2&year=2024&examination_sequence=` + sequence;
+                    location.href = `/user/exam/report?school_level=SL02&exam_round=2&year=2024&examination_sequence=` + 0;
                 })
                 .catch(error => {
                     console.error("오류:", error);
