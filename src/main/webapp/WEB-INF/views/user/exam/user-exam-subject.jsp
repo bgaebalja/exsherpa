@@ -207,7 +207,7 @@
                                                         <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0}">
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 && exam.cached eq 'false'}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
@@ -363,7 +363,7 @@
                                                         <td>${exam.size}문항</td>
                                                         <td>
                                                             <c:choose>
-                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0}">
+                                                                <c:when test="${exam.getExaminationHistoriesResponse.size() > 0 && exam.cached eq 'false'}">
                                                                     <a href="/user/exam/exam-view?exam_id=${exam.id}"
                                                                        class="startBtn"
                                                                        style="background-color: #ffae00;">재응시</a>
