@@ -12,6 +12,7 @@ import bgaebalja.exsherpa.user.domain.Users;
 import bgaebalja.exsherpa.user.repository.UserRepository;
 import bgaebalja.exsherpa.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -45,8 +46,13 @@ public class ExaminationServiceImpl implements ExaminationService {
     private static final String KEY_VALUE = "examination";
     private static final String UNLESS_CONDITION = "#result == null";
 
+    private static final String DELETE_EXAMINATION_KEY
+            = "#submitResultRequest.email + '_' + #submitResultRequest.examId";
+    private static final String DELETE_KEY_CONDITION = "#submitResultRequest != null";
+
     @Override
     @Transactional(isolation = READ_COMMITTED, timeout = 15)
+    @CacheEvict(key = DELETE_EXAMINATION_KEY, condition = DELETE_KEY_CONDITION, value = KEY_VALUE)
     public int registerResult(SubmitResultRequest submitResultRequest) {
         String email = submitResultRequest.getEmail();
         Users user = userRepository.findByUserId(email)
