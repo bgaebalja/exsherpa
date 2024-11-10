@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ExamService {
-    Page<Exam> getPastExams(Pageable pageable);
+    Page<Exam> getPastExams(Pageable pageable, String subjectName);
 
     Page<Exam> getBsherpaExams(Pageable pageable, String email, boolean isMine);
 

@@ -506,405 +506,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                     <!--첫번째 단락-->
                                                     <!--두번째 단락-->
                                                     <div class="justify_between mb90">
-                                                        <div class="box_wrap" id="subject_ability_box">
-                                                            <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>교과 역량별
-                                                                성취율
-                                                            </div>
-                                                            <div class="box box3">
-                                                                <table class="tbl_list3 mb30">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th scope="col"></th>
-                                                                        <th scope="col">계산이해</th>
-                                                                        <th scope="col">추론</th>
-                                                                        <th scope="col">문제해결</th>
-                                                                        <th scope="col">정보처리</th>
-                                                                        <th scope="col">의사소통</th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tr>
-                                                                        <td>평균</td>
-                                                                        <td>90</td>
-                                                                        <td>75</td>
-                                                                        <td>80</td>
-                                                                        <td>75</td>
-                                                                        <td>65</td>
-                                                                    </tr>
-                                                                    <tr class="blue">
-                                                                        <td>나천재</td>
-                                                                        <td>95</td>
-                                                                        <td>94</td>
-                                                                        <td>91</td>
-                                                                        <td>93</td>
-                                                                        <td>85</td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="subject_ability_graph" width="878"
-                                                                            height="400" style="margin: auto;"></canvas>
-                                                                </div>
-                                                                <!--그래프 영역-->
-                                                            </div>
-                                                        </div>
-                                                        <div class="box_wrap" id="difficulty_box">
-                                                            <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>문항 난이도 별
-                                                                성취율
-                                                            </div>
-                                                            <div class="box box4">
-                                                                <div class="justify_between">
-                                                                    <table class="tbl_list3 mb30">
-                                                                        <caption></caption>
-                                                                        <colgroup>
-                                                                            <col width="10%">
-                                                                            <col width="10%">
-                                                                            <col width="10%">
-                                                                        </colgroup>
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th scope="col">난이도</th>
-                                                                            <th scope="col">전체 평균</th>
-                                                                            <th scope="col"
-                                                                                style="color:#4b78ca;">내 성취율
-                                                                            </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>최상</td>
-                                                                            <td class="blue"><%= difficultyAnswerRate.get("최상") != null ? difficultyAnswerRate.get("최상") : "0" %>
-                                                                                %
-                                                                            </td>
-                                                                            <td><%= achievementRates[4] %>%</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>상</td>
-                                                                            <td class="blue"><%= difficultyAnswerRate.get("상") != null ? difficultyAnswerRate.get("상") : "0" %>
-                                                                                %
-                                                                            </td>
-                                                                            <td><%= achievementRates[3] %>%</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>중</td>
-                                                                            <td class="blue"><%= difficultyAnswerRate.get("중") != null ? difficultyAnswerRate.get("중") : "0" %>
-                                                                                %
-                                                                            </td>
-                                                                            <td><%= achievementRates[2] %>%</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>하</td>
-                                                                            <td class="blue"><%= difficultyAnswerRate.get("하") != null ? difficultyAnswerRate.get("하") : "0" %>
-                                                                                %
-                                                                            </td>
-                                                                            <td><%= achievementRates[1] %>%</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>최하</td>
-                                                                            <td class="blue"><%= difficultyAnswerRate.get("최하") != null ? difficultyAnswerRate.get("최하") : "0" %>
-                                                                                %
-                                                                            </td>
-                                                                            <td><%= achievementRates[0] %>%</td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                    <!--그래프 영역-->
-                                                                    <div class="graph_area ml20">
-                                                                        <canvas id="difficulty_graph" width="830"
-                                                                                height="350"></canvas>
-                                                                    </div>
-                                                                    <!--그래프 영역-->
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--두번째 단락-->
-
-                                                    <!--세번째 단락-->
-                                                    <div class="justify_between mb90">
-                                                        <div class="box_wrap" id="content_box">
-                                                            <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>
-                                                                <c:choose>
-                                                                    <c:when test="${examInformation.subject_id eq 14}">(국어)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 15}">(영어)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 16}">(수학)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 17}">(사회)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 18}">(과학)</c:when>
-                                                                </c:choose> 교과
-                                                                내용 영역 별 성취율
-                                                            </div>
-                                                            <div class="box box5">
-                                                                <table class="tbl_list4 mb30">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th scope="col">내용영역</th>
-                                                                        <th scope="col">전체평균</th>
-                                                                        <th scope="col" style="color: #4b78ca;">내 성취율
-                                                                        </th>
-
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tr>
-                                                                        <td>수와 연산</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>80</td>
-
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>도형</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>측정</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>75</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>자료와 가능성</td>
-                                                                        <td class="blue">70</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>규칙성</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>60</td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="content_graph" width="830"
-                                                                            height="350" style="margin: auto;"></canvas>
-                                                                </div>
-                                                                <!--그래프 영역-->
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="box_wrap" id="activity_box" <c:if
-                                                                test="${not empty examInformation.subject_id and examInformation.subject_id eq 15}">
-                                                            style="display: none";
-                                                        </c:if>>
-                                                            <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>
-                                                                <c:choose>
-                                                                    <c:when test="${examInformation.subject_id eq 14}">(국어)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 15}">(영어)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 16}">(수학)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 17}">(사회)</c:when>
-                                                                    <c:when test="${examInformation.subject_id eq 18}">(과학)</c:when>
-                                                                </c:choose> 교과
-                                                                행동 영역 별 성취율
-                                                            </div>
-                                                            <div class="box box6">
-                                                                <table class="tbl_list4 mb50">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th scope="col">행동영역</th>
-                                                                        <th scope="col">전체평균</th>
-                                                                        <th scope="col" style="color: #4b78ca">내 성취율
-                                                                        </th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tr>
-                                                                        <td>계산력</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>80</td>
-
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>이해력</td>
-                                                                        <td class="blue">90</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>문제 해결력</td>
-                                                                        <td class="blue">80</td>
-                                                                        <td>75</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>추론력</td>
-                                                                        <td class="blue">70</td>
-                                                                        <td>80</td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="activity_graph" width="830"
-                                                                            height="350" style="margin: auto;"></canvas>
-                                                                </div>
-                                                                <!--그래프 영역-->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--세번째 단락-->
-
-                                                    <!--네번째 단락-->
-                                                    <div class="justify_between mb90">
-                                                        <div class="box_wrap" id="difficulty_time_box">
-                                                            <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>문항 난이도별
-                                                                문제 풀이 소요 시간
-                                                            </div>
-                                                            <div class="box box7">
-                                                                <table class="tbl_list4 mb30">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th scope="col">난이도</th>
-                                                                        <th scope="col">전체평균</th>
-                                                                        <th scope="col" style="color: #4b78ca;">
-                                                                            내 소요시간
-                                                                        </th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tr>
-                                                                        <td>최상</td>
-                                                                        <td class="blue">40초</td>
-                                                                        <td>50초</td>
-
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>상</td>
-                                                                        <td class="blue">40초</td>
-                                                                        <td>40초</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>중</td>
-                                                                        <td class="blue">30초</td>
-                                                                        <td>25초</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>하</td>
-                                                                        <td class="blue">30초</td>
-                                                                        <td>25초</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>최하</td>
-                                                                        <td class="blue">20초</td>
-                                                                        <td>20초</td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="difficulty_time_graph" width="830"
-                                                                            height="350" style="margin: auto;"></canvas>
-                                                                </div>
-                                                                <!--그래프 영역-->
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="box_wrap" id="content_time_box">
-                                                            <div class="box_tit"><i
-                                                                    class="fa-regular fa-pen-to-square"></i>교과 내용
-                                                                영역 별 평균 풀이 소요 시간
-                                                            </div>
-                                                            <div class="box box8">
-                                                                <table class="tbl_list4 mb30">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                        <col width="10%">
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th scope="col">영역</th>
-                                                                        <th scope="col">전체평균</th>
-                                                                        <th scope="col" style="color: #4b78ca;">
-                                                                            내 소요시간
-                                                                        </th>
-
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <tr>
-                                                                        <td>수와 연산</td>
-                                                                        <td class="blue">70</td>
-                                                                        <td>80</td>
-
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>도형</td>
-                                                                        <td class="blue">40</td>
-                                                                        <td>90</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>측정</td>
-                                                                        <td class="blue">50</td>
-                                                                        <td>100</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>자료와 가능성</td>
-                                                                        <td class="blue">30</td>
-                                                                        <td>60</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>규칙성</td>
-                                                                        <td class="blue">20</td>
-                                                                        <td>30</td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-
-
-                                                                <!--그래프 영역-->
-                                                                <div class="graph_area">
-                                                                    <canvas id="content_time_graph" width="830"
-                                                                            height="350" style="margin: auto;"></canvas>
-                                                                </div>
-                                                                <!--그래프 영역-->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--네번째 단락-->
-
-                                                    <!--다섯번째 단락-->
-                                                    <div class="justify_between mb90">
                                                         <div class="box_wrap" id="box_answer">
                                                             <div class="box_tit"><i
                                                                     class="fa-regular fa-pen-to-square"></i>문항 별 정오표
@@ -1145,11 +746,78 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!--다섯번째 단락-->
-
-
-                                                    <!--여섯번째 단락-->
                                                     <div class="justify_between mb90">
+                                                        <div class="box_wrap" id="difficulty_box">
+                                                            <div class="box_tit"><i
+                                                                    class="fa-regular fa-pen-to-square"></i>문항 난이도 별
+                                                                성취율
+                                                            </div>
+                                                            <div class="box box4">
+                                                                <div class="justify_between">
+                                                                    <table class="tbl_list3 mb30">
+                                                                        <caption></caption>
+                                                                        <colgroup>
+                                                                            <col width="10%">
+                                                                            <col width="10%">
+                                                                            <col width="10%">
+                                                                        </colgroup>
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th scope="col">난이도</th>
+                                                                            <th scope="col">전체 평균</th>
+                                                                            <th scope="col"
+                                                                                style="color:#4b78ca;">내 성취율
+                                                                            </th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td>최상</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("최상") != null ? difficultyAnswerRate.get("최상") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[4] %>%</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>상</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("상") != null ? difficultyAnswerRate.get("상") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[3] %>%</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>중</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("중") != null ? difficultyAnswerRate.get("중") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[2] %>%</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>하</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("하") != null ? difficultyAnswerRate.get("하") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[1] %>%</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>최하</td>
+                                                                            <td class="blue"><%= difficultyAnswerRate.get("최하") != null ? difficultyAnswerRate.get("최하") : "0" %>
+                                                                                %
+                                                                            </td>
+                                                                            <td><%= achievementRates[0] %>%</td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                    <!--그래프 영역-->
+                                                                    <div class="graph_area ml20">
+                                                                        <canvas id="difficulty_graph" width="830"
+                                                                                height="350"></canvas>
+                                                                    </div>
+                                                                    <!--그래프 영역-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="box_wrap" id="item_type_box">
                                                             <div class="box_tit"><i
                                                                     class="fa-regular fa-pen-to-square"></i>객관식/주관식 별
@@ -1260,10 +928,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!--여섯번째 단락-->
                                                 </div>
-                                                <a href="javascript:generatePDF();" class="downBtn btn"
-                                                   style="color: white;">다운로드</a>
                                             </div>
                                         </li>
                                     </ul>
