@@ -13,7 +13,10 @@ import bgaebalja.exsherpa.question.service.QuestionService;
 import bgaebalja.exsherpa.solvedquestion.service.SolvedQuestionService;
 import bgaebalja.exsherpa.util.FormatConverter;
 import bgaebalja.exsherpa.util.MathComputer;
+import bgaebalja.exsherpa.util.PageableGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static bgaebalja.exsherpa.util.PaginationConstant.*;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Controller
@@ -54,6 +58,10 @@ public class ExaminationController {
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/user-exam-subject")
     public ModelAndView getExamSubjectPage(
+            @RequestParam(defaultValue = TRUE) String paged,
+            @RequestParam(defaultValue = ZERO) String pageNumber,
+            @RequestParam(defaultValue = TEN) String size,
+            @RequestParam(defaultValue = ORDER_BY_CREATED_AT_DESCENDING) String sort,
             @RequestParam("school_level") String schoolLevel,
             @RequestParam("exam_round") String examRound,
             @RequestParam("year") String year,
@@ -67,20 +75,24 @@ public class ExaminationController {
         );
 
         List<GetExamResponse> getExamResponses = new ArrayList<>();
+        Pageable pageable = PageableGenerator.createPageable(paged, pageNumber, size, sort);
 
         if (examRound.equals("1")) {
-            List<Exam> exams = examService.getPastExams();
+            Page<Exam> pagedExams = examService.getPastExams(pageable);
+            List<Exam> exams = pagedExams.getContent();
             for (Exam exam : exams) {
                 ExaminationHistory examinationHistory
                         = examinationService.getCachedExaminationHistory(email, exam.getId());
                 getExamResponses.add(GetExamResponse.from(exam, examinationHistory));
             }
             modelAndView.addObject("getExamsResponse", GetExamsResponse.of(getExamResponses));
+            modelAndView.addObject("page_information", PageInformation.from(pagedExams));
 
             return modelAndView;
         }
 
-        List<Exam> exams = examService.getBsherpaExams(email, FormatConverter.parseToBoolean(isMine));
+        Page<Exam> pagedExams = examService.getBsherpaExams(pageable, email, FormatConverter.parseToBoolean(isMine));
+        List<Exam> exams = pagedExams.getContent();
         for (Exam exam : exams) {
             ExaminationHistory examinationHistory
                     = examinationService.getCachedExaminationHistory(email, exam.getId());
@@ -88,6 +100,7 @@ public class ExaminationController {
         }
 
         modelAndView.addObject("getExamsResponse", GetExamsResponse.of(getExamResponses));
+        modelAndView.addObject("page_information", PageInformation.from(pagedExams));
 
         return modelAndView;
     }
