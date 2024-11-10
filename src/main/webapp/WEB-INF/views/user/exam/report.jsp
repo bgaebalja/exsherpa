@@ -323,7 +323,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                 System.out.println(getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount());
                                                             %>
             <em><%=
-            examinationSequence > 0 && examinationSequence <= getExaminationHistoriesResponse.size()
+            examinationSequence >= 0 && examinationSequence <= getExaminationHistoriesResponse.size()
                     ? (getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() == 0
                     ? 0
                     : Math.round((double) getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() /
