@@ -53,7 +53,7 @@ services:
       SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
       EXSHERPA_PROJECT_NAME: ${EXSHERPA_PROJECT_NAME}
       SSL_KEY_STORE_PASSWORD: ${SSL_KEY_STORE_PASSWORD}
-      JAVA_OPTS: "-Xms512m -Xmx1024m"
+      JAVA_OPTS: "-Xms512m -Xmx1024m -Duser.timezone=Asia/Seoul"
     ports:
       - "443:443"
     networks:
