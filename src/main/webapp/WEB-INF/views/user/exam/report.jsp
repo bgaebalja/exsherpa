@@ -540,7 +540,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                             Long questionAnswerRateData = questionAnswerRate.get(getSolvedQuestionResponse.getQuestionId().toString());
                                                                     %>
                                                                     <tr>
-                                                                        <td class="first">1</td>
+                                                                        <td class="first"><%= i + 1 %></td>
                                                                         <td>
                                                                             <%= getSolvedQuestionResponse.getSmallChapterName() %>
                                                                         </td>
