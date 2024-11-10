@@ -57,6 +57,7 @@ public class ExaminationController {
             @RequestParam("school_level") String schoolLevel,
             @RequestParam("exam_round") String examRound,
             @RequestParam("year") String year,
+            @RequestParam(value = "is_mine", defaultValue = "false") String isMine,
             HttpSession session
     ) {
         ModelAndView modelAndView = new ModelAndView("user/exam/user-exam-subject");
@@ -79,7 +80,7 @@ public class ExaminationController {
             return modelAndView;
         }
 
-        List<Exam> exams = examService.getBsherpaExams(email);
+        List<Exam> exams = examService.getBsherpaExams(email, FormatConverter.parseToBoolean(isMine));
         for (Exam exam : exams) {
             ExaminationHistory examinationHistory
                     = examinationService.getCachedExaminationHistory(email, exam.getId());
