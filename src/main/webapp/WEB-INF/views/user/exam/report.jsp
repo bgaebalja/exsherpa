@@ -323,7 +323,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                 System.out.println(getExaminationHistoriesResponse.get(examinationSequence).getQuestionCount());
                                                             %>
             <em><%=
-            examinationSequence > 0 && examinationSequence <= getExaminationHistoriesResponse.size()
+            examinationSequence >= 0 && examinationSequence <= getExaminationHistoriesResponse.size()
                     ? (getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() == 0
                     ? 0
                     : Math.round((double) getExaminationHistoriesResponse.get(examinationSequence).getAnswerCount() /
@@ -475,7 +475,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                 </table>
 
                                                                 <div class="bar_wrap pt30"
-                                                                     style="position: relative; left: 16.5px;"><span
+                                                                     style="position: relative; left: -55px;"><span
                                                                         class="user_name"
                                                                         style="right:
                                                                         <c:choose>
@@ -483,7 +483,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                             ${(1 - detailReportInfo.achievePer) * 100}%;
                                                                         </c:when>
                                                                         <c:otherwise>90%;</c:otherwise>
-                                                                        </c:choose> left: auto;">내 성취수준<i
+                                                                        </c:choose>left: auto;">내 성취수준<i
                                                                         class="fa-solid fa-caret-down"
                                                                         style="padding-left: 40px; width: 35px"></i></span>
                                                                 </div>
