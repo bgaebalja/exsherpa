@@ -65,6 +65,7 @@ public class ExaminationController {
             @RequestParam("school_level") String schoolLevel,
             @RequestParam("exam_round") String examRound,
             @RequestParam("year") String year,
+            @RequestParam(value = "subject_name", defaultValue = "국어") String subjectName,
             @RequestParam(value = "is_mine", defaultValue = "false") String isMine,
             HttpSession session
     ) {
@@ -78,7 +79,7 @@ public class ExaminationController {
         Pageable pageable = PageableGenerator.createPageable(paged, pageNumber, size, sort);
 
         if (examRound.equals("1")) {
-            Page<Exam> pagedExams = examService.getPastExams(pageable);
+            Page<Exam> pagedExams = examService.getPastExams(pageable, subjectName);
             List<Exam> exams = pagedExams.getContent();
             for (Exam exam : exams) {
                 ExaminationHistory examinationHistory
