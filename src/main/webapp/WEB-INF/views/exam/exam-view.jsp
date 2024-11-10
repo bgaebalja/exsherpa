@@ -440,7 +440,7 @@
                 submittedAnswer = textAnswer && textAnswer.value.trim().length > 0 ? textAnswer.value.trim() : "미응답";
             } else {
                 const selectedOption = slide.querySelector('input[type="radio"]:checked');
-                submittedAnswer = selectedOption ? selectedOption.nextElementSibling.textContent.trim() : "미응답";
+                submittedAnswer = selectedOption ? selectedOption.value : "미응답";
             }
 
             const originalAnswer = slide.querySelector('input[name="original_answer"]').value;
