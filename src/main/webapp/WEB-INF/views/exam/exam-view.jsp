@@ -110,6 +110,11 @@
             font-size: 14px;
         }
     </style>
+    <style>
+        .swiper-pagination-bullet.answered {
+            background-color: #255897;
+        }
+    </style>
 </head>
 <body>
 <div class="wrap
@@ -496,7 +501,23 @@
         const examId = document.querySelector('input[name="exam_id"]').value;
         const extractedAnswers = extractAnswers();
 
+        // 풀지 않은 문제 번호를 저장할 배열 생성
+        let unansweredQuestions = [];
+        extractedAnswers.forEach((answer, index) => {
+            if (answer.submittedAnswer === "미응답") {
+                const questionNumber = index + 1;
+                unansweredQuestions.push(questionNumber);
+            }
+        });
+
+        console.log("Unanswered questions:", unansweredQuestions);
+        console.log("Joined unanswered questions:", unansweredQuestions.join(", "));
+
+
         let message = '최종 제출하시겠습니까?\n최종 제출하시면, 정답 수정이 불가합니다.';
+        if (unansweredQuestions.length > 0) {
+            message = '아직 ' + unansweredQuestions.length + ' 문제를 문제를 풀지 않았습니다. \n\n풀지 않은 문제 목록\n' + unansweredQuestions.join(", ") + '\n\n정말 제출하시겠습니까?';
+        }
         if (confirm(message)) {
             fetch('/user/exam/submit', {
                 method: 'POST',
@@ -525,7 +546,7 @@
                     alert("시험이 제출되었습니다.");
                     const sequence = data - 1;
 
-                    location.href = `/user/exam/report?school_level=${schoolLevel}&exam_round=${examRound}&year=${year}&exam_id=${examId}&examination_sequence=` + sequence;
+                    location.href = `/user/exam/report?school_level=SL02&exam_round=2&year=2024&examination_sequence=` + sequence;
                 })
                 .catch(error => {
                     console.error("오류:", error);
