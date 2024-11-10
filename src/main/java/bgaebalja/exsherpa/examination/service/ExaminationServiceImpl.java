@@ -58,7 +58,7 @@ public class ExaminationServiceImpl implements ExaminationService {
         solvedQuestionService.registerSolvedQuestions(submitResultRequest.getAnswerRequests(), examinationHistory);
         entityManager.refresh(examinationHistory);
 
-        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByModifiedAtAsc(
+        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc(
                         user.getId()
                 )
                 .size();
@@ -90,21 +90,21 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public List<ExaminationHistory> getSolvedExaminationHistories() {
-        return examinationRepository.findBySolvedYnTrueAndDeleteYnFalse();
+        return examinationRepository.findBySolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc();
     }
 
     @Override
     public List<ExaminationHistory> getSolvedExaminationHistories(String email) {
         Users user = userRepository.findByUserId(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, email)));
-        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByModifiedAtAsc(
+        return examinationRepository.findByUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc(
                 user.getId()
         );
     }
 
     @Override
     public List<ExaminationHistory> getSolvedExaminationHistoriesFromExam(Long examId) {
-        return examinationRepository.findByExamIdAndSolvedYnTrueAndDeleteYnFalse(examId);
+        return examinationRepository.findByExamIdAndSolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc(examId);
     }
 
     @Override
@@ -112,6 +112,6 @@ public class ExaminationServiceImpl implements ExaminationService {
         Users user = userRepository.findByUserId(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE, email)));
 
-        return examinationRepository.findByExamIdAndUserIdAndSolvedYnTrueAndDeleteYnFalse(examId, user.getId());
+        return examinationRepository.findByExamIdAndUserIdAndSolvedYnTrueAndDeleteYnFalseOrderByCreatedAtDesc(examId, user.getId());
     }
 }
