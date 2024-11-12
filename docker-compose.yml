@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:latest
+    container_name: ${EXSHERPA_SLAVE_DB_CONTAINER_NAME}
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${EXSHERPA_PROJECT_NAME}
+      MARIADB_USER: ${DB_SLAVE_USER_NAME}
+      MARIADB_PASSWORD: ${DB_SLAVE_USER_PASSWORD}
+    networks:
+      - app-network
+    volumes:
+      - db_data:/var/lib/mysql
+      - ~/my.cnf:/etc/mysql/my.cnf
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u${DB_SLAVE_USER_NAME} -p${DB_SLAVE_USER_PASSWORD}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: ${EXSHERPA_REDIS_CONTAINER_NAME}
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    command: [ "redis-server", "--requirepass", "${REDIS_PASSWORD}" ]
+    networks:
+      - app-network
+
+  app:
+    image: $DOCKER_HUB_USER_NAME/${PROJECT_NAME}:${PROJECT_VERSION}
+    container_name: ${PROJECT_NAME}
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+    environment:
+      EC2_IP_FOR_EXSHERPA: ${EC2_IP_FOR_EXSHERPA}
+      PROJECT_NAME: ${PROJECT_NAME}
+      PROJECT_VERSION: ${PROJECT_VERSION}
+      EXSHERPA_RDS_ENDPOINT: ${EXSHERPA_RDS_ENDPOINT}
+      BSHERPA_SLAVE_DB_CONTAINER_NAME: ${BSHERPA_SLAVE_DB_CONTAINER_NAME}
+      EXSHERPA_REDIS_CONTAINER_NAME: ${EXSHERPA_REDIS_CONTAINER_NAME}
+      SPRING_DATASOURCE_MASTER_URL: jdbc:mariadb://${EXSHERPA_RDS_ENDPOINT}:3306/${EXSHERPA_PROJECT_NAME}
+      SPRING_DATASOURCE_MASTER_USERNAME: ${DB_MASTER_USER_NAME}
+      SPRING_DATASOURCE_MASTER_PASSWORD: ${DB_MASTER_USER_PASSWORD}
+      SPRING_DATASOURCE_SLAVE_URL: jdbc:mariadb://${BSHERPA_SLAVE_DB_CONTAINER_NAME}:3306/${EXSHERPA_PROJECT_NAME}
+      SPRING_DATASOURCE_SLAVE_USERNAME: ${DB_SLAVE_USER_NAME}
+      SPRING_DATASOURCE_SLAVE_PASSWORD: ${DB_SLAVE_USER_PASSWORD}
+      SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      EXSHERPA_PROJECT_NAME: ${EXSHERPA_PROJECT_NAME}
+      SSL_KEY_STORE_PASSWORD: ${SSL_KEY_STORE_PASSWORD}
+      JAVA_OPTS: "-Xms512m -Xmx1024m -Duser.timezone=Asia/Seoul"
+    ports:
+      - "443:443"
+    networks:
+      - app-network
+    volumes:
+      - /home/ubuntu/keystore.p12:/app/keystore.p12
+
+networks:
+  app-network:
+    driver: bridge
+  es-bridge:
+    driver: bridge
+
+volumes:
+  db_data:

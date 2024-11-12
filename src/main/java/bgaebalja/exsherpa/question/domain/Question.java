@@ -1,0 +1,129 @@
+package bgaebalja.exsherpa.question.domain;
+
+import bgaebalja.exsherpa.audit.BaseGeneralEntity;
+import bgaebalja.exsherpa.collection.domain.Collection;
+import bgaebalja.exsherpa.option.domain.Option;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
+
+import static bgaebalja.exsherpa.util.EntityConstant.BOOLEAN_DEFAULT_FALSE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+
+@Entity
+@NoArgsConstructor(access = PROTECTED)
+@Getter
+public class Question extends BaseGeneralEntity {
+    // Question Data
+    @Column(nullable = false)
+    private Long itemId;
+
+    @Column(nullable = false)
+    private String html;
+
+    @Column(nullable = false)
+    private String url;
+
+    // enum으로 저장
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private QuestionType questionType;
+
+    // enum으로 저장
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Difficulty difficulty;
+
+    @Column(name = "description_url", nullable = false)
+    private String descriptionUrl;
+
+    @Column(name = "description_html", nullable = false)
+    private String descriptionHtml;
+
+    // Answer Data
+    @Column(nullable = false)
+    private String answer;
+
+    @Column(nullable = false)
+    private String answerUrl;
+
+    @Column(nullable = false)
+    private String answerHtml;
+
+    @Column(nullable = false)
+    private int errorReportCount;
+
+    @Column(nullable = false, columnDefinition = BOOLEAN_DEFAULT_FALSE)
+    private boolean blockYn;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "collection_id")
+    private Collection collection;
+
+    @OneToMany(mappedBy = "question", cascade = PERSIST)
+    private List<Option> options;
+
+    // 배치순서 Column 추가
+    @Column(name = "placement_number")
+    private Integer placementNumber;
+
+    //Chapter Data
+    @Column(name = "large_chapter_code")
+    private String largeChapterCode;
+
+    @Column(name = "large_chapter_name")
+    private String largeChapterName;
+
+    @Column(name = "medium_chapter_code")
+    private String mediumChapterCode;
+
+    @Column(name = "medium_chapter_name")
+    private String mediumChapterName;
+
+    @Column(name = "small_chapter_code")
+    private String smallChapterCode;
+
+    @Column(name = "small_chapter_name")
+    private String smallChapterName;
+
+    @Column(name = "topic_chapter_code")
+    private String topicChapterCode;
+
+    @Column(name = "topic_chapter_name")
+    private String topicChapterName;
+
+    @Builder
+    private Question(Long itemId, String html, String url, QuestionType questionType, Difficulty difficulty, String answer,
+                     String descriptionUrl, String descriptionHtml, String answerUrl, String answerHtml, int errorReportCount,
+                     boolean blockYn, Integer placementNumber, String largeChapterCode, String largeChapterName, String mediumChapterCode,
+                     String mediumChapterName, String smallChapterCode, String smallChapterName, String topicChapterCode,
+                     String topicChapterName, Collection collection) {
+        this.itemId = itemId;
+        this.html = html;
+        this.url = url;
+        this.questionType = questionType;
+        this.difficulty = difficulty;
+        this.descriptionUrl = descriptionUrl;
+        this.descriptionHtml = descriptionHtml;
+        this.answer = answer;
+        this.answerUrl = answerUrl;
+        this.answerHtml = answerHtml;
+        this.errorReportCount = errorReportCount;
+        this.blockYn = blockYn;
+        this.placementNumber = placementNumber;
+        this.largeChapterCode = largeChapterCode;
+        this.largeChapterName = largeChapterName;
+        this.mediumChapterCode = mediumChapterCode;
+        this.mediumChapterName = mediumChapterName;
+        this.smallChapterCode = smallChapterCode;
+        this.smallChapterName = smallChapterName;
+        this.topicChapterCode = topicChapterCode;
+        this.topicChapterName = topicChapterName;
+        this.collection = collection;
+    }
+}

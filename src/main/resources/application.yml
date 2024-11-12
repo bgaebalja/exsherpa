@@ -1,3 +1,11 @@
+server:
+  url: ${EC2_IP_FOR_EXSHERPA}
+  port: 443
+  ssl:
+    key-store: file:/app/keystore.p12
+    key-store-password: ${SSL_KEY_STORE_PASSWORD}
+    keyStoreType: PKCS12
+    keyAlias: tomcat
 spring:
   application:
     name: exsherpa
@@ -15,12 +23,12 @@ spring:
       password: ${DB_MASTER_USER_PASSWORD}
     slave:
       driver-class-name: org.mariadb.jdbc.Driver
-      jdbc-url: jdbc:mariadb://${EXSHERPA_SLAVE_DB_CONTAINER_NAME}:3306/${EXSHERPA_PROJECT_NAME}?serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true
+      jdbc-url: jdbc:mariadb://${BSHERPA_SLAVE_DB_CONTAINER_NAME}:3306/${EXSHERPA_PROJECT_NAME}?serverTimezone=UTC&characterEncoding=UTF-8&useUnicode=true
       username: ${DB_SLAVE_USER_NAME}
       password: ${DB_SLAVE_USER_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       properties:
         hibernate:
           dialect: org.hibernate.dialect.MariaDBDialect
@@ -33,11 +41,13 @@ spring:
     serialization:
       fail-on-empty-beans: false
   redis:
-    host: ${BSHERPA_REDIS_CONTAINER_NAME}
+    host: ${EXSHERPA_REDIS_CONTAINER_NAME}
     port: 6379
     password: ${REDIS_PASSWORD}
   servlet:
     content-type: text/html
+logging:
+  config: classpath:logback-spring.xml
 management:
   endpoints:
     web:

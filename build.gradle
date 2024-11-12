@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.18'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'war'
 }
 
 group = 'bgaebalja'
@@ -29,9 +30,15 @@ dependencies {
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.json:json:20220924'
 
+    // gson
+    implementation 'com.google.code.gson:gson:2.8.9'
+
     // servlet
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'javax.servlet:jstl'
+
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.8'
 
     // data
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
@@ -39,6 +46,9 @@ dependencies {
     implementation 'com.h2database:h2:2.1.214'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.12'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.15.2'
+
+    // session
+    implementation 'org.springframework.session:spring-session-data-redis:2.7.0'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.8'
@@ -66,4 +76,12 @@ task printProjectVersion {
 
 jar {
     enabled = false
+}
+
+bootJar {
+    enabled = false
+}
+
+bootWar {
+    enabled = true
 }
