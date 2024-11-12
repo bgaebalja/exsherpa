@@ -41,23 +41,6 @@ public class MathComputer {
         return answerRate;
     }
 
-    public static void computeAnswerRate(
-            Map<String, int[]> map, String key, Map<String, Long> answerRate,
-            GetSolvedQuestionResponse getSolvedQuestionResponse
-    ) {
-        boolean isCorrect = getSolvedQuestionResponse.isCorrect();
-
-        map.putIfAbsent(key, new int[]{0, 0});
-        int[] answerData = map.get(key);
-
-        if (isCorrect) {
-            ++answerData[0];
-        }
-        ++answerData[1];
-
-        answerRate.put(key, Math.round((double) answerData[0] * 100 / answerData[1]));
-    }
-
     public static Map<String, Long> computeQuestionAnswerRate(
             GetExaminationHistoriesResponse getExaminationHistoriesResponse
     ) {
@@ -116,5 +99,22 @@ public class MathComputer {
         }
 
         return answerRate;
+    }
+
+    public static void computeAnswerRate(
+            Map<String, int[]> map, String key, Map<String, Long> answerRate,
+            GetSolvedQuestionResponse getSolvedQuestionResponse
+    ) {
+        boolean isCorrect = getSolvedQuestionResponse.isCorrect();
+
+        map.putIfAbsent(key, new int[]{0, 0});
+        int[] answerData = map.get(key);
+
+        if (isCorrect) {
+            ++answerData[0];
+        }
+        ++answerData[1];
+
+        answerRate.put(key, Math.round((double) answerData[0] * 100 / answerData[1]));
     }
 }
