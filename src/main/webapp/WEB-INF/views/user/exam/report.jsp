@@ -540,7 +540,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
                                                                             Long questionAnswerRateData = questionAnswerRate.get(getSolvedQuestionResponse.getQuestionId().toString());
                                                                     %>
                                                                     <tr>
-                                                                        <td class="first"><%= i + 1 %></td>
+                                                                        <td class="first"><%= i + 1 %>
+                                                                        </td>
                                                                         <td>
                                                                             <%= getSolvedQuestionResponse.getSmallChapterName() %>
                                                                         </td>
@@ -1015,7 +1016,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             difficultyAnswerRate["최하"] || 0
         ];
 
-        const myRates = achievementRates;
+        const myRates = achievementRates.reverse();
 
         const difficultyCtx = document.getElementById('difficulty_graph').getContext('2d');
         const difficultyChart = new Chart(difficultyCtx, {
@@ -1052,7 +1053,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     });
 </script>
 <script>
-    // JSON 데이터를 JavaScript 변수에 할당
     const allObSubAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(allObSubAnswerRate) %>');
     const myObSubAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(myObSubAnswerRate) %>');
 
@@ -1097,7 +1097,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     });
 </script>
 <script>
-    // JSON 데이터를 JavaScript 변수에 할당
     const allQuestionTypeAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(allQuestionTypeAnswerRate) %>');
     const myQuestionTypeAnswerRate = JSON.parse('<%= new ObjectMapper().writeValueAsString(myQuestionTypeAnswerRate) %>');
 
@@ -1206,7 +1205,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         const roundSelect = document.getElementById('round_select');
         const selectedOption = roundSelect.options[roundSelect.selectedIndex];
         const examYearRound = selectedOption.value.split('-');
-        const examinationSequence = selectedOption.getAttribute('data-sequence'); // sequence 값 가져오기
+        const examinationSequence = selectedOption.getAttribute('data-sequence');
         const year = examYearRound[0];
         const examRound = examYearRound[1];
         location.href = '/user/exam/report?school_level=SL02&exam_round=' + examRound + '&year=' + year + '&examination_sequence=' + examinationSequence;
@@ -1417,7 +1416,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 </script>
 <script>
     function displayExaminationHistory() {
-        const selectedIndex = parseInt(document.getElementById("round_select").value) - 1; // 1-based index adjustment
+        const selectedIndex = parseInt(document.getElementById("round_select").value) - 1;
         const examinationHistories = JSON.parse(document.getElementById("examinationHistoriesData").textContent);
 
         document.getElementById("username").innerText = examinationHistories[selectedIndex].username;
