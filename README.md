@@ -10,6 +10,14 @@
 <b>2024. 11. 2 ~ 2024. 11. 11</b>
 <br><br>
 
+### 성효빈
+- 팀장, CBT 서비스, 통계 서비스 개발, 서비스 배포 및 관리
+
+### 허상범
+- 로그인 및 회원가입 기능 개발
+
+  <br>
+
 ## 📚 관련 URL
 
 - [EX셀파 서비스](https://exsherpa.com)
@@ -42,6 +50,7 @@
 - Java
 - Spring Boot
 - Spring Security
+- Spring Data JPA
   <br>
 
 ## DevOps
