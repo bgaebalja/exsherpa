@@ -22,6 +22,7 @@
 
 - [EX셀파 서비스](https://exsherpa.com)
 - [EX셀파 CI/CD 파이프라인](http://hyobin-jenkins.duckdns.org:8080/job/exsherpa)
+- [B셀파 서비스](https://bsherpa.com)
 - [B개발자팀 노션](https://www.notion.so/B-e-GAEBALJA-123c5942ff2c80a8aac2cd410ff7fb4d)
 - [발표 자료](https://www.canva.com/design/DAGWD1LaIIM/_NCQC7H3Nb6X0bD_ufa36A/edit?ui=eyJEIjp7IlQiOnsiQSI6IlBCRHRIY1MxbjlqMzF4OHgifX19)
 - [시연 영상](https://youtu.be/tuUKSYSd1go)
