@@ -29,7 +29,7 @@
   <br><br>
 
 ## 🗼 Architecture
-![exsherpa-architecture](https://github.com/user-attachments/assets/8c873285-655d-429b-bde1-e8d6af789f6f)
+![exsherpa-architecture](https://github.com/user-attachments/assets/122cdca9-5859-492a-9a9c-f13190e29b40)
 <br><br>
 
 ## 🗄️ ERD
